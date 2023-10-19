@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Releasing
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.16.0]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Init pnpm (latest)
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Use Node.js (v${{ matrix.node-version }})
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Creating .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Show branch name
+        run: echo ${{ github.ref }}
+
+      - name: Publish to npm
+        id: changesets-main
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: changesets/action@v1
+        with:
+          version: pnpm exec changeset version
+          publish: pnpm exec changeset publish
+          commit: ":bookmark: ci(release): npm packages release"
+          title: ":bookmark: ci(release): npm packages release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

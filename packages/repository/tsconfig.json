@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "moduleDetection": "auto",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    // "types": [],
+    /* Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set. */
+    // "allowImportingTsExtensions": true,
+    /* Use the package.json 'exports' field when resolving package imports. */
+    // "resolvePackageJsonExports": true,
+    /* Use the package.json 'imports' field when resolving imports. */
+    // "resolvePackageJsonImports": true,
+    /* Enable importing .json files. */
+    "resolveJsonModule": true,
+    /* Enable importing files with any extension, provided a declaration file is present. */
+    // "allowArbitraryExtensions": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["docs/**/*", "node_modules/**/*", "dist/**/*"]
+}

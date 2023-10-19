@@ -1,0 +1,16 @@
+{
+  "name": "docs",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "vitepress": "1.0.0-rc.22"
+  },
+  "devDependencies": {
+    "eslint": "8.51.0"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  }
+}

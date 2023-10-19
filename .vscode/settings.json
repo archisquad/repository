@@ -1,0 +1,38 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml",
+    "html"
+  ],
+  "eslint.workingDirectories": [
+    { "pattern": "./demo/*/" },
+    { "pattern": "./docs/" },
+    { "pattern": "./packages/*/" }
+  ],
+  "eslint.run": "onType",
+  "editor.codeActionsOnSave": {},
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
+  "[json]": {
+    "editor.formatOnSave": false
+  },
+  "vitest.commandLine": "vitest"
+}
