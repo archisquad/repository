@@ -3,17 +3,26 @@ import { AllowedEntityInput, EntityData, EntitySchema } from "./data"
 import { Relations, Relationship } from "./relations"
 import { SyncKey } from "./sync"
 
+type DetectEmptyArray<TArr> = TArr extends never[] | [] ? true : false
+
+type RelationsCleaner<
+  TSchema extends EntitySchema,
+  TRelations extends Relationship<TSchema>[] = [],
+> = DetectEmptyArray<TRelations> extends true
+  ? // eslint-disable-next-line @typescript-eslint/ban-types
+    {}
+  : Relations<TRelations[number]>
+
 export type Entity<
   TSchema extends EntitySchema,
   TActualData extends EntityData<AllowedEntityInput<TSchema>>,
   TRelations extends Relationship<TSchema>[] = [],
-> = DeepReadonly<TActualData> &
-  Relations<TRelations[number]> & {
-    update<const TUpdatedData extends AllowedEntityInput<TSchema>>(
-      data: TUpdatedData
-    ): Entity<TSchema, TActualData & TUpdatedData, TRelations>
-    toObject(): EntityData<TActualData>
-    toJson(): string
-    isSynced(id: SyncKey): boolean
-    setSynced(id: SyncKey, promise: Promise<unknown>): void
-  }
+> = DeepReadonly<TActualData> & {
+  update<const TUpdatedData extends AllowedEntityInput<TSchema>>(
+    data: TUpdatedData
+  ): Entity<TSchema, TActualData & TUpdatedData, TRelations>
+  toObject(): EntityData<TActualData>
+  toJson(): string
+  isSynced(id: SyncKey): boolean
+  setSynced(id: SyncKey, promise: Promise<unknown>): void
+} & RelationsCleaner<TSchema, TRelations>
