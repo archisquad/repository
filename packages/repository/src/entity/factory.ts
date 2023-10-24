@@ -64,7 +64,6 @@ export function entityModelFactory<TInputSchema extends UserDefinedSchema>() {
 
       return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
         ModelSchema,
-        typeof data,
         typeof definitions
       >
     }
@@ -79,7 +78,6 @@ export function entityModelFactory<TInputSchema extends UserDefinedSchema>() {
 
       return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
         ModelSchema,
-        typeof data,
         typeof definitions
       >
     }

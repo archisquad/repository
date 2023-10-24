@@ -1,4 +1,4 @@
-import { AllowedEntityInput, EntityData } from "./data"
+import { AllowedEntityInput } from "./data"
 import { Entity } from "./entity"
 import {
   PostsRelationDefinition,
@@ -9,14 +9,8 @@ import {
 } from "vitest"
 
 describe("interface", () => {
-  it("Entity has relationship accessors according to defined relations", ({
-    fakeData,
-  }) => {
-    type Test = Entity<
-      TestEntityData,
-      EntityData<typeof fakeData>,
-      [PostsRelationDefinition]
-    >
+  it("Entity has relationship accessors according to defined relations", () => {
+    type Test = Entity<TestEntityData, [PostsRelationDefinition]>
 
     expectTypeOf<Test["posts"]>().toEqualTypeOf<
       () => {
@@ -27,18 +21,18 @@ describe("interface", () => {
     >()
   })
 
-  it("Entity can be created without relations", ({ fakeData }) => {
-    type Test = Entity<TestEntityData, EntityData<typeof fakeData>>
+  it("Entity can be created without relations", () => {
+    type Test = Entity<TestEntityData>
 
     expectTypeOf<Test["id"]>().toEqualTypeOf<string>()
-    expectTypeOf<Test["foo"]>().toEqualTypeOf<(typeof fakeData)["foo"]>()
+    expectTypeOf<Test["foo"]>().toEqualTypeOf<TestEntityData["foo"]>()
     expectTypeOf<Test["deep"]>().toEqualTypeOf<
-      Readonly<(typeof fakeData)["deep"]>
+      Readonly<TestEntityData["deep"]>
     >()
   })
 
-  it("Entity has update method", ({ fakeData }) => {
-    type EntityExample = Entity<TestEntityData, EntityData<typeof fakeData>>
+  it("Entity has update method", () => {
+    type EntityExample = Entity<TestEntityData>
     type Test = EntityExample["update"]
 
     expectTypeOf<Test>().toMatchTypeOf<
@@ -46,25 +40,19 @@ describe("interface", () => {
     >()
   })
 
-  it("Entity has toObject method", ({ fakeData }) => {
-    type Test = Entity<TestEntityData, EntityData<typeof fakeData>>
+  it("Entity has toObject method", () => {
+    type Test = Entity<TestEntityData>
 
-    expectTypeOf<Test["toObject"]>().toEqualTypeOf<
-      () => EntityData<typeof fakeData>
-    >()
+    expectTypeOf<Test["toObject"]>().toEqualTypeOf<() => TestEntityData>()
   })
 
-  it("Entity give readonly access to data", ({ fakeData }) => {
-    type Test = Entity<TestEntityData, EntityData<typeof fakeData>>
+  it("Entity give readonly access to data", () => {
+    type Test = Entity<TestEntityData>
 
-    expectTypeOf<Test["foo"]>().toEqualTypeOf<
-      Readonly<(typeof fakeData)["foo"]>
-    >()
-    expectTypeOf<Test["bar"]>().toEqualTypeOf<
-      Readonly<(typeof fakeData)["bar"]>
-    >()
+    expectTypeOf<Test["foo"]>().toEqualTypeOf<Readonly<TestEntityData["foo"]>>()
+    expectTypeOf<Test["bar"]>().toEqualTypeOf<Readonly<TestEntityData["bar"]>>()
     expectTypeOf<Test["deep"]>().toEqualTypeOf<
-      Readonly<(typeof fakeData)["deep"]>
+      Readonly<TestEntityData["deep"]>
     >()
   })
 })
