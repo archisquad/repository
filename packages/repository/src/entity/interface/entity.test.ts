@@ -1,4 +1,4 @@
-import { AllowedEntityInput } from "./data"
+import { AllowedEntityInput, EntitySchema } from "./data"
 import { Entity } from "./entity"
 import {
   PostsRelationDefinition,
@@ -8,7 +8,7 @@ import {
   it,
 } from "vitest"
 
-describe("interface", () => {
+describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {
     type Test = Entity<TestEntityData, [PostsRelationDefinition]>
 
@@ -54,5 +54,19 @@ describe("interface", () => {
     expectTypeOf<Test["deep"]>().toEqualTypeOf<
       Readonly<TestEntityData["deep"]>
     >()
+  })
+})
+
+describe("EntitySchema", () => {
+  it("should omit id from input", () => {
+    type Test = EntitySchema<{ id: number; name: string }>
+
+    expectTypeOf<Test>().toMatchTypeOf<{ name: string }>()
+  })
+
+  it("should add id to output", () => {
+    type Test = EntitySchema<{ id: number; name: string }>
+
+    expectTypeOf<Test>().toMatchTypeOf<{ id: string; name: string }>()
   })
 })
