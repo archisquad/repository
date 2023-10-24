@@ -3,7 +3,6 @@ import { generateId } from "./generateId"
 import {
   AllowedEntityInput,
   Entity,
-  EntityData,
   EntityPrototype,
   EntitySchema,
   ProxyTarget,

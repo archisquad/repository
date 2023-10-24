@@ -1,5 +1,5 @@
 import { DeepReadonly } from "../types"
-import { AllowedEntityInput, EntityData, EntitySchema } from "./data"
+import { AllowedEntityInput, EntitySchema } from "./data"
 import { Relations, Relationship } from "./relations"
 import { SyncKey } from "./sync"
 
