@@ -33,7 +33,7 @@ export function entityModelFactory<TInputSchema extends UserDefinedSchema>() {
     const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity)
 
     function updateEntity<TUpdatedData extends AllowedEntityInput<ModelSchema>>(
-      this: { proto: EntityPrototype<ModelSchema, EntityData<ModelSchema>> },
+      this: { proto: EntityPrototype<ModelSchema> },
       updatedData: TUpdatedData
     ): any {
       const updatedInternalEntity = this.proto.update(updatedData)
@@ -56,7 +56,7 @@ export function entityModelFactory<TInputSchema extends UserDefinedSchema>() {
       inputData: TInputData
     ) {
       const id = generateId()
-      const data = { ...inputData, id } satisfies EntityData<TInputData>
+      const data = { ...inputData, id } as unknown as ModelSchema
 
       const internalEntity = new internalEntityClass(data)
 
@@ -69,9 +69,7 @@ export function entityModelFactory<TInputSchema extends UserDefinedSchema>() {
     }
 
     function recoverEntity(serializedData: string) {
-      const data = JSON.parse(serializedData) as EntityData<
-        AllowedEntityInput<ModelSchema>
-      >
+      const data = JSON.parse(serializedData) as ModelSchema
       const internalEntity = new internalEntityClass(data)
 
       const proxyTarget = createProxyTarget(internalEntity)

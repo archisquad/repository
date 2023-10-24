@@ -20,7 +20,7 @@ export type Entity<
   update<const TUpdatedData extends AllowedEntityInput<TSchema>>(
     data: TUpdatedData
   ): Entity<TSchema, TRelations>
-  toObject(): EntityData<TSchema>
+  toObject(): TSchema
   toJson(): string
   isSynced(id: SyncKey): boolean
   setSynced(id: SyncKey, promise: Promise<unknown>): void
