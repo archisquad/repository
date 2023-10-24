@@ -2,6 +2,7 @@ import { SyncKey } from "@/entity/interface"
 import { makeSyncKey } from "@/entity/sync"
 import type { RepositoryKey } from "@/repositoryKey"
 import { Faker, faker } from "@faker-js/faker"
+import { Simplify } from "type-fest"
 import { beforeEach } from "vitest"
 
 declare module "vitest" {
@@ -15,9 +16,11 @@ declare module "vitest" {
     some: boolean
   }
 
-  export type TestEntityData = TestRawEntityData & {
-    id: string
-  }
+  export type TestEntityData = Simplify<
+    TestRawEntityData & {
+      id: string
+    }
+  >
 
   export type PostsRelationDefinition = {
     readonly id: "posts"
