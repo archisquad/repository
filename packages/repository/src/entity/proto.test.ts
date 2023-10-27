@@ -21,6 +21,7 @@ describe("proto", () => {
       expect.objectContaining({
         id: "1",
         foo: "foo2",
+        some: true,
       })
     )
     expectTypeOf(result.toObject()).toMatchTypeOf<
