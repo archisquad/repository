@@ -2,14 +2,7 @@
 import { entityModelFactory } from "./factory"
 import { makeSyncKey } from "./sync"
 import { makeRepositoryKey } from "@/repositoryKey"
-import {
-  TestRawEntityData,
-  beforeEach,
-  describe,
-  expect,
-  expectTypeOf,
-  it,
-} from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
 
 describe("Entity", () => {
   beforeEach((context) => {
@@ -34,23 +27,17 @@ describe("Entity", () => {
   })
 
   describe("Factories", () => {
-    describe("Model Factory", () => {
-      it("Given schema, When model factory called, Then return context factory", () => {
-        const result = entityModelFactory<TestRawEntityData>()
-
-        expect(result).toBeInstanceOf(Function)
-      })
-    })
-
     describe("Context Factory", () => {
       it("Given schema, relations, sync keys, When context factory called, Then return entity factories", ({
+        entitySchema,
         syncKeys,
         authorsRelationship,
       }) => {
-        const result = entityModelFactory<TestRawEntityData>()(
-          [authorsRelationship],
-          syncKeys
-        )
+        const result = entityModelFactory({
+          schema: entitySchema,
+          definitions: [authorsRelationship],
+          syncDestinations: syncKeys,
+        })
 
         expect(result).toEqual(
           expect.objectContaining({
@@ -61,11 +48,13 @@ describe("Entity", () => {
       })
 
       it("Given schema, relations, When context factory called, Then return entity factories", ({
+        entitySchema,
         authorsRelationship,
       }) => {
-        const result = entityModelFactory<TestRawEntityData>()([
-          authorsRelationship,
-        ])
+        const result = entityModelFactory({
+          schema: entitySchema,
+          definitions: [authorsRelationship],
+        })
 
         expect(result).toEqual(
           expect.objectContaining({
@@ -75,8 +64,10 @@ describe("Entity", () => {
         )
       })
 
-      it("Given schema, When context factory called, Then return entity factories", () => {
-        const result = entityModelFactory<TestRawEntityData>()()
+      it("Given schema, When context factory called, Then return entity factories", ({
+        entitySchema,
+      }) => {
+        const result = entityModelFactory({ schema: entitySchema })
 
         expect(result).toEqual(
           expect.objectContaining({
@@ -88,8 +79,10 @@ describe("Entity", () => {
     })
 
     describe("Entity Factory", () => {
-      it("Given schema, When entity factory called, Then return entity with given data", () => {
-        const entityFactory = entityModelFactory<TestRawEntityData>()()
+      it("Given schema, When entity factory called, Then return entity with given data", ({
+        entitySchema,
+      }) => {
+        const entityFactory = entityModelFactory({ schema: entitySchema })
 
         const data = {
           foo: "bar",
@@ -104,8 +97,10 @@ describe("Entity", () => {
         )
       })
 
-      it("Given schema, When entity factory called, Then return entity with unique identifier", () => {
-        const entityFactory = entityModelFactory<TestRawEntityData>()()
+      it("Given schema, When entity factory called, Then return entity with unique identifier", ({
+        entitySchema,
+      }) => {
+        const entityFactory = entityModelFactory({ schema: entitySchema })
 
         const data = {
           foo: "bar",
@@ -117,11 +112,13 @@ describe("Entity", () => {
       })
 
       it("Given schema, relations, When entity factory called, Then return entity with relations", ({
+        entitySchema,
         authorsRelationship,
       }) => {
-        const entityFactory = entityModelFactory<TestRawEntityData>()([
-          authorsRelationship,
-        ])
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          definitions: [authorsRelationship],
+        })
         const data = {
           foo: "bar",
         }
@@ -132,12 +129,14 @@ describe("Entity", () => {
         expect(entity.author).toBeTypeOf("function")
       })
 
-      it("Given schema, sync keys, When entity factory called, Then return entity with sync keys", () => {
+      it("Given schema, sync keys, When entity factory called, Then return entity with sync keys", ({
+        entitySchema,
+      }) => {
         const firstSyncKey = makeSyncKey("foo")
-        const entityFactory = entityModelFactory<TestRawEntityData>()(
-          [],
-          [firstSyncKey]
-        )
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          syncDestinations: [firstSyncKey],
+        })
         const data = {
           foo: "bar",
         }
@@ -151,8 +150,9 @@ describe("Entity", () => {
     describe("Recover Entity", () => {
       it("Given serialized entity, When recover entity, Then return entity with given data, And the same ID", ({
         serializedEntity,
+        entitySchema,
       }) => {
-        const entityFactory = entityModelFactory<TestRawEntityData>()()
+        const entityFactory = entityModelFactory({ schema: entitySchema })
 
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
 
@@ -165,12 +165,14 @@ describe("Entity", () => {
       })
 
       it("Given serialized entity, When recover entity, Then return entity with relations", ({
+        entitySchema,
         authorsRelationship,
         serializedEntity,
       }) => {
-        const entityFactory = entityModelFactory<TestRawEntityData>()([
-          authorsRelationship,
-        ])
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          definitions: [authorsRelationship],
+        })
 
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
 
@@ -180,12 +182,13 @@ describe("Entity", () => {
 
       it("Given serialized entity, When recover entity, Then return entity with sync keys all set to un-up-to-date", ({
         serializedEntity,
+        entitySchema,
       }) => {
         const firstSyncKey = makeSyncKey("foo")
-        const entityFactory = entityModelFactory<TestRawEntityData>()(
-          [],
-          [firstSyncKey]
-        )
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          syncDestinations: [firstSyncKey],
+        })
 
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
 
@@ -196,14 +199,17 @@ describe("Entity", () => {
 
   describe("Instance", () => {
     it("Given entity, When update, Then update data, And set sync status to un-up-to-date, And keep the same ID, And create new object, And keeps relations untouched", async ({
+      entitySchema,
       authorsRelationship,
     }) => {
       const firstSyncKey = makeSyncKey("foo")
       const secondSyncKey = makeSyncKey("bar")
-      const { createEntity } = entityModelFactory<TestRawEntityData>()(
-        [authorsRelationship],
-        [firstSyncKey, secondSyncKey]
-      )
+      const { createEntity } = entityModelFactory({
+        schema: entitySchema,
+        definitions: [authorsRelationship],
+        syncDestinations: [firstSyncKey, secondSyncKey],
+      })
+
       const entity = createEntity({
         foo: "bar",
       })
@@ -232,8 +238,10 @@ describe("Entity", () => {
       expect(updatedEntity.author).toBeTypeOf("function")
     })
 
-    it("Given entity, When update to add data properties, Then updated entity have both data properties", () => {
-      const { createEntity } = entityModelFactory<TestRawEntityData>()()
+    it("Given entity, When update to add data properties, Then updated entity have both data properties", ({
+      entitySchema,
+    }) => {
+      const { createEntity } = entityModelFactory({ schema: entitySchema })
       const entity = createEntity({
         foo: "bar",
       })
@@ -247,8 +255,10 @@ describe("Entity", () => {
       expect(updatedEntity.some).toBe(false)
     })
 
-    it("Given entity, When update with id, Then ID is not updated", () => {
-      const { createEntity } = entityModelFactory<TestRawEntityData>()()
+    it("Given entity, When update with id, Then ID is not updated", ({
+      entitySchema,
+    }) => {
+      const { createEntity } = entityModelFactory({ schema: entitySchema })
       const entity = createEntity({
         foo: "bar",
       })
@@ -263,8 +273,10 @@ describe("Entity", () => {
       expect(updatedEntity.id).not.toBe("some-id")
     })
 
-    it("Given entity, When serialize, Then return serialized entity", () => {
-      const { createEntity } = entityModelFactory<TestRawEntityData>()()
+    it("Given entity, When serialize, Then return serialized entity", ({
+      entitySchema,
+    }) => {
+      const { createEntity } = entityModelFactory({ schema: entitySchema })
       const data = {
         foo: "bar",
       }
@@ -278,8 +290,10 @@ describe("Entity", () => {
       })
     })
 
-    it("Given entity, When dumping to regular object, Then return regular object with data", () => {
-      const { createEntity } = entityModelFactory<TestRawEntityData>()()
+    it("Given entity, When dumping to regular object, Then return regular object with data", ({
+      entitySchema,
+    }) => {
+      const { createEntity } = entityModelFactory({ schema: entitySchema })
       const data = {
         foo: "bar",
       }
@@ -293,13 +307,15 @@ describe("Entity", () => {
       })
     })
 
-    it("Given entity, When setSynced, Then update sync status only", async () => {
+    it("Given entity, When setSynced, Then update sync status only", async ({
+      entitySchema,
+    }) => {
       const firstSyncKey = makeSyncKey("foo")
       const secondSyncKey = makeSyncKey("bar")
-      const entityFactory = entityModelFactory<TestRawEntityData>()(
-        [],
-        [firstSyncKey, secondSyncKey]
-      )
+      const entityFactory = entityModelFactory({
+        schema: entitySchema,
+        syncDestinations: [firstSyncKey, secondSyncKey],
+      })
       const data = {
         foo: "bar",
       }
