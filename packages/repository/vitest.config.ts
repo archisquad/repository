@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config"
+import { configDefaults, defineConfig } from "vitest/config"
 
 export default defineConfig({
   test: {
@@ -11,6 +11,7 @@ export default defineConfig({
     coverage: {
       provider: "istanbul",
       reporter: ["text", "json", "json-summary", "html", "lcov"],
+      exclude: [...(configDefaults.coverage?.exclude ?? []), "**/*.test-d.ts"],
       lines: 80,
       statements: 80,
       functions: 80,
