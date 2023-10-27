@@ -18,7 +18,7 @@ export function createInternalEntity<TSchema extends EntitySchema>(
       this._syncMap = new SyncMap(syncIds)
     }
 
-    public get data(): DeepReadonly<EntitySchema> {
+    public get data(): DeepReadonly<TSchema> {
       return this._data
     }
 
