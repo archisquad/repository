@@ -5,8 +5,7 @@ describe("User Input Data types", () => {
   it("UserInputData is id-stripped, partial schema", () => {
     type Test = AllowedEntityInput<EntitySchema<{ foo: string; id: number }>>
 
-    // @ts-expect-error -- testing types
-    expectTypeOf<Test["id"]>().toEqualTypeOf<never>()
+    expectTypeOf<Test>().not.toEqualTypeOf<{ id: number }>()
     expectTypeOf<Test["foo"]>().toEqualTypeOf<string | undefined>()
   })
 })

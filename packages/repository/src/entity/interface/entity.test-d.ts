@@ -62,10 +62,11 @@ describe("EntitySchema", () => {
     type Test = EntitySchema<{ id: number; name: string }>
 
     expectTypeOf<Test>().toMatchTypeOf<{ name: string }>()
+    expectTypeOf<Test>().not.toMatchTypeOf<{ id: number }>()
   })
 
   it("should add id to output", () => {
-    type Test = EntitySchema<{ id: number; name: string }>
+    type Test = EntitySchema<{ name: string }>
 
     expectTypeOf<Test>().toMatchTypeOf<{ id: string; name: string }>()
   })

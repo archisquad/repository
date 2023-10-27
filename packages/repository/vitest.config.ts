@@ -16,5 +16,8 @@ export default defineConfig({
       functions: 80,
       branches: 80,
     },
+    typecheck: {
+      enabled: true,
+    },
   },
 })

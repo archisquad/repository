@@ -20,5 +20,11 @@ module.exports = {
         "@typescript-eslint/no-unsafe-call": "warn",
       },
     },
+    {
+      files: ["**/*.test-d.ts"],
+      rules: {
+        "unicorn/filename-case": "off",
+      },
+    },
   ],
 }
