@@ -2,21 +2,26 @@ import { DeepReadonly } from "../types"
 import { AllowedEntityInput, EntitySchema } from "./data"
 import { Relations, Relationship } from "./relations"
 import { SyncKey } from "./sync"
+import { EmptyObject, Except } from "type-fest"
 
 type DetectEmptyArray<TArr> = TArr extends never[] | [] ? true : false
 
-type RelationsCleaner<
+type ResolvedRelations<
   TSchema extends EntitySchema,
-  TRelations extends Relationship<TSchema>[] = [],
+  TRelations extends Relationship<TSchema>[],
 > = DetectEmptyArray<TRelations> extends true
-  ? // eslint-disable-next-line @typescript-eslint/ban-types
-    {}
+  ? EmptyObject
   : Relations<TRelations[number]>
 
-export type Entity<
+export type Methods<TSchema extends EntitySchema> = Record<
+  string,
+  (this: TSchema, ...args: any[]) => any
+>
+
+type PrototypeMethods<
   TSchema extends EntitySchema,
-  TRelations extends Relationship<TSchema>[] = [],
-> = DeepReadonly<TSchema> & {
+  TRelations extends Relationship<TSchema>[],
+> = {
   update<const TUpdatedData extends AllowedEntityInput<TSchema>>(
     data: TUpdatedData
   ): Entity<TSchema, TRelations>
@@ -24,4 +29,13 @@ export type Entity<
   toJson(): string
   isSynced(id: SyncKey): boolean
   setSynced(id: SyncKey, promise: Promise<unknown>): void
-} & RelationsCleaner<TSchema, TRelations>
+}
+
+export type Entity<
+  TSchema extends EntitySchema,
+  TRelations extends Relationship<TSchema>[] = [],
+  TMethods extends Methods<TSchema> = EmptyObject,
+> = DeepReadonly<TSchema> &
+  PrototypeMethods<TSchema, TRelations> &
+  Except<TMethods, keyof PrototypeMethods<TSchema, TRelations>> &
+  ResolvedRelations<TSchema, TRelations>
