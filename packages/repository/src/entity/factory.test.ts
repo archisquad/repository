@@ -2,7 +2,7 @@
 import { entityModelFactory } from "./factory"
 import { makeSyncKey } from "./sync"
 import { makeRepositoryKey } from "@/repositoryKey"
-import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 
 describe("Entity", () => {
   beforeEach((context) => {
@@ -24,17 +24,21 @@ describe("Entity", () => {
       id: "super-unique-id",
       foo: "bar",
     })
+
+    vi.clearAllMocks()
   })
 
   describe("Factories", () => {
-    describe("Context Factory", () => {
-      it("Given schema, relations, sync keys, When context factory called, Then return entity factories", ({
+    describe("Model Factory", () => {
+      it("Given schema, relations, sync keys, methods, When entity model factory called, Then return entity factories", ({
         entitySchema,
+        entityMethods,
         syncKeys,
         authorsRelationship,
       }) => {
         const result = entityModelFactory({
           schema: entitySchema,
+          methods: entityMethods,
           definitions: [authorsRelationship],
           syncDestinations: syncKeys,
         })
@@ -47,7 +51,7 @@ describe("Entity", () => {
         )
       })
 
-      it("Given schema, relations, When context factory called, Then return entity factories", ({
+      it("Given schema, relations, When entity model factory called, Then return entity factories", ({
         entitySchema,
         authorsRelationship,
       }) => {
@@ -64,7 +68,24 @@ describe("Entity", () => {
         )
       })
 
-      it("Given schema, When context factory called, Then return entity factories", ({
+      it("Given schema, methods, When entity model factory called, Then return entity factories", ({
+        entitySchema,
+        entityMethods,
+      }) => {
+        const result = entityModelFactory({
+          schema: entitySchema,
+          methods: entityMethods,
+        })
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            createEntity: expect.any(Function),
+            recoverEntity: expect.any(Function),
+          })
+        )
+      })
+
+      it("Given schema, When entity model factory called, Then return entity factories", ({
         entitySchema,
       }) => {
         const result = entityModelFactory({ schema: entitySchema })
@@ -145,6 +166,31 @@ describe("Entity", () => {
 
         expect(entity.isSynced(firstSyncKey)).toBe(false)
       })
+
+      it("Given schema, methods, When entity factory called, Then return entity with methods", ({
+        entitySchema,
+      }) => {
+        const testMethod = vi.fn()
+
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          methods: {
+            testMethod,
+          },
+        })
+        const data = {
+          foo: "bar",
+        }
+
+        const entity = entityFactory.createEntity(data)
+
+        expect(entity.testMethod).toBeDefined()
+        expect(entity.testMethod).toBeTypeOf("function")
+
+        entity.testMethod()
+
+        expect(testMethod).toHaveBeenCalled()
+      })
     })
 
     describe("Recover Entity", () => {
@@ -193,6 +239,29 @@ describe("Entity", () => {
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
 
         expect(recoveredEntity.isSynced(firstSyncKey)).toBe(false)
+      })
+
+      it("Given serialized entity, When recover entity, Then return entity with methods", ({
+        serializedEntity,
+        entitySchema,
+      }) => {
+        const testMethod = vi.fn()
+
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          methods: {
+            testMethod,
+          },
+        })
+
+        const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
+
+        expect(recoveredEntity.testMethod).toBeDefined()
+        expect(recoveredEntity.testMethod).toBeTypeOf("function")
+
+        recoveredEntity.testMethod()
+
+        expect(testMethod).toHaveBeenCalled()
       })
     })
   })
@@ -331,6 +400,26 @@ describe("Entity", () => {
       expect(entity.isSynced(firstSyncKey)).toBe(true)
       expect(entity.isSynced(secondSyncKey)).toBe(false)
       expect(entity.id).toBe(id)
+    })
+
+    it("Given entity with methods, when method called, Then method has access to data", ({
+      entitySchema,
+      fakeData,
+    }) => {
+      const { createEntity } = entityModelFactory({
+        schema: entitySchema,
+        methods: {
+          testMethod() {
+            return this.deep
+          },
+        },
+      })
+
+      const entity = createEntity(fakeData)
+
+      const result = entity.testMethod()
+
+      expect(result).toBe(fakeData.deep)
     })
   })
 })
