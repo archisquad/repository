@@ -1,10 +1,5 @@
 import { deepReadonly } from "./deepReadonly"
-import {
-  AllowedEntityInput,
-  EntityData,
-  EntitySchema,
-  SyncKey,
-} from "./interface"
+import { AllowedEntityInput, EntitySchema, SyncKey } from "./interface"
 import { SyncMap } from "./sync"
 import { DeepReadonly } from "./types"
 
@@ -12,38 +7,34 @@ import { DeepReadonly } from "./types"
 export function createInternalEntity<TSchema extends EntitySchema>(
   syncIds: SyncKey[]
 ) {
-  return class EntityInternal<
-    TActualData extends EntityData<AllowedEntityInput<TSchema>>,
-  > {
-    private _data: DeepReadonly<TActualData>
+  return class EntityInternal {
+    private _data: DeepReadonly<TSchema>
     private _syncMap: SyncMap
 
-    constructor(data: TActualData) {
+    constructor(data: TSchema) {
       this._data = deepReadonly({
         ...data,
       })
       this._syncMap = new SyncMap(syncIds)
     }
 
-    public get data(): DeepReadonly<TActualData> {
+    public get data(): DeepReadonly<TSchema> {
       return this._data
     }
 
-    public update<TUpdatedData extends AllowedEntityInput<TSchema>>(
-      data: TUpdatedData
-    ): EntityInternal<TActualData & TUpdatedData> {
-      return new EntityInternal<TActualData & TUpdatedData>({
-        ...(this._data as TActualData),
+    public update(data: AllowedEntityInput<TSchema>): EntityInternal {
+      return new EntityInternal({
+        ...this._data,
         ...data,
         id: this._data.id,
-      })
+      } as TSchema)
     }
 
     public toJson(): string {
       return JSON.stringify(this._data)
     }
 
-    public toObject(): DeepReadonly<TActualData> {
+    public toObject(): DeepReadonly<TSchema> {
       return this._data
     }
 

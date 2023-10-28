@@ -1,5 +1,5 @@
 import { DeepReadonly } from "../types"
-import { AllowedEntityInput, EntityData, EntitySchema } from "./data"
+import { AllowedEntityInput, EntitySchema } from "./data"
 import { Relations, Relationship } from "./relations"
 import { SyncKey } from "./sync"
 
@@ -15,13 +15,12 @@ type RelationsCleaner<
 
 export type Entity<
   TSchema extends EntitySchema,
-  TActualData extends EntityData<AllowedEntityInput<TSchema>>,
   TRelations extends Relationship<TSchema>[] = [],
-> = DeepReadonly<TActualData> & {
+> = DeepReadonly<TSchema> & {
   update<const TUpdatedData extends AllowedEntityInput<TSchema>>(
     data: TUpdatedData
-  ): Entity<TSchema, TActualData & TUpdatedData, TRelations>
-  toObject(): EntityData<TActualData>
+  ): Entity<TSchema, TRelations>
+  toObject(): TSchema
   toJson(): string
   isSynced(id: SyncKey): boolean
   setSynced(id: SyncKey, promise: Promise<unknown>): void
