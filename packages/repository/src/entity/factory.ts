@@ -5,6 +5,7 @@ import {
   Entity,
   EntityPrototype,
   EntitySchema,
+  Methods,
   ProxyTarget,
   Relationship,
   SyncKey,
@@ -16,16 +17,18 @@ import { relationAccessorFactory } from "./relationsAccessor"
 
 export function entityModelFactory<
   TInputSchema extends UserDefinedSchema,
+  TMethods extends Methods<EntitySchema<TInputSchema>>,
   const TDefinition extends Relationship<
     EntitySchema<TInputSchema>
   > = Relationship<EntitySchema<TInputSchema>>,
 >(configObj: {
   schema: TInputSchema
+  methods?: TMethods
   definitions?: TDefinition[]
   syncDestinations?: SyncKey[]
 }) {
   type ModelSchema = EntitySchema<TInputSchema>
-  const { definitions = [], syncDestinations = [] } = configObj
+  const { definitions = [], syncDestinations = [], methods = {} } = configObj
 
   const relationAccessor =
     definitions.length > 0 ? relationAccessorFactory(definitions) : {}
@@ -33,7 +36,7 @@ export function entityModelFactory<
   const internalEntityClass =
     createInternalEntity<ModelSchema>(syncDestinations)
 
-  const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity)
+  const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
   function updateEntity<TUpdatedData extends AllowedEntityInput<ModelSchema>>(
     this: { proto: EntityPrototype<ModelSchema> },
@@ -65,8 +68,9 @@ export function entityModelFactory<
 
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       ModelSchema,
-      typeof definitions
-    >
+      typeof definitions,
+      TMethods
+    > & { test: TMethods }
   }
 
   function recoverEntity(serializedData: string) {
@@ -77,7 +81,8 @@ export function entityModelFactory<
 
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       ModelSchema,
-      typeof definitions
+      typeof definitions,
+      TMethods
     >
   }
 
