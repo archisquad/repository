@@ -16,6 +16,7 @@ import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { validateInput } from "./validation"
 
+
 export function entityModelFactory<
   TInputSchema extends UserDefinedSchema,
   TMethods extends Methods<EntitySchema<TInputSchema>>,
@@ -29,6 +30,7 @@ export function entityModelFactory<
   syncDestinations?: SyncKey[]
 }) {
   type ModelSchema = EntitySchema<TInputSchema>
+
   const {
     schema,
     definitions = [],
