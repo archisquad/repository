@@ -14,6 +14,7 @@ import {
 import { createInternalEntity } from "./proto"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
+import { validateInput } from "./validation"
 
 export function entityModelFactory<
   TInputSchema extends UserDefinedSchema,
@@ -28,7 +29,15 @@ export function entityModelFactory<
   syncDestinations?: SyncKey[]
 }) {
   type ModelSchema = EntitySchema<TInputSchema>
-  const { definitions = [], syncDestinations = [], methods = {} } = configObj
+  const {
+    schema,
+    definitions = [],
+    syncDestinations = [],
+    methods = {},
+  } = configObj
+
+  // TODO: The user should define the schema without any dynamically added ID
+  validateInput(schema as unknown as ModelSchema, methods, definitions)
 
   const relationAccessor =
     definitions.length > 0 ? relationAccessorFactory(definitions) : {}
