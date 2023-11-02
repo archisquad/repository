@@ -55,6 +55,54 @@ describe("Entity interface", () => {
       Readonly<TestEntityData["deep"]>
     >()
   })
+
+  it("Entity allow to define custom methods", () => {
+    type Test = Entity<
+      TestEntityData,
+      [],
+      {
+        customMethod(): string
+      }
+    >
+
+    expectTypeOf<Test["customMethod"]>().toEqualTypeOf<() => string>()
+  })
+
+  it("Entity can be created without defining methods", () => {
+    type Test = Entity<TestEntityData>
+
+    expectTypeOf<Test>().toMatchTypeOf<
+      TestEntityData & {
+        id: string
+      }
+    >()
+  })
+
+  it("Defined methods can't override built-in methods", () => {
+    type Test = Entity<
+      TestEntityData,
+      [],
+      {
+        toObject(): never
+      }
+    >
+
+    expectTypeOf<Test["toObject"]>().toEqualTypeOf<() => TestEntityData>()
+  })
+
+  it("Defined method can access data via this", () => {
+    type Test = Entity<
+      TestEntityData,
+      [],
+      {
+        customMethod(): string
+      }
+    >
+
+    expectTypeOf<Test["customMethod"]>().toEqualTypeOf<
+      (this: TestEntityData) => string
+    >()
+  })
 })
 
 describe("EntitySchema", () => {

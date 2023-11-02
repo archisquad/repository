@@ -58,6 +58,9 @@ declare module "vitest" {
     fakeData: ReturnType<typeof generateFakeObj>
     syncKeys: SyncKey[]
     entitySchema: TestRawEntityData
+    entityMethods: {
+      someMethod: (input: string) => { output: typeof input }
+    }
     // TODO: Delete it after refactoring
     foreignRepositoryKey: RepositoryKey<
       {
@@ -99,6 +102,9 @@ beforeEach((context) => {
       bar: "string",
     },
     some: true,
+  }
+  context.entityMethods = {
+    someMethod: (input: string) => ({ output: input }),
   }
 })
 
