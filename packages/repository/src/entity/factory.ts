@@ -14,74 +14,75 @@ import { createInternalEntity } from "./proto"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 
-export function entityModelFactory<TInputSchema extends UserDefinedSchema>() {
+export function entityModelFactory<
+  TInputSchema extends UserDefinedSchema,
+  const TDefinition extends Relationship<
+    EntitySchema<TInputSchema>
+  > = Relationship<EntitySchema<TInputSchema>>,
+>(configObj: {
+  schema: TInputSchema
+  definitions?: TDefinition[]
+  syncDestinations?: SyncKey[]
+}) {
   type ModelSchema = EntitySchema<TInputSchema>
+  const { definitions = [], syncDestinations = [] } = configObj
 
-  return <
-    const TDefinition extends
-      Relationship<ModelSchema> = Relationship<ModelSchema>,
-  >(
-    definitions: TDefinition[] = [],
-    syncKeys: SyncKey[] = []
-  ) => {
-    const relationAccessor =
-      definitions.length > 0 ? relationAccessorFactory(definitions) : {}
+  const relationAccessor =
+    definitions.length > 0 ? relationAccessorFactory(definitions) : {}
 
-    const internalEntityClass = createInternalEntity<ModelSchema>(syncKeys)
+  const internalEntityClass =
+    createInternalEntity<ModelSchema>(syncDestinations)
 
-    const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity)
+  const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity)
 
-    function updateEntity<TUpdatedData extends AllowedEntityInput<ModelSchema>>(
-      this: { proto: EntityPrototype<ModelSchema> },
-      updatedData: TUpdatedData
-    ): any {
-      const updatedInternalEntity = this.proto.update(updatedData)
+  function updateEntity<TUpdatedData extends AllowedEntityInput<ModelSchema>>(
+    this: { proto: EntityPrototype<ModelSchema> },
+    updatedData: TUpdatedData
+  ): any {
+    const updatedInternalEntity = this.proto.update(updatedData)
 
-      const proxyTarget = createProxyTarget(updatedInternalEntity)
+    const proxyTarget = createProxyTarget(updatedInternalEntity)
 
-      return new Proxy(proxyTarget, proxyHandler)
-    }
+    return new Proxy(proxyTarget, proxyHandler)
+  }
 
-    function createProxyTarget<TInternalEntity>(
-      internalEntity: TInternalEntity
-    ) {
-      return {
-        proto: internalEntity,
-        relationAccessor: relationAccessor,
-      }
-    }
-
-    function createEntity<TInputData extends AllowedEntityInput<ModelSchema>>(
-      inputData: TInputData
-    ) {
-      const id = generateId()
-      const data = { ...inputData, id } as unknown as ModelSchema
-
-      const internalEntity = new internalEntityClass(data)
-
-      const proxyTarget = createProxyTarget(internalEntity)
-
-      return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
-        ModelSchema,
-        typeof definitions
-      >
-    }
-
-    function recoverEntity(serializedData: string) {
-      const data = JSON.parse(serializedData) as ModelSchema
-      const internalEntity = new internalEntityClass(data)
-
-      const proxyTarget = createProxyTarget(internalEntity)
-
-      return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
-        ModelSchema,
-        typeof definitions
-      >
-    }
-
+  function createProxyTarget<TInternalEntity>(internalEntity: TInternalEntity) {
     return {
-      createEntity,
-      recoverEntity,
+      proto: internalEntity,
+      relationAccessor: relationAccessor,
     }
+  }
+
+  function createEntity<TInputData extends AllowedEntityInput<ModelSchema>>(
+    inputData: TInputData
+  ) {
+    const id = generateId()
+    const data = { ...inputData, id } as unknown as ModelSchema
+
+    const internalEntity = new internalEntityClass(data)
+
+    const proxyTarget = createProxyTarget(internalEntity)
+
+    return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
+      ModelSchema,
+      typeof definitions
+    >
+  }
+
+  function recoverEntity(serializedData: string) {
+    const data = JSON.parse(serializedData) as ModelSchema
+    const internalEntity = new internalEntityClass(data)
+
+    const proxyTarget = createProxyTarget(internalEntity)
+
+    return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
+      ModelSchema,
+      typeof definitions
+    >
+  }
+
+  return {
+    createEntity,
+    recoverEntity,
   }
 }

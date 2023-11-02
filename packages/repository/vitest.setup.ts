@@ -57,6 +57,7 @@ declare module "vitest" {
     faker: typeof faker
     fakeData: ReturnType<typeof generateFakeObj>
     syncKeys: SyncKey[]
+    entitySchema: TestRawEntityData
     // TODO: Delete it after refactoring
     foreignRepositoryKey: RepositoryKey<
       {
@@ -90,6 +91,15 @@ beforeEach((context) => {
   context.faker = faker
   context.syncKeys = [makeSyncKey("test")]
   context.fakeData = generateFakeObj(context.faker)
+  context.entitySchema = {
+    foo: "string",
+    bar: 1,
+    deep: {
+      foo: "string",
+      bar: "string",
+    },
+    some: true,
+  }
 })
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
