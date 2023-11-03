@@ -191,6 +191,30 @@ describe("Entity", () => {
 
         expect(testMethod).toHaveBeenCalled()
       })
+
+      it("Given schema, methods that override prototype methods, When entity factory called, Then return entity with override method", ({
+        entitySchema,
+      }) => {
+        const testMethod = vi.fn()
+
+        const entityFactory = entityModelFactory({
+          schema: entitySchema,
+          methods: {
+            toJson: testMethod,
+          },
+        })
+        const data = {
+          foo: "bar",
+        }
+
+        const entity = entityFactory.createEntity(data)
+        entity.toJson()
+
+        expect(entity.toJson).toBeDefined()
+        expect(entity.toJson).toBeTypeOf("function")
+        expect(testMethod).toHaveBeenCalled()
+        expectTypeOf(entity.toJson).toEqualTypeOf<typeof testMethod>()
+      })
     })
 
     describe("Recover Entity", () => {
@@ -345,7 +369,9 @@ describe("Entity", () => {
     it("Given entity, When serialize, Then return serialized entity", ({
       entitySchema,
     }) => {
-      const { createEntity } = entityModelFactory({ schema: entitySchema })
+      const { createEntity } = entityModelFactory({
+        schema: entitySchema,
+      })
       const data = {
         foo: "bar",
       }
@@ -409,7 +435,7 @@ describe("Entity", () => {
       const { createEntity } = entityModelFactory({
         schema: entitySchema,
         methods: {
-          testMethod() {
+          testMethod: function () {
             return this.deep
           },
         },
