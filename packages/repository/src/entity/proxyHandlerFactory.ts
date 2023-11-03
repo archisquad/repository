@@ -43,6 +43,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         }
       }
 
+      // User defined methods, takes precedence over internal methods
       if (Reflect.has(methods, prop)) {
         return function (...args: any[]) {
           return methods[prop].apply(
