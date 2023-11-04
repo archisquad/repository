@@ -102,32 +102,26 @@ describe("Entity", () => {
     describe("Entity Factory", () => {
       it("Given schema, When entity factory called, Then return entity with given data", ({
         entitySchema,
+        fakeData,
       }) => {
         const entityFactory = entityModelFactory({ schema: entitySchema })
 
-        const data = {
-          foo: "bar",
-        }
-
-        const entity = entityFactory.createEntity(data)
+        const entity = entityFactory.createEntity(fakeData)
 
         expect(entity).toEqual(
           expect.objectContaining({
-            foo: "bar",
+            foo: fakeData.foo,
           })
         )
       })
 
       it("Given schema, When entity factory called, Then return entity with unique identifier", ({
         entitySchema,
+        fakeData,
       }) => {
         const entityFactory = entityModelFactory({ schema: entitySchema })
 
-        const data = {
-          foo: "bar",
-        }
-
-        const entity = entityFactory.createEntity(data)
+        const entity = entityFactory.createEntity(fakeData)
 
         expect(entity.id).toBeDefined()
       })
@@ -135,16 +129,14 @@ describe("Entity", () => {
       it("Given schema, relations, When entity factory called, Then return entity with relations", ({
         entitySchema,
         authorsRelationship,
+        fakeData,
       }) => {
         const entityFactory = entityModelFactory({
           schema: entitySchema,
           definitions: [authorsRelationship],
         })
-        const data = {
-          foo: "bar",
-        }
 
-        const entity = entityFactory.createEntity(data)
+        const entity = entityFactory.createEntity(fakeData)
 
         expect(entity.author).toBeDefined()
         expect(entity.author).toBeTypeOf("function")
@@ -152,62 +144,52 @@ describe("Entity", () => {
 
       it("Given schema, sync keys, When entity factory called, Then return entity with sync keys", ({
         entitySchema,
+        fakeData,
       }) => {
         const firstSyncKey = makeSyncKey("foo")
         const entityFactory = entityModelFactory({
           schema: entitySchema,
           syncDestinations: [firstSyncKey],
         })
-        const data = {
-          foo: "bar",
-        }
 
-        const entity = entityFactory.createEntity(data)
+        const entity = entityFactory.createEntity(fakeData)
 
         expect(entity.isSynced(firstSyncKey)).toBe(false)
       })
 
       it("Given schema, methods, When entity factory called, Then return entity with methods", ({
         entitySchema,
+        fakeData,
       }) => {
         const testMethod = vi.fn()
-
         const entityFactory = entityModelFactory({
           schema: entitySchema,
           methods: {
             testMethod,
           },
         })
-        const data = {
-          foo: "bar",
-        }
 
-        const entity = entityFactory.createEntity(data)
+        const entity = entityFactory.createEntity(fakeData)
+        entity.testMethod()
 
         expect(entity.testMethod).toBeDefined()
         expect(entity.testMethod).toBeTypeOf("function")
-
-        entity.testMethod()
-
         expect(testMethod).toHaveBeenCalled()
       })
 
       it("Given schema, methods that override prototype methods, When entity factory called, Then return entity with override method", ({
         entitySchema,
+        fakeData,
       }) => {
         const testMethod = vi.fn()
-
         const entityFactory = entityModelFactory({
           schema: entitySchema,
           methods: {
             toJson: testMethod,
           },
         })
-        const data = {
-          foo: "bar",
-        }
 
-        const entity = entityFactory.createEntity(data)
+        const entity = entityFactory.createEntity(fakeData)
         entity.toJson()
 
         expect(entity.toJson).toBeDefined()
@@ -270,7 +252,6 @@ describe("Entity", () => {
         entitySchema,
       }) => {
         const testMethod = vi.fn()
-
         const entityFactory = entityModelFactory({
           schema: entitySchema,
           methods: {
@@ -279,12 +260,10 @@ describe("Entity", () => {
         })
 
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
+        recoveredEntity.testMethod()
 
         expect(recoveredEntity.testMethod).toBeDefined()
         expect(recoveredEntity.testMethod).toBeTypeOf("function")
-
-        recoveredEntity.testMethod()
-
         expect(testMethod).toHaveBeenCalled()
       })
     })
@@ -333,18 +312,17 @@ describe("Entity", () => {
 
     it("Given entity, When update to add data properties, Then updated entity have both data properties", ({
       entitySchema,
+      fakeData,
     }) => {
       const { createEntity } = entityModelFactory({ schema: entitySchema })
-      const entity = createEntity({
-        foo: "bar",
-      })
+      const entity = createEntity(fakeData)
 
       const updatedEntity = entity.update({
         some: false,
       })
 
       expect(updatedEntity).not.toBe(entity)
-      expect(updatedEntity.foo).toBe("bar")
+      expect(updatedEntity.foo).toBe(fakeData.foo)
       expect(updatedEntity.some).toBe(false)
     })
 
@@ -368,19 +346,17 @@ describe("Entity", () => {
 
     it("Given entity, When serialize, Then return serialized entity", ({
       entitySchema,
+      fakeData,
     }) => {
       const { createEntity } = entityModelFactory({
         schema: entitySchema,
       })
-      const data = {
-        foo: "bar",
-      }
-      const entity = createEntity(data)
+      const entity = createEntity(fakeData)
 
       const serializedEntity = entity.toJson()
 
       expect(JSON.parse(serializedEntity)).toEqual({
-        ...data,
+        ...fakeData,
         id: entity.id,
       })
     })
@@ -404,6 +380,7 @@ describe("Entity", () => {
 
     it("Given entity, When setSynced, Then update sync status only", async ({
       entitySchema,
+      fakeData,
     }) => {
       const firstSyncKey = makeSyncKey("foo")
       const secondSyncKey = makeSyncKey("bar")
@@ -411,10 +388,7 @@ describe("Entity", () => {
         schema: entitySchema,
         syncDestinations: [firstSyncKey, secondSyncKey],
       })
-      const data = {
-        foo: "bar",
-      }
-      const entity = entityFactory.createEntity(data)
+      const entity = entityFactory.createEntity(fakeData)
       expect(entity.isSynced(firstSyncKey)).toBe(false)
       expect(entity.isSynced(secondSyncKey)).toBe(false)
       const id = entity.id
@@ -440,7 +414,6 @@ describe("Entity", () => {
           },
         },
       })
-
       const entity = createEntity(fakeData)
 
       const result = entity.testMethod()
