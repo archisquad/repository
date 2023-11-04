@@ -16,10 +16,9 @@ import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { validateInput } from "./validation"
 
-
 export function entityModelFactory<
   TInputSchema extends UserDefinedSchema,
-  TMethods extends Methods<EntitySchema<TInputSchema>>,
+  TMethods extends Methods<EntitySchema<TInputSchema>> | undefined,
   const TDefinition extends Relationship<
     EntitySchema<TInputSchema>
   > = Relationship<EntitySchema<TInputSchema>>,
@@ -79,9 +78,9 @@ export function entityModelFactory<
 
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       ModelSchema,
-      typeof definitions,
-      TMethods
-    > & { test: TMethods }
+      TMethods,
+      typeof definitions
+    >
   }
 
   function recoverEntity(serializedData: string) {
@@ -92,8 +91,8 @@ export function entityModelFactory<
 
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       ModelSchema,
-      typeof definitions,
-      TMethods
+      TMethods,
+      typeof definitions
     >
   }
 
