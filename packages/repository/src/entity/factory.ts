@@ -17,13 +17,15 @@ import { relationAccessorFactory } from "./relationsAccessor"
 import { validateInput } from "./validation"
 
 export function entityModelFactory<
+  TSchema,
   TInputSchema extends UserDefinedSchema,
   TMethods extends Methods<EntitySchema<TInputSchema>> | undefined,
   const TDefinition extends Relationship<
     EntitySchema<TInputSchema>
   > = Relationship<EntitySchema<TInputSchema>>,
 >(configObj: {
-  schema: TInputSchema
+  schema: TSchema
+  inferSchema: (data: TSchema) => TInputSchema
   methods?: TMethods
   definitions?: TDefinition[]
   syncDestinations?: SyncKey[]
