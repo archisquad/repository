@@ -2,7 +2,16 @@
 import { entityModelFactory } from "./factory"
 import { makeSyncKey } from "./sync"
 import { makeRepositoryKey } from "@/repositoryKey"
-import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import { BaseSchema, Output, boolean, number, object, string } from "valibot"
+import {
+  TestEntityData,
+  beforeEach,
+  describe,
+  expect,
+  expectTypeOf,
+  it,
+  vi,
+} from "vitest"
 
 describe("Entity", () => {
   beforeEach((context) => {
@@ -31,13 +40,15 @@ describe("Entity", () => {
   describe("Factories", () => {
     describe("Model Factory", () => {
       it("Given schema, relations, sync keys, methods, When entity model factory called, Then return entity factories", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         entityMethods,
         syncKeys,
         authorsRelationship,
       }) => {
         const result = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           methods: entityMethods,
           definitions: [authorsRelationship],
           syncDestinations: syncKeys,
@@ -52,11 +63,13 @@ describe("Entity", () => {
       })
 
       it("Given schema, relations, When entity model factory called, Then return entity factories", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         authorsRelationship,
       }) => {
         const result = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           definitions: [authorsRelationship],
         })
 
@@ -69,11 +82,13 @@ describe("Entity", () => {
       })
 
       it("Given schema, methods, When entity model factory called, Then return entity factories", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         entityMethods,
       }) => {
         const result = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           methods: entityMethods,
         })
 
@@ -86,9 +101,13 @@ describe("Entity", () => {
       })
 
       it("Given schema, When entity model factory called, Then return entity factories", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
       }) => {
-        const result = entityModelFactory({ schema: entitySchema })
+        const result = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+        })
 
         expect(result).toEqual(
           expect.objectContaining({
@@ -101,10 +120,14 @@ describe("Entity", () => {
 
     describe("Entity Factory", () => {
       it("Given schema, When entity factory called, Then return entity with given data", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         fakeData,
       }) => {
-        const entityFactory = entityModelFactory({ schema: entitySchema })
+        const entityFactory = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+        })
 
         const entity = entityFactory.createEntity(fakeData)
 
@@ -116,10 +139,14 @@ describe("Entity", () => {
       })
 
       it("Given schema, When entity factory called, Then return entity with unique identifier", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         fakeData,
       }) => {
-        const entityFactory = entityModelFactory({ schema: entitySchema })
+        const entityFactory = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+        })
 
         const entity = entityFactory.createEntity(fakeData)
 
@@ -127,12 +154,14 @@ describe("Entity", () => {
       })
 
       it("Given schema, relations, When entity factory called, Then return entity with relations", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         authorsRelationship,
         fakeData,
       }) => {
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           definitions: [authorsRelationship],
         })
 
@@ -143,12 +172,14 @@ describe("Entity", () => {
       })
 
       it("Given schema, sync keys, When entity factory called, Then return entity with sync keys", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         fakeData,
       }) => {
         const firstSyncKey = makeSyncKey("foo")
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           syncDestinations: [firstSyncKey],
         })
 
@@ -158,12 +189,14 @@ describe("Entity", () => {
       })
 
       it("Given schema, methods, When entity factory called, Then return entity with methods", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         fakeData,
       }) => {
         const testMethod = vi.fn()
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           methods: {
             testMethod,
           },
@@ -178,12 +211,14 @@ describe("Entity", () => {
       })
 
       it("Given schema, methods that override prototype methods, When entity factory called, Then return entity with override method", ({
-        entitySchema,
+        zodSchema,
+        zodInferFn,
         fakeData,
       }) => {
         const testMethod = vi.fn()
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           methods: {
             toJson: testMethod,
           },
@@ -202,9 +237,13 @@ describe("Entity", () => {
     describe("Recover Entity", () => {
       it("Given serialized entity, When recover entity, Then return entity with given data, And the same ID", ({
         serializedEntity,
-        entitySchema,
+        zodSchema,
+        zodInferFn,
       }) => {
-        const entityFactory = entityModelFactory({ schema: entitySchema })
+        const entityFactory = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+        })
 
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
 
@@ -217,12 +256,14 @@ describe("Entity", () => {
       })
 
       it("Given serialized entity, When recover entity, Then return entity with relations", ({
-        entitySchema,
         authorsRelationship,
         serializedEntity,
+        zodSchema,
+        zodInferFn,
       }) => {
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           definitions: [authorsRelationship],
         })
 
@@ -234,11 +275,13 @@ describe("Entity", () => {
 
       it("Given serialized entity, When recover entity, Then return entity with sync keys all set to un-up-to-date", ({
         serializedEntity,
-        entitySchema,
+        zodSchema,
+        zodInferFn,
       }) => {
         const firstSyncKey = makeSyncKey("foo")
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           syncDestinations: [firstSyncKey],
         })
 
@@ -249,11 +292,13 @@ describe("Entity", () => {
 
       it("Given serialized entity, When recover entity, Then return entity with methods", ({
         serializedEntity,
-        entitySchema,
+        zodSchema,
+        zodInferFn,
       }) => {
         const testMethod = vi.fn()
         const entityFactory = entityModelFactory({
-          schema: entitySchema,
+          schema: zodSchema,
+          inferSchema: zodInferFn,
           methods: {
             testMethod,
           },
@@ -269,15 +314,87 @@ describe("Entity", () => {
     })
   })
 
+  describe("Schema declaration", () => {
+    it("Given dummy-object schema, When entity model declared, Then return proper schema type", ({
+      fakeData,
+    }) => {
+      const { createEntity } = entityModelFactory({
+        schema: {
+          foo: "string",
+          bar: 1,
+          deep: {
+            foo: "string",
+            bar: "string",
+          },
+          some: true,
+        },
+        inferSchema: (data) => data,
+      })
+
+      const entity = createEntity(fakeData)
+
+      expectTypeOf(entity).toMatchTypeOf<TestEntityData>()
+      expect(entity.foo).toBe(fakeData.foo)
+    })
+
+    it("Given zod based schema, When entity model declared, Then return proper schema type", ({
+      zodSchema,
+      zodInferFn,
+      fakeData,
+    }) => {
+      const { createEntity } = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+      })
+
+      const entity = createEntity(fakeData)
+
+      expectTypeOf(entity).toMatchTypeOf<TestEntityData>()
+      expect(entity.foo).toBe(fakeData.foo)
+    })
+
+    it("Given valibot based schema, When entity model declared, Then return proper schema type", ({
+      fakeData,
+    }) => {
+      const valibotSchema = object({
+        foo: string(),
+        bar: number(),
+        deep: object({
+          foo: string(),
+          bar: string(),
+        }),
+        some: boolean(),
+      })
+      const valibotInferFn = <TSchema extends BaseSchema>(
+        valibotSchema: TSchema
+        // eslint-disable-next-line unicorn/consistent-function-scoping
+      ) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return {} as Output<TSchema>
+      }
+      const { createEntity } = entityModelFactory({
+        schema: valibotSchema,
+        inferSchema: valibotInferFn,
+      })
+
+      const entity = createEntity(fakeData)
+
+      expectTypeOf(entity).toMatchTypeOf<TestEntityData>()
+      expect(entity.foo).toBe(fakeData.foo)
+    })
+  })
+
   describe("Instance", () => {
     it("Given entity, When update, Then update data, And set sync status to un-up-to-date, And keep the same ID, And create new object, And keeps relations untouched", async ({
-      entitySchema,
       authorsRelationship,
+      zodSchema,
+      zodInferFn,
     }) => {
       const firstSyncKey = makeSyncKey("foo")
       const secondSyncKey = makeSyncKey("bar")
       const { createEntity } = entityModelFactory({
-        schema: entitySchema,
+        schema: zodSchema,
+        inferSchema: zodInferFn,
         definitions: [authorsRelationship],
         syncDestinations: [firstSyncKey, secondSyncKey],
       })
@@ -311,10 +428,14 @@ describe("Entity", () => {
     })
 
     it("Given entity, When update to add data properties, Then updated entity have both data properties", ({
-      entitySchema,
+      zodSchema,
+      zodInferFn,
       fakeData,
     }) => {
-      const { createEntity } = entityModelFactory({ schema: entitySchema })
+      const { createEntity } = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+      })
       const entity = createEntity(fakeData)
 
       const updatedEntity = entity.update({
@@ -327,9 +448,13 @@ describe("Entity", () => {
     })
 
     it("Given entity, When update with id, Then ID is not updated", ({
-      entitySchema,
+      zodSchema,
+      zodInferFn,
     }) => {
-      const { createEntity } = entityModelFactory({ schema: entitySchema })
+      const { createEntity } = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+      })
       const entity = createEntity({
         foo: "bar",
       })
@@ -345,11 +470,13 @@ describe("Entity", () => {
     })
 
     it("Given entity, When serialize, Then return serialized entity", ({
-      entitySchema,
+      zodSchema,
+      zodInferFn,
       fakeData,
     }) => {
       const { createEntity } = entityModelFactory({
-        schema: entitySchema,
+        schema: zodSchema,
+        inferSchema: zodInferFn,
       })
       const entity = createEntity(fakeData)
 
@@ -362,9 +489,13 @@ describe("Entity", () => {
     })
 
     it("Given entity, When dumping to regular object, Then return regular object with data", ({
-      entitySchema,
+      zodSchema,
+      zodInferFn,
     }) => {
-      const { createEntity } = entityModelFactory({ schema: entitySchema })
+      const { createEntity } = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+      })
       const data = {
         foo: "bar",
       }
@@ -379,13 +510,15 @@ describe("Entity", () => {
     })
 
     it("Given entity, When setSynced, Then update sync status only", async ({
-      entitySchema,
+      zodSchema,
+      zodInferFn,
       fakeData,
     }) => {
       const firstSyncKey = makeSyncKey("foo")
       const secondSyncKey = makeSyncKey("bar")
       const entityFactory = entityModelFactory({
-        schema: entitySchema,
+        schema: zodSchema,
+        inferSchema: zodInferFn,
         syncDestinations: [firstSyncKey, secondSyncKey],
       })
       const entity = entityFactory.createEntity(fakeData)
@@ -403,11 +536,13 @@ describe("Entity", () => {
     })
 
     it("Given entity with methods, when method called, Then method has access to data", ({
-      entitySchema,
+      zodSchema,
+      zodInferFn,
       fakeData,
     }) => {
       const { createEntity } = entityModelFactory({
-        schema: entitySchema,
+        schema: zodSchema,
+        inferSchema: zodInferFn,
         methods: {
           testMethod: function () {
             return this.deep
