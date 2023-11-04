@@ -68,12 +68,18 @@ importers:
       unbuild:
         specifier: 2.0.0
         version: 2.0.0(typescript@5.2.2)
+      valibot:
+        specifier: 0.20.1
+        version: 0.20.1
       vitepress:
         specifier: 1.0.0-rc.22
         version: 1.0.0-rc.22(@algolia/client-search@4.20.0)(@types/node@20.5.1)(search-insights@2.9.0)
       vitest:
         specifier: 1.0.0-beta.3
         version: 1.0.0-beta.3(@types/node@20.5.1)(jsdom@22.1.0)
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
 
   docs:
     dependencies:
@@ -130,9 +136,15 @@ importers:
       unbuild:
         specifier: 2.0.0
         version: 2.0.0(typescript@5.2.2)
+      valibot:
+        specifier: 0.20.1
+        version: 0.20.1
       vitest:
         specifier: 1.0.0-beta.3
         version: 1.0.0-beta.3(@types/node@20.5.1)(jsdom@22.1.0)
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
 
 packages:
 
@@ -7534,6 +7546,10 @@ packages:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
     dev: true
 
+  /valibot@0.20.1:
+    resolution: {integrity: sha512-7lToTLG5wtK76u32gq8dUK0bAw7bknTGbeNSKRJunAC2soGVnNrKngg+38Jjt6FOwH+MshUONHoFz+LgmjeYKQ==}
+    dev: true
+
   /validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
     dependencies:
@@ -8037,4 +8053,8 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
+    dev: true
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true
