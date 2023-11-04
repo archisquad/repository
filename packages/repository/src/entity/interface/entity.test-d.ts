@@ -10,7 +10,7 @@ import {
 
 describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {
-    type Test = Entity<TestEntityData, [PostsRelationDefinition]>
+    type Test = Entity<TestEntityData, undefined, [PostsRelationDefinition]>
 
     expectTypeOf<Test["posts"]>().toEqualTypeOf<
       () => {
@@ -33,9 +33,8 @@ describe("Entity interface", () => {
 
   it("Entity has update method", () => {
     type EntityExample = Entity<TestEntityData>
-    type Test = EntityExample["update"]
 
-    expectTypeOf<Test>().toMatchTypeOf<
+    expectTypeOf<EntityExample["update"]>().toMatchTypeOf<
       (data: AllowedEntityInput<TestEntityData>) => EntityExample
     >()
   })
@@ -59,7 +58,6 @@ describe("Entity interface", () => {
   it("Entity allow to define custom methods", () => {
     type Test = Entity<
       TestEntityData,
-      [],
       {
         customMethod(): string
       }
@@ -78,22 +76,35 @@ describe("Entity interface", () => {
     >()
   })
 
-  it("Defined methods can't override built-in methods", () => {
+  it("Defined methods can't override built-in update method", () => {
     type Test = Entity<
       TestEntityData,
-      [],
       {
-        toObject(): never
+        update(): never
       }
     >
 
-    expectTypeOf<Test["toObject"]>().toEqualTypeOf<() => TestEntityData>()
+    expectTypeOf<Test["update"]>().toEqualTypeOf<{
+      (
+        data: AllowedEntityInput<TestEntityData>
+      ): Entity<TestEntityData, { update(): never }, []>
+    }>()
+  })
+
+  it("Defined methods can override other built-in methods", () => {
+    type Test = Entity<
+      TestEntityData,
+      {
+        toJson(): { foo: string }
+      }
+    >
+
+    expectTypeOf<Test["toJson"]>().toEqualTypeOf<() => { foo: string }>()
   })
 
   it("Defined method can access data via this", () => {
     type Test = Entity<
       TestEntityData,
-      [],
       {
         customMethod(): string
       }
