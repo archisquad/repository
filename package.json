@@ -23,7 +23,7 @@
   "prettier": "@archisquad/prettier-config",
   "devDependencies": {
     "@archisquad/prettier-config": "1.0.0",
-    "@commitlint/cli": "17.8.1",
+    "@commitlint/cli": "18.4.0",
     "@faker-js/faker": "8.2.0",
     "@microsoft/eslint-formatter-sarif": "3.0.0",
     "@paralleldrive/cuid2": "2.2.2",
