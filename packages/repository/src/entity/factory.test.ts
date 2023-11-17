@@ -384,6 +384,68 @@ describe("Entity", () => {
     })
   })
 
+  describe("Schema validation", () => {
+    it("Given schema with validator, When entity factory called, Then validator called on given data", ({
+      zodSchema,
+      zodInferFn,
+      fakeData,
+    }) => {
+      const validator = vi.fn()
+      const entityFactory = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+        validator,
+      })
+
+      entityFactory.createEntity(fakeData)
+
+      expect(validator).toHaveBeenCalledWith(
+        zodSchema,
+        // id is added by the factory, direct match is not possible
+        expect.objectContaining(fakeData)
+      )
+    })
+
+    it("Given schema with validator, When entity factory called on proper data, Then entity returned", ({
+      zodSchema,
+      zodInferFn,
+      zodValidatorFn,
+      fakeData,
+    }) => {
+      const entityFactory = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+        validator: zodValidatorFn,
+      })
+
+      const entity = entityFactory.createEntity(fakeData)
+
+      expect(entity).toEqual(
+        expect.objectContaining({
+          foo: fakeData.foo,
+        })
+      )
+    })
+
+    it("Given schema with validator, When entity factory called on invalid data, Then throw error", ({
+      zodSchema,
+      zodInferFn,
+      zodValidatorFn,
+      fakeData,
+    }) => {
+      const entityFactory = entityModelFactory({
+        schema: zodSchema,
+        inferSchema: zodInferFn,
+        validator: zodValidatorFn,
+      })
+
+      expect(() =>
+        // @ts-expect-error - intentionally testing invalid data
+        entityFactory.createEntity({ ...fakeData, foo: 1 })
+      ).toThrow()
+    })
+  })
+
   describe("Instance", () => {
     it("Given entity, When update, Then update data, And set sync status to un-up-to-date, And keep the same ID, And create new object, And keeps relations untouched", async ({
       authorsRelationship,

@@ -10,6 +10,7 @@ import {
   Relationship,
   SyncKey,
   UserDefinedSchema,
+  Validator,
 } from "./interface"
 import { createInternalEntity } from "./proto"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
@@ -26,6 +27,7 @@ export function entityModelFactory<
 >(configObj: {
   schema: TSchema
   inferSchema: (data: TSchema) => TInputSchema
+  validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
   definitions?: TDefinition[]
   syncDestinations?: SyncKey[]
@@ -37,6 +39,7 @@ export function entityModelFactory<
     definitions = [],
     syncDestinations = [],
     methods = {},
+    validator = (schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
   // TODO: The user should define the schema without any dynamically added ID
@@ -45,8 +48,11 @@ export function entityModelFactory<
   const relationAccessor =
     definitions.length > 0 ? relationAccessorFactory(definitions) : {}
 
-  const internalEntityClass =
-    createInternalEntity<ModelSchema>(syncDestinations)
+  const validatorFn = (data: unknown) => validator(schema, data)
+  const internalEntityClass = createInternalEntity<ModelSchema>(
+    syncDestinations,
+    validatorFn as unknown as (data: any) => ModelSchema
+  )
 
   const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
