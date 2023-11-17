@@ -1,13 +1,17 @@
 import { createInternalEntity } from "./proto"
 import { DeepReadonly } from "./types"
-import { TestEntityData, describe, expect, expectTypeOf, it } from "vitest"
+import { TestEntityData, describe, expect, expectTypeOf, it, vi } from "vitest"
 
 describe("proto", () => {
   it("Update method returns new instance with extended data", ({
     syncKeys,
     fakeData,
+    passThroughValidator,
   }) => {
-    const context = createInternalEntity<TestEntityData>(syncKeys)
+    const context = createInternalEntity<TestEntityData>(
+      syncKeys,
+      passThroughValidator
+    )
 
     const entity = new context({ ...fakeData, id: "1" })
 
@@ -41,8 +45,12 @@ describe("proto", () => {
   it("isSynced method return status for given SyncKey", ({
     syncKeys,
     fakeData,
+    passThroughValidator,
   }) => {
-    const context = createInternalEntity<TestEntityData>(syncKeys)
+    const context = createInternalEntity<TestEntityData>(
+      syncKeys,
+      passThroughValidator
+    )
 
     const entity = new context({ ...fakeData, id: "2" })
 
@@ -53,8 +61,12 @@ describe("proto", () => {
   it("setSynced method set status for given SyncKey", async ({
     syncKeys,
     fakeData,
+    passThroughValidator,
   }) => {
-    const context = createInternalEntity<TestEntityData>(syncKeys)
+    const context = createInternalEntity<TestEntityData>(
+      syncKeys,
+      passThroughValidator
+    )
 
     const entity = new context({ ...fakeData, id: "1" })
 
@@ -65,5 +77,40 @@ describe("proto", () => {
 
     expect(entity.isSynced(syncKeys[0])).toBe(true)
     expect(entity.isSynced(syncKeys[1])).toBe(false)
+  })
+
+  it("Validator function is called on entity creation", ({
+    syncKeys,
+    fakeData,
+    passThroughValidator,
+  }) => {
+    const validatorFn = vi.fn(<TInput>(input: TInput) => ({
+      ...passThroughValidator(input),
+      bar: "bar",
+    }))
+    const context = createInternalEntity<TestEntityData>(syncKeys, validatorFn)
+
+    const result = new context({ ...fakeData, id: "1" })
+
+    expect(validatorFn).toBeCalledTimes(1)
+    expect(result.data.bar).toBe("bar")
+  })
+
+  it("Validator function is called on entity update", ({
+    syncKeys,
+    fakeData,
+    passThroughValidator,
+  }) => {
+    const validatorFn = vi.fn(<TInput>(input: TInput) => ({
+      ...passThroughValidator(input),
+      foo: "updated",
+    }))
+    const context = createInternalEntity<TestEntityData>(syncKeys, validatorFn)
+    const entity = new context({ ...fakeData, id: "1" })
+
+    entity.update({ foo: "foo2" })
+
+    expect(validatorFn).toBeCalledTimes(2)
+    expect(entity.data.foo).toBe("updated")
   })
 })
