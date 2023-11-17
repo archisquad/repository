@@ -72,7 +72,13 @@ declare module "vitest" {
       someMethod: (input: string) => { output: typeof input }
     }
     zodSchema: typeof zodSchema
+    // TODO: Problem with added ID, to solve in ARC-33
     zodInferFn: (input: typeof zodSchema) => TestRawEntityData
+    zodValidatorFn: (
+      schema: typeof zodSchema,
+      input: unknown
+    ) => TestRawEntityData
+    passThroughValidator: <TInput>(input: TInput) => TInput
     // TODO: Delete it after refactoring
     foreignRepositoryKey: RepositoryKey<
       {
@@ -113,6 +119,10 @@ beforeEach((context) => {
   context.zodInferFn = (input: typeof zodSchema) => {
     return {} as z.infer<typeof input>
   }
+  context.zodValidatorFn = (schema: typeof zodSchema, input: unknown) => {
+    return schema.parse(input)
+  }
+  context.passThroughValidator = <TInput>(input: TInput) => input
 })
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
