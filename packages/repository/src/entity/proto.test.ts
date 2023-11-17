@@ -1,8 +1,20 @@
 import { createInternalEntity } from "./proto"
 import { DeepReadonly } from "./types"
-import { TestEntityData, describe, expect, expectTypeOf, it, vi } from "vitest"
+import {
+  TestEntityData,
+  beforeEach,
+  describe,
+  expect,
+  expectTypeOf,
+  it,
+  vi,
+} from "vitest"
 
 describe("proto", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it("Update method returns new instance with extended data", ({
     syncKeys,
     fakeData,
