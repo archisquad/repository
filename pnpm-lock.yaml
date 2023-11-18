@@ -42,8 +42,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0(prettier@3.0.3)(typescript@5.2.2)(vitest@1.0.0-beta.3)
       gitmoji-cli:
-        specifier: 8.5.0
-        version: 8.5.0
+        specifier: 9.0.0
+        version: 9.0.0
       husky:
         specifier: 8.0.3
         version: 8.0.3
@@ -2912,18 +2912,19 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
-  /conf@11.0.2:
-    resolution: {integrity: sha512-jjyhlQ0ew/iwmtwsS2RaB6s8DBifcE2GYBEaw2SJDUY/slJJbNfY4GlDVzOs/ff8cM/Wua5CikqXgbFl5eu85A==}
-    engines: {node: '>=14.16'}
+  /conf@12.0.0:
+    resolution: {integrity: sha512-fIWyWUXrJ45cHCIQX+Ck1hrZDIf/9DR0P0Zewn3uNht28hbt5OfGUq8rRWsxi96pZWPyBEd0eY9ama01JTaknA==}
+    engines: {node: '>=18'}
     dependencies:
       ajv: 8.12.0
       ajv-formats: 2.1.1(ajv@8.12.0)
       atomically: 2.0.2
       debounce-fn: 5.1.2
-      dot-prop: 7.2.0
+      dot-prop: 8.0.2
       env-paths: 3.0.0
       json-schema-typed: 8.0.1
       semver: 7.5.4
+      uint8array-extras: 0.3.0
     dev: true
 
   /config-chain@1.1.13:
@@ -3294,11 +3295,11 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /dot-prop@7.2.0:
-    resolution: {integrity: sha512-Ol/IPXUARn9CSbkrdV4VJo7uCy1I3VuSiWCaFSg+8BdUOzF9n3jefIpcgAydvUZbTdEBZs2vEiTiS9m61ssiDA==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+  /dot-prop@8.0.2:
+    resolution: {integrity: sha512-xaBe6ZT4DHPkg0k4Ytbvn5xoxgpG0jOS1dYxSOwAHPuNLjP3/OzN0gH55SrLqpx8cBfSaVt91lXYkApjb+nYdQ==}
+    engines: {node: '>=16'}
     dependencies:
-      type-fest: 2.19.0
+      type-fest: 3.13.1
     dev: true
 
   /e-prime@0.10.4:
@@ -4391,13 +4392,13 @@ packages:
       through2: 4.0.2
     dev: true
 
-  /gitmoji-cli@8.5.0:
-    resolution: {integrity: sha512-ZSplvgm8UiAjsWBOxYAfbLj8JTMFj5TjB6yM7RFlqEfsFMgP0fhIPpgnHU5aMiyVyvX6jBRVf1hzjrmP3/cgiA==}
-    engines: {node: '>=16'}
+  /gitmoji-cli@9.0.0:
+    resolution: {integrity: sha512-yXVPbLHzC85da8tOq/h+WKrmtLQu/HgvS+nxp6rknTvVdW6tYIQqFDDJFeUy4MWLvPqsGCGnkF9PtI6PftMVIA==}
+    engines: {node: '>=18'}
     hasBin: true
     dependencies:
       chalk: 5.3.0
-      conf: 11.0.2
+      conf: 12.0.0
       execa: 8.0.1
       fuse.js: 6.6.2
       inquirer: 9.2.11
@@ -4407,7 +4408,7 @@ packages:
       ora: 7.0.1
       path-exists: 5.0.0
       proxy-agent: 6.3.1
-      update-notifier: 6.0.2
+      update-notifier: 7.0.0
       validator: 13.11.0
     transitivePeerDependencies:
       - supports-color
@@ -4588,11 +4589,6 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       has-symbols: 1.0.3
-    dev: true
-
-  /has-yarn@3.0.0:
-    resolution: {integrity: sha512-IrsVwUHhEULx3R8f/aA8AHuEzAorplsab/v8HBzEiIukwq5i/EC+xmOW+HfP1OaDP+2JkgT1yILHN2O3UFIbcA==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
   /has@1.0.4:
@@ -4942,6 +4938,12 @@ packages:
     resolution: {integrity: sha512-gyPJuv83bHMpocVYoqof5VDiZveEoGoFL8m3BXNb2VW8Xs+rz9kqO8LOQ5DH6EsuvilT1ApazU0pyl+ytbPtlw==}
     dev: true
 
+  /is-in-ci@0.1.0:
+    resolution: {integrity: sha512-d9PXLEY0v1iJ64xLiQMJ51J128EYHAaOR4yZqQi8aHGfw6KgifM3/Viw1oZZ1GCVmb3gBuyhLyHj0HgR2DhSXQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dev: true
+
   /is-inside-container@1.0.0:
     resolution: {integrity: sha512-KIYLCCJghfHZxqjYBE7rEy0OBuTd5xCHS7tHVgvCLkx7StIoaxwNW3hCALgEUjFfeRk+MG/Qxmp/vtETEF3tRA==}
     engines: {node: '>=14.16'}
@@ -5108,11 +5110,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       is-docker: 2.2.1
-    dev: true
-
-  /is-yarn-global@0.4.1:
-    resolution: {integrity: sha512-/kppl+R+LO5VmhYSEWARUFjodS25D68gvj8W7z0I7OWhUla5xWu8KL6CtB2V0R6yqhnRgbcaREMr4EEM6htLPQ==}
-    engines: {node: '>=12'}
     dev: true
 
   /isarray@2.0.5:
@@ -7426,6 +7423,11 @@ packages:
     resolution: {integrity: sha512-uY/99gMLIOlJPwATcMVYfqDSxUR9//AUcgZMzwfSTJPDKzA1S8mX4VLqa+fiAtveraQUBCz4FFcwVZBGbwBXIw==}
     dev: true
 
+  /uint8array-extras@0.3.0:
+    resolution: {integrity: sha512-erJsJwQ0tKdwuqI0359U8ijkFmfiTcq25JvvzRVc1VP+2son1NJRXhxcAKJmAW3ajM8JSGAfsAXye8g4s+znxA==}
+    engines: {node: '>=18'}
+    dev: true
+
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
     dependencies:
@@ -7536,19 +7538,17 @@ packages:
       picocolors: 1.0.0
     dev: true
 
-  /update-notifier@6.0.2:
-    resolution: {integrity: sha512-EDxhTEVPZZRLWYcJ4ZXjGFN0oP7qYvbXWzEgRm/Yql4dHX5wDbvh89YHP6PK1lzZJYrMtXUuZZz8XGK+U6U1og==}
-    engines: {node: '>=14.16'}
+  /update-notifier@7.0.0:
+    resolution: {integrity: sha512-Hv25Bh+eAbOLlsjJreVPOs4vd51rrtCrmhyOJtbpAojro34jS4KQaEp4/EvlHJX7jSO42VvEFpkastVyXyIsdQ==}
+    engines: {node: '>=18'}
     dependencies:
       boxen: 7.1.1
       chalk: 5.3.0
       configstore: 6.0.0
-      has-yarn: 3.0.0
       import-lazy: 4.0.0
-      is-ci: 3.0.1
+      is-in-ci: 0.1.0
       is-installed-globally: 0.4.0
       is-npm: 6.0.0
-      is-yarn-global: 0.4.1
       latest-version: 7.0.0
       pupa: 3.1.0
       semver: 7.5.4
