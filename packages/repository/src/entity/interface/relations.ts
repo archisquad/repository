@@ -1,52 +1,38 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { EntitySchema } from "./data"
 import { RepositoryKey } from "src/repositoryKey"
-import { UnionToIntersection } from "type-fest"
+import { IsStringLiteral, Simplify } from "type-fest"
 
 type RelationshipTypes = "has-many" | "belongs-to"
 
 export interface Relationship<
-  TLocalSchema,
-  TForeignRepository extends RepositoryKey<any, any> = RepositoryKey<
-    Record<string, any>,
-    string
-  >,
+  TSchema extends EntitySchema,
+  TForeignRepository extends RepositoryKey<Record<string, any>, string>,
 > {
-  id: string
   type: RelationshipTypes
   foreignRepository: TForeignRepository
   foreignKey: keyof TForeignRepository["__schema"]
-  localKey: keyof TLocalSchema
+  localKey: keyof TSchema
 }
 
-export type FindForeignSchemaInDefinitions<TDefinitions, TID> =
-  TDefinitions extends {
-    id: TID
-    foreignRepository: infer TForeignRepository
-  }
-    ? TForeignRepository extends RepositoryKey<infer TForeignSchema, any>
-      ? TForeignSchema
-      : never
-    : never
+export type RelationshipsDefinitions<
+  TSchema extends EntitySchema,
+  TDefinitions extends Relationship<TSchema, any> = Relationship<TSchema, any>,
+> = Record<string, TDefinitions>
 
-export type ForeignType<
-  TDefinitions extends { id: string },
-  TRelationName extends TDefinitions["id"],
-  TRelationType extends RelationshipTypes,
-> = TRelationType extends "has-many"
-  ? FindForeignSchemaInDefinitions<TDefinitions, TRelationName>[]
-  : FindForeignSchemaInDefinitions<TDefinitions, TRelationName>
+type RelationshipAccessMethods<
+  TSchema extends EntitySchema,
+  TRelations extends RelationshipsDefinitions<TSchema>,
+> = {
+  -readonly [Key in keyof TRelations]: TRelations[Key]["type"] extends "belongs-to"
+    ? () => Simplify<TRelations[Key]["foreignRepository"]["__schema"]>
+    : () => Simplify<TRelations[Key]["foreignRepository"]["__schema"]>[]
+}
 
-export type Relations<TDefinitions> = UnionToIntersection<
-  TDefinitions extends {
-    id: string
-    type: infer TRelationType extends RelationshipTypes
-  }
-    ? {
-        [Key in TDefinitions["id"]]: () => ForeignType<
-          TDefinitions,
-          Key,
-          TRelationType
-        >
-      }
-    : never
->
+export type ResolvedRelations<
+  TSchema extends EntitySchema,
+  TRelations extends RelationshipsDefinitions<TSchema> | undefined,
+> = TRelations extends RelationshipsDefinitions<TSchema>
+  ? IsStringLiteral<keyof TRelations> extends true
+    ? RelationshipAccessMethods<TSchema, NonNullable<TRelations>>
+    : {}
+  : {}
