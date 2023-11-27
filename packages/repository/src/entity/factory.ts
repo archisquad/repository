@@ -7,7 +7,7 @@ import {
   EntitySchema,
   Methods,
   ProxyTarget,
-  Relationship,
+  RelationshipsDefinitions,
   SyncKey,
   UserDefinedSchema,
   Validator,
@@ -21,32 +21,32 @@ export function entityModelFactory<
   TSchema,
   TInputSchema extends UserDefinedSchema,
   TMethods extends Methods<EntitySchema<TInputSchema>> | undefined,
-  const TDefinition extends Relationship<
+  const TDefinitions extends RelationshipsDefinitions<
     EntitySchema<TInputSchema>
-  > = Relationship<EntitySchema<TInputSchema>>,
+  >,
 >(configObj: {
   schema: TSchema
   inferSchema: (data: TSchema) => TInputSchema
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
-  definitions?: TDefinition[]
+  relations?: TDefinitions
   syncDestinations?: SyncKey[]
 }) {
   type ModelSchema = EntitySchema<TInputSchema>
 
   const {
     schema,
-    definitions = [],
+    relations = {},
     syncDestinations = [],
     methods = {},
     validator = (schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
   // TODO: The user should define the schema without any dynamically added ID
-  validateInput(schema as unknown as ModelSchema, methods, definitions)
+  validateInput(schema as unknown as ModelSchema, methods, relations)
 
   const relationAccessor =
-    definitions.length > 0 ? relationAccessorFactory(definitions) : {}
+    Object.keys(relations).length > 0 ? relationAccessorFactory(relations) : {}
 
   const validatorFn = (data: unknown) => validator(schema, data)
   const internalEntityClass = createInternalEntity<ModelSchema>(
@@ -87,7 +87,7 @@ export function entityModelFactory<
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       ModelSchema,
       TMethods,
-      typeof definitions
+      TDefinitions
     >
   }
 
@@ -100,7 +100,7 @@ export function entityModelFactory<
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       ModelSchema,
       TMethods,
-      typeof definitions
+      TDefinitions
     >
   }
 
