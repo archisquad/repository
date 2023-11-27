@@ -1,4 +1,5 @@
-import { EntitySchema, Methods, Relationship } from "./interface"
+import { EntitySchema, Methods } from "./interface"
+import { RelationshipsDefinitions } from "./interface/relations"
 
 export function validateInput<
   TSchema extends EntitySchema,
@@ -6,11 +7,11 @@ export function validateInput<
 >(
   schema: TSchema,
   methods: TMethods,
-  relations: Relationship<TSchema, any>[]
+  relations: RelationshipsDefinitions<TSchema>
 ): void {
   const fieldNames = Object.keys(schema)
   const methodNames = Object.keys(methods)
-  const relationNames = relations.map((relation) => relation.id)
+  const relationNames = Object.keys(relations)
 
   if (methodNames.length === 0 && relationNames.length === 0) {
     return
