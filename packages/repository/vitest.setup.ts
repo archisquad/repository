@@ -34,7 +34,6 @@ declare module "vitest" {
   >
 
   export type PostsRelationDefinition = {
-    readonly id: "posts"
     readonly type: "has-many"
     readonly foreignRepository: RepositoryKey<
       {
@@ -57,7 +56,6 @@ declare module "vitest" {
   >
 
   export type AuthorRelationDefinition = {
-    readonly id: "author"
     readonly type: "belongs-to"
     readonly foreignRepository: AuthorsRepositoryKey
     readonly foreignKey: "id"
