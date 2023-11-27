@@ -23,7 +23,6 @@ describe("Entity", () => {
       "authors"
     >("authors")
     context.authorsRelationship = {
-      id: "author",
       type: "belongs-to",
       foreignRepository: context.authorsRepositoryKey,
       foreignKey: "id",
