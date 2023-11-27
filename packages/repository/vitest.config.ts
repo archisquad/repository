@@ -1,10 +1,10 @@
+import tsconfigPaths from "vite-tsconfig-paths"
 import { configDefaults, defineConfig } from "vitest/config"
 
 export default defineConfig({
+  // Types incompatibility between vite-tsconfig-paths and vite 5.0.2
+  plugins: [tsconfigPaths() as any],
   test: {
-    alias: {
-      "@": "./src",
-    },
     include: ["src/**/*.{test,unit,integration}.{ts,tsx}"],
     environment: "node",
     setupFiles: ["vitest.setup.ts"],
@@ -12,10 +12,12 @@ export default defineConfig({
       provider: "istanbul",
       reporter: ["text", "json", "json-summary", "html", "lcov"],
       exclude: [...(configDefaults.coverage?.exclude ?? []), "**/*.test-d.ts"],
-      lines: 80,
-      statements: 80,
-      functions: 80,
-      branches: 80,
+      thresholds: {
+        lines: 80,
+        statements: 80,
+        functions: 80,
+        branches: 80,
+      },
     },
     typecheck: {
       enabled: true,

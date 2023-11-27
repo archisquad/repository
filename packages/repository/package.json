@@ -2,6 +2,7 @@
   "name": "@archisquad/repository",
   "version": "0.0.1",
   "description": "Repository pattern implementation with TypeScript as framework agnostic library",
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -45,7 +46,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
     "@archisquad/prettier-config": "1.0.0",
@@ -61,6 +62,7 @@
     "type-fest": "4.8.2",
     "typescript": "5.3.2",
     "unbuild": "2.0.0",
+    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "1.0.0-beta.5"
   },
   "dependencies": {
