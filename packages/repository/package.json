@@ -2,6 +2,7 @@
   "name": "@archisquad/repository",
   "version": "0.0.1",
   "description": "Repository pattern implementation with TypeScript as framework agnostic library",
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -45,23 +46,24 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
     "@archisquad/prettier-config": "1.0.0",
-    "@faker-js/faker": "8.2.0",
+    "@faker-js/faker": "8.3.1",
     "@microsoft/eslint-formatter-sarif": "3.0.0",
     "@total-typescript/ts-reset": "0.5.1",
-    "@vitest/coverage-istanbul": "1.0.0-beta.3",
-    "eslint": "8.53.0",
+    "@vitest/coverage-istanbul": "1.0.0-beta.5",
+    "eslint": "8.54.0",
     "eslint-config-archisquad": "1.0.0",
     "jsdom": "22.1.0",
-    "lint-staged": "15.0.2",
-    "prettier": "3.0.3",
-    "type-fest": "4.6.0",
-    "typescript": "5.2.2",
+    "lint-staged": "15.1.0",
+    "prettier": "3.1.0",
+    "type-fest": "4.8.2",
+    "typescript": "5.3.2",
     "unbuild": "2.0.0",
-    "vitest": "1.0.0-beta.3",
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "1.0.0-beta.5",
     "zod": "3.22.4",
     "valibot": "0.20.1"
   },
