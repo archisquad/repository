@@ -27,5 +27,11 @@ module.exports = {
         "unicorn/filename-case": "off",
       },
     },
+    {
+      files: ["src/entity/interface/*.ts"],
+      rules: {
+        "@typescript-eslint/ban-types": "off",
+      },
+    },
   ],
 }
