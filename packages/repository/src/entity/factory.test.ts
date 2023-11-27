@@ -50,7 +50,7 @@ describe("Entity", () => {
           schema: zodSchema,
           inferSchema: zodInferFn,
           methods: entityMethods,
-          definitions: [authorsRelationship],
+          relations: { author: authorsRelationship },
           syncDestinations: syncKeys,
         })
 
@@ -70,7 +70,7 @@ describe("Entity", () => {
         const result = entityModelFactory({
           schema: zodSchema,
           inferSchema: zodInferFn,
-          definitions: [authorsRelationship],
+          relations: { author: authorsRelationship },
         })
 
         expect(result).toEqual(
@@ -162,7 +162,7 @@ describe("Entity", () => {
         const entityFactory = entityModelFactory({
           schema: zodSchema,
           inferSchema: zodInferFn,
-          definitions: [authorsRelationship],
+          relations: { author: authorsRelationship },
         })
 
         const entity = entityFactory.createEntity(fakeData)
@@ -264,7 +264,7 @@ describe("Entity", () => {
         const entityFactory = entityModelFactory({
           schema: zodSchema,
           inferSchema: zodInferFn,
-          definitions: [authorsRelationship],
+          relations: { author: authorsRelationship },
         })
 
         const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
@@ -457,7 +457,7 @@ describe("Entity", () => {
       const { createEntity } = entityModelFactory({
         schema: zodSchema,
         inferSchema: zodInferFn,
-        definitions: [authorsRelationship],
+        relations: { author: authorsRelationship },
         syncDestinations: [firstSyncKey, secondSyncKey],
       })
 
