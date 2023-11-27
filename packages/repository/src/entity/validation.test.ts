@@ -11,7 +11,7 @@ describe("Entity model valitation", () => {
           name: "string",
         },
         methods: {},
-        relations: [],
+        relations: {},
       },
       true,
     ],
@@ -24,7 +24,7 @@ describe("Entity model valitation", () => {
         methods: {
           methodA: () => {},
         },
-        relations: [],
+        relations: {},
       },
       true,
     ],
@@ -37,7 +37,7 @@ describe("Entity model valitation", () => {
         methods: {
           name: () => "string",
         },
-        relations: [],
+        relations: {},
       },
       false,
     ],
@@ -50,11 +50,9 @@ describe("Entity model valitation", () => {
         methods: {
           methodB: () => "string",
         },
-        relations: [
-          {
-            id: "relationA",
-          },
-        ],
+        relations: {
+          relationA: {},
+        },
       },
       true,
     ],
@@ -67,11 +65,9 @@ describe("Entity model valitation", () => {
         methods: {
           methodB: () => "string",
         },
-        relations: [
-          {
-            id: "name",
-          },
-        ],
+        relations: {
+          name: {},
+        },
       },
       false,
     ],
@@ -84,11 +80,9 @@ describe("Entity model valitation", () => {
         methods: {
           relationC: () => "string",
         },
-        relations: [
-          {
-            id: "relationC",
-          },
-        ],
+        relations: {
+          relationC: {},
+        },
       },
       false,
     ],
