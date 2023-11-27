@@ -10,7 +10,11 @@ import {
 
 describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {
-    type Test = Entity<TestEntityData, undefined, [PostsRelationDefinition]>
+    type Test = Entity<
+      TestEntityData,
+      undefined,
+      { posts: PostsRelationDefinition }
+    >
 
     expectTypeOf<Test["posts"]>().toEqualTypeOf<
       () => {
@@ -87,7 +91,7 @@ describe("Entity interface", () => {
     expectTypeOf<Test["update"]>().toEqualTypeOf<{
       (
         data: AllowedEntityInput<TestEntityData>
-      ): Entity<TestEntityData, { update(): never }, []>
+      ): Entity<TestEntityData, { update(): never }, {}>
     }>()
   })
 
