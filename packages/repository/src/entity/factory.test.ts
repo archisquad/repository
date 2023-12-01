@@ -2,7 +2,15 @@
 import { entityModelFactory } from "./factory"
 import { makeSyncKey } from "./sync"
 import { makeRepositoryKey } from "@/repositoryKey"
-import { BaseSchema, Output, boolean, number, object, string } from "valibot"
+import {
+  ObjectSchema,
+  Output,
+  boolean,
+  cuid2,
+  number,
+  object,
+  string,
+} from "valibot"
 import {
   TestEntityData,
   beforeEach,
@@ -115,6 +123,42 @@ describe("Entity", () => {
           })
         )
       })
+
+      it("Given schema, selected schema key as identifier, When entity model factory called, Then return entity factories", ({
+        zodSchema,
+        zodInferFn,
+      }) => {
+        const result = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+          identifier: "foo",
+        })
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            createEntity: expect.any(Function),
+            recoverEntity: expect.any(Function),
+          })
+        )
+      })
+
+      it("Given schema, getter fn as identifier, When entity model factory called, Then return entity factories", ({
+        zodSchema,
+        zodInferFn,
+      }) => {
+        const result = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+          identifier: (data) => data.foo,
+        })
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            createEntity: expect.any(Function),
+            recoverEntity: expect.any(Function),
+          })
+        )
+      })
     })
 
     describe("Entity Factory", () => {
@@ -135,6 +179,38 @@ describe("Entity", () => {
             foo: fakeData.foo,
           })
         )
+      })
+
+      it("Given schema, selected schema key as identifier, When entity factory called, Then return entity with identifier", ({
+        zodSchema,
+        zodInferFn,
+        fakeData,
+      }) => {
+        const entityFactory = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+          identifier: "foo",
+        })
+
+        const entity = entityFactory.createEntity(fakeData)
+
+        expect(entity.getIdentifier()).toEqual(fakeData.foo)
+      })
+
+      it("Given schema, getter fn as identifier, When entity factory called, Then return entity with identifier", ({
+        zodSchema,
+        zodInferFn,
+        fakeData,
+      }) => {
+        const entityFactory = entityModelFactory({
+          schema: zodSchema,
+          inferSchema: zodInferFn,
+          identifier: (data) => data.foo,
+        })
+
+        const entity = entityFactory.createEntity(fakeData)
+
+        expect(entity.getIdentifier()).toEqual(fakeData.foo)
       })
 
       it("Given schema, When entity factory called, Then return entity with unique identifier", ({
@@ -319,6 +395,7 @@ describe("Entity", () => {
     }) => {
       const { createEntity } = entityModelFactory({
         schema: {
+          id: "string",
           foo: "string",
           bar: 1,
           deep: {
@@ -356,6 +433,7 @@ describe("Entity", () => {
       fakeData,
     }) => {
       const valibotSchema = object({
+        id: string([cuid2()]),
         foo: string(),
         bar: number(),
         deep: object({
@@ -364,12 +442,13 @@ describe("Entity", () => {
         }),
         some: boolean(),
       })
-      const valibotInferFn = <TSchema extends BaseSchema>(
+
+      const valibotInferFn = <TSchema extends ObjectSchema<any>>(
         valibotSchema: TSchema
         // eslint-disable-next-line unicorn/consistent-function-scoping
       ) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return {} as Output<TSchema>
+        return (valibotSchema as { entries: any }).entries as Output<TSchema>
       }
       const { createEntity } = entityModelFactory({
         schema: valibotSchema,
