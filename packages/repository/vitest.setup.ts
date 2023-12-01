@@ -7,6 +7,7 @@ import { beforeEach } from "vitest"
 import { z } from "zod"
 
 const zodSchema = z.object({
+  id: z.string().cuid2(),
   foo: z.string(),
   bar: z.number(),
   deep: z.object({
@@ -115,7 +116,7 @@ beforeEach((context) => {
   }
   context.zodSchema = zodSchema
   context.zodInferFn = (input: typeof zodSchema) => {
-    return {} as z.infer<typeof input>
+    return input.shape as unknown as z.infer<typeof input>
   }
   context.zodValidatorFn = (schema: typeof zodSchema, input: unknown) => {
     return schema.parse(input)
