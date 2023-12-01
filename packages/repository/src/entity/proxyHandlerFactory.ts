@@ -37,9 +37,16 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         return Reflect.get(target.proto.data, prop, receiver)
       }
 
+      // The update method & getIdentifier are not overridable
       if (prop === "update") {
         return function (...args: any) {
           return updateEntityFn.apply(target, args)
+        }
+      }
+
+      if (prop === "getIdentifier") {
+        return function () {
+          return target.proto.getIdentifier()
         }
       }
 
