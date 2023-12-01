@@ -1,12 +1,23 @@
 import { deepReadonly } from "./deepReadonly"
-import { AllowedEntityInput, EntitySchema, SyncKey } from "./interface"
+import { GetIdentifierFn } from "./identifier"
+import {
+  AllowedEntityInput,
+  EntitySchema,
+  Identifier,
+  ResolveIdentifier,
+  SyncKey,
+} from "./interface"
 import { SyncMap } from "./sync"
 import { DeepReadonly } from "./types"
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createInternalEntity<TSchema extends EntitySchema>(
-  syncIds: SyncKey[],
-  validatorFn: (data: any) => TSchema
+export function internalEntityFactory<
+  TSchema extends EntitySchema,
+  TIdentifier extends Identifier<TSchema> | undefined,
+>(
+  syncDestinations: SyncKey[],
+  validatorFn: (data: any) => TSchema,
+  identifierFn: GetIdentifierFn<TSchema, TIdentifier>
 ) {
   return class EntityInternal {
     private _data: DeepReadonly<TSchema>
@@ -16,11 +27,16 @@ export function createInternalEntity<TSchema extends EntitySchema>(
       this._data = deepReadonly({
         ...validatorFn(data),
       })
-      this._syncMap = new SyncMap(syncIds)
+      this._syncMap = new SyncMap(syncDestinations)
     }
 
     public get data(): DeepReadonly<TSchema> {
       return this._data
+    }
+
+    public getIdentifier(): ResolveIdentifier<TSchema, TIdentifier> {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- that's ESLint bug
+      return identifierFn(this._data as TSchema)
     }
 
     public update(data: AllowedEntityInput<TSchema>): EntityInternal {
