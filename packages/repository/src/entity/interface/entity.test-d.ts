@@ -1,4 +1,3 @@
-import { AllowedEntityInput, EntitySchema } from "./data"
 import { Entity } from "./entity"
 import {
   PostsRelationDefinition,
@@ -38,8 +37,9 @@ describe("Entity interface", () => {
   it("Entity has update method", () => {
     type EntityExample = Entity<TestEntityData>
 
+    // TODO: Add type for narrowing if identifier is key-based
     expectTypeOf<EntityExample["update"]>().toMatchTypeOf<
-      (data: AllowedEntityInput<TestEntityData>) => EntityExample
+      (data: TestEntityData) => EntityExample
     >()
   })
 
@@ -47,6 +47,24 @@ describe("Entity interface", () => {
     type Test = Entity<TestEntityData>
 
     expectTypeOf<Test["toObject"]>().toEqualTypeOf<() => TestEntityData>()
+  })
+
+  it("Entity has getIdentifier method", () => {
+    type Test = Entity<TestEntityData, undefined, undefined, () => number>
+
+    expectTypeOf<Test["getIdentifier"]>().toEqualTypeOf<() => number>()
+  })
+
+  it("Entity could have identifier defined", () => {
+    type Test = Entity<TestEntityData, undefined, undefined, "bar">
+
+    expectTypeOf<Test["getIdentifier"]>().toEqualTypeOf<() => number>()
+  })
+
+  it("Entity haven't to identifier defined", () => {
+    type Test = Entity<TestEntityData, undefined, undefined, undefined>
+
+    expectTypeOf<Test["getIdentifier"]>().toEqualTypeOf<() => string>()
   })
 
   it("Entity give readonly access to data", () => {
@@ -89,9 +107,7 @@ describe("Entity interface", () => {
     >
 
     expectTypeOf<Test["update"]>().toEqualTypeOf<{
-      (
-        data: AllowedEntityInput<TestEntityData>
-      ): Entity<TestEntityData, { update(): never }, {}>
+      (data: TestEntityData): Entity<TestEntityData, { update(): never }, {}>
     }>()
   })
 
@@ -117,20 +133,5 @@ describe("Entity interface", () => {
     expectTypeOf<Test["customMethod"]>().toEqualTypeOf<
       (this: TestEntityData) => string
     >()
-  })
-})
-
-describe("EntitySchema", () => {
-  it("should omit id from input", () => {
-    type Test = EntitySchema<{ id: number; name: string }>
-
-    expectTypeOf<Test>().toMatchTypeOf<{ name: string }>()
-    expectTypeOf<Test>().not.toMatchTypeOf<{ id: number }>()
-  })
-
-  it("should add id to output", () => {
-    type Test = EntitySchema<{ name: string }>
-
-    expectTypeOf<Test>().toMatchTypeOf<{ id: string; name: string }>()
   })
 })
