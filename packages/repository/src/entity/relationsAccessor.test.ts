@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Relations } from "./interface"
+import { ResolvedRelations } from "./interface"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { makeRepositoryKey } from "@/repositoryKey"
-import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
+import {
+  TestEntityData,
+  beforeEach,
+  describe,
+  expect,
+  expectTypeOf,
+  it,
+} from "vitest"
 
 describe("Entity: Relations Accessor", () => {
   beforeEach((context) => {
@@ -27,28 +34,29 @@ describe("Entity: Relations Accessor", () => {
     authorsRepositoryKey,
     postsRepositoryKey,
   }) => {
-    const relations = [
-      {
-        id: "author",
+    const relations = {
+      author: {
         type: "belongs-to",
         foreignRepository: authorsRepositoryKey,
         foreignKey: "id",
         localKey: "bar",
-      } as const,
-      {
-        id: "posts",
+      },
+      posts: {
         type: "has-many",
         foreignRepository: postsRepositoryKey,
         foreignKey: "id",
         localKey: "foo",
-      } as const,
-    ]
+      },
+    } as const
 
-    const relationsAccessor = relationAccessorFactory(relations)
+    const relationsAccessor = relationAccessorFactory<
+      TestEntityData,
+      typeof relations
+    >(relations)
 
     expectTypeOf(relationsAccessor).toEqualTypeOf<
-      Relations<(typeof relations)[number]>
-    >
+      ResolvedRelations<TestEntityData, typeof relations>
+    >()
     expectTypeOf(relationsAccessor.author).toEqualTypeOf<
       () => {
         id: string
@@ -66,16 +74,6 @@ describe("Entity: Relations Accessor", () => {
   })
 
   it("Given an empty array, When factory called, Then throw an error", () => {
-    expect(() => relationAccessorFactory([])).toThrow()
+    expect(() => relationAccessorFactory({})).toThrow()
   })
-
-  it.todo(
-    "Given a relation definition, When belongs-to accessor called, Then return one related entity",
-    () => {}
-  )
-
-  it.todo(
-    "Given a relation definition, When has-many accessor called, Then return many related entities",
-    () => {}
-  )
 })

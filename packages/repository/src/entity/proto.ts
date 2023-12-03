@@ -5,7 +5,8 @@ import { DeepReadonly } from "./types"
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function createInternalEntity<TSchema extends EntitySchema>(
-  syncIds: SyncKey[]
+  syncIds: SyncKey[],
+  validatorFn: (data: any) => TSchema
 ) {
   return class EntityInternal {
     private _data: DeepReadonly<TSchema>
@@ -13,7 +14,7 @@ export function createInternalEntity<TSchema extends EntitySchema>(
 
     constructor(data: TSchema) {
       this._data = deepReadonly({
-        ...data,
+        ...validatorFn(data),
       })
       this._syncMap = new SyncMap(syncIds)
     }

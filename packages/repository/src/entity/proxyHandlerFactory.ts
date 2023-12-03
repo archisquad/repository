@@ -24,7 +24,8 @@ const allowedInternalMethods = new Set([
 ])
 
 export function proxyHandlerFactory<TProxied extends ProxyTarget>(
-  updateEntityFn: (data: any) => any
+  updateEntityFn: (data: any) => any,
+  methods: any = {}
 ): ProxyHandler<TProxied> {
   return {
     get(target, prop, receiver) {
@@ -39,6 +40,17 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
       if (prop === "update") {
         return function (...args: any) {
           return updateEntityFn.apply(target, args)
+        }
+      }
+
+      // User defined methods, takes precedence over internal methods
+      if (Reflect.has(methods, prop)) {
+        return function (...args: any[]) {
+          return methods[prop].apply(
+            // @ts-expect-error -- proxy handler
+            this === receiver ? target.proto.data : this,
+            args
+          )
         }
       }
 

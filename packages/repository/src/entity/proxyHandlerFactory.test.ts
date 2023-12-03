@@ -89,6 +89,23 @@ describe("proxyHandlerFactory", () => {
     expect(testProxy.fakeRelation()).toEqual({ id: 1, name: "fakeRelated" })
   })
 
+  it("Given proxy with handler & user-defined methods, When call user-defined method, Then return wrapper-function with applied prototype as this", ({
+    fakeProxiedObj,
+  }) => {
+    const userDefinedMethods = {
+      someMethod: function () {
+        return this
+      },
+    }
+    const proxyHandler = proxyHandlerFactory<typeof fakeProxiedObj>(
+      vi.fn(),
+      userDefinedMethods
+    )
+    const testProxy = new Proxy(fakeProxiedObj, proxyHandler) as any
+
+    expect(testProxy.someMethod()).toEqual(fakeProxiedObj.proto.data)
+  })
+
   it("Given proxy with handler, When call data property, Then return empty object", ({
     testProxy,
   }) => {

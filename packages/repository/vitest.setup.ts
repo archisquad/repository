@@ -4,6 +4,17 @@ import type { RepositoryKey } from "@/repositoryKey"
 import { Faker, faker } from "@faker-js/faker"
 import { Simplify } from "type-fest"
 import { beforeEach } from "vitest"
+import { z } from "zod"
+
+const zodSchema = z.object({
+  foo: z.string(),
+  bar: z.number(),
+  deep: z.object({
+    foo: z.string(),
+    bar: z.string(),
+  }),
+  some: z.boolean(),
+})
 
 declare module "vitest" {
   export type TestRawEntityData = {
@@ -23,7 +34,6 @@ declare module "vitest" {
   >
 
   export type PostsRelationDefinition = {
-    readonly id: "posts"
     readonly type: "has-many"
     readonly foreignRepository: RepositoryKey<
       {
@@ -46,7 +56,6 @@ declare module "vitest" {
   >
 
   export type AuthorRelationDefinition = {
-    readonly id: "author"
     readonly type: "belongs-to"
     readonly foreignRepository: AuthorsRepositoryKey
     readonly foreignKey: "id"
@@ -57,6 +66,17 @@ declare module "vitest" {
     faker: typeof faker
     fakeData: ReturnType<typeof generateFakeObj>
     syncKeys: SyncKey[]
+    entityMethods: {
+      someMethod: (input: string) => { output: typeof input }
+    }
+    zodSchema: typeof zodSchema
+    // TODO: Problem with added ID, to solve in ARC-33
+    zodInferFn: (input: typeof zodSchema) => TestRawEntityData
+    zodValidatorFn: (
+      schema: typeof zodSchema,
+      input: unknown
+    ) => TestRawEntityData
+    passThroughValidator: <TInput>(input: TInput) => TInput
     // TODO: Delete it after refactoring
     foreignRepositoryKey: RepositoryKey<
       {
@@ -90,6 +110,17 @@ beforeEach((context) => {
   context.faker = faker
   context.syncKeys = [makeSyncKey("test")]
   context.fakeData = generateFakeObj(context.faker)
+  context.entityMethods = {
+    someMethod: (input: string) => ({ output: input }),
+  }
+  context.zodSchema = zodSchema
+  context.zodInferFn = (input: typeof zodSchema) => {
+    return {} as z.infer<typeof input>
+  }
+  context.zodValidatorFn = (schema: typeof zodSchema, input: unknown) => {
+    return schema.parse(input)
+  }
+  context.passThroughValidator = <TInput>(input: TInput) => input
 })
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

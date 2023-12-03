@@ -6,6 +6,6 @@ describe("generateId", () => {
     const result = generateId()
 
     expect(result).not.toBeUndefined()
-    // expectTypeOf(result).toEqualTypeOf<string>()
+    expectTypeOf(result).toEqualTypeOf<string>()
   })
 })

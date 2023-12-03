@@ -1,27 +1,23 @@
 import { DeepReadonly } from "../types"
 import { AllowedEntityInput, EntitySchema } from "./data"
-import { Relations, Relationship } from "./relations"
-import { SyncKey } from "./sync"
+import { Methods, ResolvedMethods } from "./methods"
+import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
-type DetectEmptyArray<TArr> = TArr extends never[] | [] ? true : false
-
-type RelationsCleaner<
+type UpdateMethod<
   TSchema extends EntitySchema,
-  TRelations extends Relationship<TSchema>[] = [],
-> = DetectEmptyArray<TRelations> extends true
-  ? // eslint-disable-next-line @typescript-eslint/ban-types
-    {}
-  : Relations<TRelations[number]>
+  TMethods extends Methods<TSchema> | undefined,
+  TRelations extends RelationshipsDefinitions<TSchema> | undefined,
+> = {
+  update(
+    data: AllowedEntityInput<TSchema>
+  ): Entity<TSchema, TMethods, TRelations>
+}
 
 export type Entity<
   TSchema extends EntitySchema,
-  TRelations extends Relationship<TSchema>[] = [],
-> = DeepReadonly<TSchema> & {
-  update<const TUpdatedData extends AllowedEntityInput<TSchema>>(
-    data: TUpdatedData
-  ): Entity<TSchema, TRelations>
-  toObject(): TSchema
-  toJson(): string
-  isSynced(id: SyncKey): boolean
-  setSynced(id: SyncKey, promise: Promise<unknown>): void
-} & RelationsCleaner<TSchema, TRelations>
+  TMethods extends Methods<TSchema> | undefined = undefined,
+  TRelations extends RelationshipsDefinitions<TSchema> | undefined = undefined,
+> = DeepReadonly<TSchema> &
+  UpdateMethod<TSchema, TMethods, TRelations> &
+  ResolvedMethods<TSchema, TMethods> &
+  ResolvedRelations<TSchema, TRelations>

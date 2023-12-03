@@ -3,6 +3,7 @@ module.exports = {
 
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
   },
 
   overrides: [
@@ -24,6 +25,12 @@ module.exports = {
       files: ["**/*.test-d.ts"],
       rules: {
         "unicorn/filename-case": "off",
+      },
+    },
+    {
+      files: ["src/entity/interface/*.ts"],
+      rules: {
+        "@typescript-eslint/ban-types": "off",
       },
     },
   ],
