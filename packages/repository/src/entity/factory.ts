@@ -2,7 +2,6 @@
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
 import {
-  AllowedEntityInput,
   Entity,
   EntityPrototype,
   EntitySchema,
@@ -11,6 +10,7 @@ import {
   ProxyTarget,
   RelationshipsDefinitions,
   SyncKey,
+  UpdateEntityInput,
   Validator,
 } from "./interface"
 import { internalEntityFactory } from "./proto"
@@ -58,7 +58,7 @@ export function entityModelFactory<
   const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
   function updateEntity<TUpdatedData extends TInputSchema>(
-    this: { proto: EntityPrototype<TInputSchema> },
+    this: { proto: EntityPrototype<TInputSchema, TIdentifier> },
     updatedData: TUpdatedData
   ): any {
     const updatedInternalEntity = this.proto.update(updatedData)
@@ -77,9 +77,9 @@ export function entityModelFactory<
     }
   }
 
-  function createEntity<TInputData extends AllowedEntityInput<TInputSchema>>(
-    inputData: TInputData
-  ) {
+  function createEntity<
+    TInputData extends UpdateEntityInput<TInputSchema, TIdentifier>,
+  >(inputData: TInputData) {
     const id = generateId()
     const data = { ...inputData, id } as unknown as TInputSchema
 

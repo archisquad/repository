@@ -2,10 +2,6 @@ import { IsStringLiteral } from "type-fest"
 
 export type EntitySchema = Record<string, any>
 
-export type AllowedEntityInput<TSchema = EntitySchema> = Partial<
-  Omit<TSchema, "id">
->
-
 export type Validator<TSchema, TInputSchema> = (
   schema: TSchema,
   data: any
@@ -30,3 +26,12 @@ export type ResolveIdentifier<TSchema, TIdentifier> = [TIdentifier] extends [
       ? TSchema[TIdentifier]
       : DefaultIdentifier
     : DefaultIdentifier
+
+export type UpdateEntityInput<
+  TSchema,
+  TIdentifier extends Identifier<TSchema> | undefined,
+> = TIdentifier extends keyof TSchema
+  ? IsStringLiteral<TIdentifier> extends true
+    ? Omit<TSchema, TIdentifier>
+    : TSchema
+  : TSchema

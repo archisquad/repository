@@ -1,11 +1,11 @@
 import { deepReadonly } from "./deepReadonly"
 import { GetIdentifierFn } from "./identifier"
 import {
-  AllowedEntityInput,
   EntitySchema,
   Identifier,
   ResolveIdentifier,
   SyncKey,
+  UpdateEntityInput,
 } from "./interface"
 import { SyncMap } from "./sync"
 import { DeepReadonly } from "./types"
@@ -39,7 +39,9 @@ export function internalEntityFactory<
       return identifierFn(this._data as TSchema)
     }
 
-    public update(data: AllowedEntityInput<TSchema>): EntityInternal {
+    public update(
+      data: UpdateEntityInput<TSchema, TIdentifier>
+    ): EntityInternal {
       return new EntityInternal({
         ...this._data,
         ...data,
