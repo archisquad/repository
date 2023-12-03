@@ -23,7 +23,7 @@
   },
   "prettier": "@archisquad/prettier-config",
   "devDependencies": {
-    "@archisquad/prettier-config": "1.0.0",
+    "@archisquad/prettier-config": "1.0.1",
     "@changesets/cli": "2.26.2",
     "@commitlint/cli": "18.4.3",
     "@faker-js/faker": "8.3.1",
@@ -33,7 +33,7 @@
     "@vitest/coverage-istanbul": "1.0.0-beta.5",
     "commitlint-config-gitmoji": "2.3.1",
     "eslint": "8.54.0",
-    "eslint-config-archisquad": "1.0.0",
+    "eslint-config-archisquad": "1.1.0",
     "gitmoji-cli": "9.0.0",
     "husky": "8.0.3",
     "jsdom": "22.1.0",

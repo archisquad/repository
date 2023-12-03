@@ -16,7 +16,6 @@ export function validateInput<
 >(configObj: {
   schema: TSchema
   inferSchema: (data: TSchema) => TInputSchema
-  // TODO: Verify if this is the best way to handle identifier (especially at type-level)
   identifier?: TIdentifier
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
