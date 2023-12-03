@@ -20,15 +20,17 @@ describe("proto", () => {
     fakeData,
     passThroughValidator,
   }) => {
-    const context = internalEntityFactory<TestEntityData>(
+    const context = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator
+      passThroughValidator,
+      () => "1"
     )
 
     const entity = new context({ ...fakeData, id: "1" })
 
     const result = entity.update({
       foo: "foo2",
+      bar: 2,
       some: true,
     })
 
@@ -45,7 +47,7 @@ describe("proto", () => {
         id: string
         foo: string
         bar: number
-        deep: {
+        deep?: {
           foo: string
           bar: string
         }
@@ -59,9 +61,10 @@ describe("proto", () => {
     fakeData,
     passThroughValidator,
   }) => {
-    const context = internalEntityFactory<TestEntityData>(
+    const context = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator
+      passThroughValidator,
+      () => "1"
     )
 
     const entity = new context({ ...fakeData, id: "2" })
@@ -75,9 +78,10 @@ describe("proto", () => {
     fakeData,
     passThroughValidator,
   }) => {
-    const context = internalEntityFactory<TestEntityData>(
+    const context = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator
+      passThroughValidator,
+      () => "1"
     )
 
     const entity = new context({ ...fakeData, id: "1" })
@@ -116,7 +120,11 @@ describe("proto", () => {
       ...passThroughValidator(input),
       bar: "bar",
     }))
-    const context = internalEntityFactory<TestEntityData>(syncKeys, validatorFn)
+    const context = internalEntityFactory<TestEntityData, "id">(
+      syncKeys,
+      validatorFn,
+      () => "1"
+    )
 
     const result = new context({ ...fakeData, id: "1" })
 
@@ -140,7 +148,7 @@ describe("proto", () => {
     )
     const entity = new context({ ...fakeData, id: "1" })
 
-    entity.update({ foo: "foo2" })
+    entity.update({ foo: "foo2", bar: 2, some: true })
 
     expect(validatorFn).toBeCalledTimes(2)
     expect(entity.data.foo).toBe("updated")

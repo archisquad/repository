@@ -192,7 +192,10 @@ describe("Entity", () => {
           identifier: "foo",
         })
 
-        const entity = entityFactory.createEntity(fakeData)
+        const entity = entityFactory.createEntity({
+          ...fakeData,
+          id: "anything",
+        })
 
         expect(entity.getIdentifier()).toEqual(fakeData.foo)
       })
@@ -208,7 +211,10 @@ describe("Entity", () => {
           identifier: (data) => data.foo,
         })
 
-        const entity = entityFactory.createEntity(fakeData)
+        const entity = entityFactory.createEntity({
+          ...fakeData,
+          id: "anything",
+        })
 
         expect(entity.getIdentifier()).toEqual(fakeData.foo)
       })
@@ -527,6 +533,7 @@ describe("Entity", () => {
   describe("Instance", () => {
     it("Given entity, When update, Then update data, And set sync status to un-up-to-date, And keep the same ID, And create new object, And keeps relations untouched", async ({
       authorsRelationship,
+      fakeData,
       zodSchema,
       zodInferFn,
     }) => {
@@ -539,9 +546,7 @@ describe("Entity", () => {
         syncDestinations: [firstSyncKey, secondSyncKey],
       })
 
-      const entity = createEntity({
-        foo: "bar",
-      })
+      const entity = createEntity(fakeData)
       const testPromise = Promise.resolve()
       entity.setSynced(firstSyncKey, testPromise)
       await testPromise
@@ -590,14 +595,13 @@ describe("Entity", () => {
     it("Given entity, When update with id, Then ID is not updated", ({
       zodSchema,
       zodInferFn,
+      fakeData,
     }) => {
       const { createEntity } = entityModelFactory({
         schema: zodSchema,
         inferSchema: zodInferFn,
       })
-      const entity = createEntity({
-        foo: "bar",
-      })
+      const entity = createEntity(fakeData)
 
       const updatedEntity = entity.update({
         // @ts-expect-error - intentionally testing invalid update
@@ -631,20 +635,18 @@ describe("Entity", () => {
     it("Given entity, When dumping to regular object, Then return regular object with data", ({
       zodSchema,
       zodInferFn,
+      fakeData,
     }) => {
       const { createEntity } = entityModelFactory({
         schema: zodSchema,
         inferSchema: zodInferFn,
       })
-      const data = {
-        foo: "bar",
-      }
-      const entity = createEntity(data)
+      const entity = createEntity(fakeData)
 
       const dumpedObject = entity.toObject()
 
       expect(dumpedObject).toEqual({
-        ...data,
+        ...fakeData,
         id: entity.id,
       })
     })

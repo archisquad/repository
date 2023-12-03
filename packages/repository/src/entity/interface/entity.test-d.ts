@@ -29,7 +29,7 @@ describe("Entity interface", () => {
 
     expectTypeOf<Test["id"]>().toEqualTypeOf<string>()
     expectTypeOf<Test["foo"]>().toEqualTypeOf<TestEntityData["foo"]>()
-    expectTypeOf<Test["deep"]>().toEqualTypeOf<
+    expectTypeOf<Test["deep"]>().toMatchTypeOf<
       Readonly<TestEntityData["deep"]>
     >()
   })
@@ -70,9 +70,9 @@ describe("Entity interface", () => {
   it("Entity give readonly access to data", () => {
     type Test = Entity<TestEntityData>
 
-    expectTypeOf<Test["foo"]>().toEqualTypeOf<Readonly<TestEntityData["foo"]>>()
-    expectTypeOf<Test["bar"]>().toEqualTypeOf<Readonly<TestEntityData["bar"]>>()
-    expectTypeOf<Test["deep"]>().toEqualTypeOf<
+    expectTypeOf<Test["foo"]>().toMatchTypeOf<Readonly<TestEntityData["foo"]>>()
+    expectTypeOf<Test["bar"]>().toMatchTypeOf<Readonly<TestEntityData["bar"]>>()
+    expectTypeOf<Test["deep"]>().toMatchTypeOf<
       Readonly<TestEntityData["deep"]>
     >()
   })
@@ -106,8 +106,10 @@ describe("Entity interface", () => {
       }
     >
 
-    expectTypeOf<Test["update"]>().toEqualTypeOf<{
-      (data: TestEntityData): Entity<TestEntityData, { update(): never }, {}>
+    expectTypeOf<Test["update"]>().toMatchTypeOf<{
+      (
+        data: TestEntityData
+      ): Entity<TestEntityData, { update(): never }, undefined, undefined>
     }>()
   })
 

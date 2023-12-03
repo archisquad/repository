@@ -30,8 +30,10 @@ export type ResolveIdentifier<TSchema, TIdentifier> = [TIdentifier] extends [
 export type UpdateEntityInput<
   TSchema,
   TIdentifier extends Identifier<TSchema> | undefined,
-> = TIdentifier extends keyof TSchema
-  ? IsStringLiteral<TIdentifier> extends true
-    ? Omit<TSchema, TIdentifier>
-    : TSchema
-  : TSchema
+> = [TIdentifier] extends [((data: TSchema) => any) | undefined]
+  ? TSchema
+  : IsStringLiteral<TIdentifier> extends true
+    ? TIdentifier extends keyof TSchema
+      ? Omit<TSchema, TIdentifier>
+      : TSchema
+    : Omit<TSchema, "id">

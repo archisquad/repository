@@ -1,5 +1,10 @@
 import { DeepReadonly } from "../types"
-import { EntitySchema, Identifier, ResolveIdentifier } from "./data"
+import {
+  EntitySchema,
+  Identifier,
+  ResolveIdentifier,
+  UpdateEntityInput,
+} from "./data"
 import { Methods, ResolvedMethods } from "./methods"
 import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
@@ -7,9 +12,11 @@ type UpdateMethod<
   TSchema extends EntitySchema,
   TMethods extends Methods<TSchema> | undefined,
   TRelations extends RelationshipsDefinitions<TSchema> | undefined,
-  TIdentifier extends Identifier<TSchema> | undefined = undefined,
+  TIdentifier extends Identifier<TSchema> | undefined,
 > = {
-  update(data: TSchema): Entity<TSchema, TMethods, TRelations, TIdentifier>
+  update(
+    data: Partial<UpdateEntityInput<TSchema, TIdentifier>>
+  ): Entity<TSchema, TMethods, TRelations, TIdentifier>
 }
 
 export type GetIdentifierMethod<TSchema, TIdentifier> = {
@@ -22,7 +29,7 @@ export type Entity<
   TRelations extends RelationshipsDefinitions<TSchema> | undefined = undefined,
   TIdentifier extends Identifier<TSchema> | undefined = undefined,
 > = DeepReadonly<TSchema> &
-  UpdateMethod<TSchema, TMethods, TRelations> &
+  UpdateMethod<TSchema, TMethods, TRelations, TIdentifier> &
   GetIdentifierMethod<TSchema, TIdentifier> &
   ResolvedMethods<TSchema, TMethods> &
   ResolvedRelations<TSchema, TRelations>

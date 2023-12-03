@@ -21,7 +21,7 @@ declare module "vitest" {
   export type TestRawEntityData = {
     foo: string
     bar: number
-    deep: {
+    deep?: {
       foo: string
       bar: string
     }
@@ -71,8 +71,7 @@ declare module "vitest" {
       someMethod: (input: string) => { output: typeof input }
     }
     zodSchema: typeof zodSchema
-    // TODO: Problem with added ID, to solve in ARC-33
-    zodInferFn: (input: typeof zodSchema) => TestRawEntityData
+    zodInferFn: (input: typeof zodSchema) => TestEntityData
     zodValidatorFn: (
       schema: typeof zodSchema,
       input: unknown
