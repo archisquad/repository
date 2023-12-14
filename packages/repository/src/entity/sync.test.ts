@@ -71,7 +71,7 @@ describe("SyncMap", () => {
   }) => {
     const syncMap = new SyncMap([destinationId])
     expect(syncMap.checkStatus(destinationId)).toBe(false)
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((_resolve, reject) => {
       reject(new Error("test"))
     })
 

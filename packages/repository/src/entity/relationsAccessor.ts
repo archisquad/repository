@@ -14,7 +14,7 @@ export function relationAccessorFactory<
 
   return Object.entries(definitions).reduce(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (accessor, [name, definition]) => {
+    (accessor, [name, _definition]) => {
       accessor[name] = () => {
         // TODO: Add implementation for reaching out to RepositoryManager
 

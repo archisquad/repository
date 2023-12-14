@@ -89,9 +89,7 @@ describe("proxyHandlerFactory", () => {
     fakeProxiedObj,
   }) => {
     const userDefinedMethods = {
-      getIdentifier: function () {
-        return "fail"
-      },
+      getIdentifier: () => "fail",
     }
     const proxyHandler = proxyHandlerFactory<typeof fakeProxiedObj>(
       vi.fn(),
@@ -193,7 +191,7 @@ describe("proxyHandlerFactory", () => {
     testProxy,
   }) => {
     expect(() => {
-      delete testProxy.fakeKey
+      testProxy.fakeKey = undefined
     }).toThrowError("You can't delete entity properties, use update() instead.")
   })
 
@@ -244,7 +242,7 @@ describe("proxyHandlerFactory", () => {
     testProxy,
   }) => {
     expect(() => {
-      const value = testProxy.nonExistingKey
+      const _value = testProxy.nonExistingKey
     }).toThrowError("Property 'nonExistingKey' does not exist on this entity.")
   })
 })

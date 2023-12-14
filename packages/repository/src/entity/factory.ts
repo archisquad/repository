@@ -39,7 +39,7 @@ export function entityModelFactory<
     relations = {},
     syncDestinations = [],
     methods = {},
-    validator = (schema: TSchema, data: unknown) => data as TInputSchema,
+    validator = (_schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
   validateInput(configObj)
