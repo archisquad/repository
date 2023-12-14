@@ -34,6 +34,7 @@ describe("proxyHandlerFactory", () => {
           })
         },
         toObject: vi.fn().mockReturnValue({ fake: "fake" }),
+        getIdentifier: vi.fn().mockReturnValue("1"),
       }),
       _mockedRelationAccessor: vi.fn().mockReturnValue({
         fakeRelation: () => ({
@@ -75,6 +76,30 @@ describe("proxyHandlerFactory", () => {
   }) => {
     expect(testProxy.toObject).toBeInstanceOf(Function)
     expect(testProxy.toObject()).toEqual({ fake: "fake" })
+  })
+
+  it("Given proxy with handler, When call getIdentifier(), Then return getIdentifier() function from proto object", ({
+    testProxy,
+  }) => {
+    expect(testProxy.getIdentifier).toBeInstanceOf(Function)
+    expect(testProxy.getIdentifier()).toEqual("1")
+  })
+
+  it("Given proxy with handler & overrided getIdentifier method, When call getIdentifier(), Then return getIdentifier() function from proto object", ({
+    fakeProxiedObj,
+  }) => {
+    const userDefinedMethods = {
+      getIdentifier: function () {
+        return "fail"
+      },
+    }
+    const proxyHandler = proxyHandlerFactory<typeof fakeProxiedObj>(
+      vi.fn(),
+      userDefinedMethods
+    )
+    const testProxy = new Proxy(fakeProxiedObj, proxyHandler) as any
+
+    expect(testProxy.getIdentifier()).toEqual("1")
   })
 
   it("Given proxy with handler, When access data key, Then return that key from proto.data() getter", ({

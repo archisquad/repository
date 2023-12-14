@@ -7,7 +7,7 @@ export type Methods<TSchema extends EntitySchema> = Record<
   (this: TSchema, ...args: any[]) => any
 >
 
-type PrototypeMethods<TSchema extends EntitySchema> = {
+export type PrototypeMethods<TSchema extends EntitySchema> = {
   toObject(): TSchema
   toJson(): string
   isSynced(id: SyncKey): boolean
@@ -48,6 +48,6 @@ export type ResolvedMethods<
           keyof PrototypeMethods<TSchema>,
           keyof TMethods
         >]: PrototypeMethods<TSchema>[Key]
-      } & Except<TMethods, "update">
+      } & Except<TMethods, "update" | "getIdentifier">
     : never
   : PrototypeMethods<TSchema>

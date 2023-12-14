@@ -1,17 +1,49 @@
-import { EntitySchema, Methods } from "./interface"
+import {
+  EntitySchema,
+  Identifier,
+  Methods,
+  SyncKey,
+  Validator,
+} from "./interface"
 import { RelationshipsDefinitions } from "./interface/relations"
 
 export function validateInput<
-  TSchema extends EntitySchema,
-  TMethods extends Methods<TSchema>,
->(
-  schema: TSchema,
-  methods: TMethods,
-  relations: RelationshipsDefinitions<TSchema>
-): void {
+  TSchema,
+  TInputSchema extends EntitySchema,
+  TIdentifier extends Identifier<TInputSchema> | undefined,
+  TMethods extends Methods<TInputSchema> | undefined,
+  const TDefinitions extends RelationshipsDefinitions<TInputSchema>,
+>(configObj: {
+  schema: TSchema
+  inferSchema: (data: TSchema) => TInputSchema
+  identifier?: TIdentifier
+  validator?: Validator<TSchema, TInputSchema>
+  methods?: TMethods
+  relations?: TDefinitions
+  syncDestinations?: SyncKey[]
+}): void {
+  const { inferSchema, methods = {}, relations = {}, identifier } = configObj
+  const schema = inferSchema(configObj.schema)
+
   const fieldNames = Object.keys(schema)
   const methodNames = Object.keys(methods)
   const relationNames = Object.keys(relations)
+
+  if (!identifier && !fieldNames.includes("id")) {
+    throw new EntityModelValidationError(
+      "You must provide an identifier or define a field named 'id'."
+    )
+  }
+
+  if (
+    identifier &&
+    typeof identifier === "string" &&
+    !fieldNames.includes(identifier)
+  ) {
+    throw new EntityModelValidationError(
+      `The identifier '${identifier}' does not exist in the schema.`
+    )
+  }
 
   if (methodNames.length === 0 && relationNames.length === 0) {
     return

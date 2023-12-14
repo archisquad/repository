@@ -7,6 +7,7 @@ import { beforeEach } from "vitest"
 import { z } from "zod"
 
 const zodSchema = z.object({
+  id: z.string().cuid2(),
   foo: z.string(),
   bar: z.number(),
   deep: z.object({
@@ -20,7 +21,7 @@ declare module "vitest" {
   export type TestRawEntityData = {
     foo: string
     bar: number
-    deep: {
+    deep?: {
       foo: string
       bar: string
     }
@@ -70,8 +71,7 @@ declare module "vitest" {
       someMethod: (input: string) => { output: typeof input }
     }
     zodSchema: typeof zodSchema
-    // TODO: Problem with added ID, to solve in ARC-33
-    zodInferFn: (input: typeof zodSchema) => TestRawEntityData
+    zodInferFn: (input: typeof zodSchema) => TestEntityData
     zodValidatorFn: (
       schema: typeof zodSchema,
       input: unknown
@@ -115,7 +115,7 @@ beforeEach((context) => {
   }
   context.zodSchema = zodSchema
   context.zodInferFn = (input: typeof zodSchema) => {
-    return {} as z.infer<typeof input>
+    return input.shape as unknown as z.infer<typeof input>
   }
   context.zodValidatorFn = (schema: typeof zodSchema, input: unknown) => {
     return schema.parse(input)

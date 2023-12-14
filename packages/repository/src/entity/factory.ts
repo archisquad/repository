@@ -1,106 +1,111 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { generateId } from "./generateId"
+import { getIdentifier } from "./identifier"
 import {
-  AllowedEntityInput,
   Entity,
   EntityPrototype,
   EntitySchema,
+  Identifier,
   Methods,
   ProxyTarget,
   RelationshipsDefinitions,
   SyncKey,
-  UserDefinedSchema,
+  UpdateEntityInput,
   Validator,
 } from "./interface"
-import { createInternalEntity } from "./proto"
+import { internalEntityFactory } from "./proto"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { validateInput } from "./validation"
 
 export function entityModelFactory<
   TSchema,
-  TInputSchema extends UserDefinedSchema,
-  TMethods extends Methods<EntitySchema<TInputSchema>> | undefined,
-  const TDefinitions extends RelationshipsDefinitions<
-    EntitySchema<TInputSchema>
-  >,
+  TInputSchema extends EntitySchema,
+  TIdentifier extends Identifier<TInputSchema> | undefined,
+  TMethods extends Methods<TInputSchema> | undefined,
+  const TDefinitions extends RelationshipsDefinitions<TInputSchema>,
 >(configObj: {
   schema: TSchema
   inferSchema: (data: TSchema) => TInputSchema
+  identifier?: TIdentifier
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
   relations?: TDefinitions
   syncDestinations?: SyncKey[]
 }) {
-  type ModelSchema = EntitySchema<TInputSchema>
-
   const {
     schema,
+    identifier,
     relations = {},
     syncDestinations = [],
     methods = {},
     validator = (schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
-  // TODO: The user should define the schema without any dynamically added ID
-  validateInput(schema as unknown as ModelSchema, methods, relations)
+  validateInput(configObj)
+
+  const identifierFn = getIdentifier<TInputSchema, TIdentifier>(identifier)
+  const validatorFn = (data: unknown) => validator(schema, data)
+  const internalEntityClass = internalEntityFactory<TInputSchema, TIdentifier>(
+    syncDestinations,
+    validatorFn,
+    identifierFn
+  )
 
   const relationAccessor =
     Object.keys(relations).length > 0 ? relationAccessorFactory(relations) : {}
 
-  const validatorFn = (data: unknown) => validator(schema, data)
-  const internalEntityClass = createInternalEntity<ModelSchema>(
-    syncDestinations,
-    validatorFn as unknown as (data: any) => ModelSchema
-  )
-
   const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
-  function updateEntity<TUpdatedData extends AllowedEntityInput<ModelSchema>>(
-    this: { proto: EntityPrototype<ModelSchema> },
+  function updateEntity<TUpdatedData extends TInputSchema>(
+    this: { proto: EntityPrototype<TInputSchema, TIdentifier> },
     updatedData: TUpdatedData
   ): any {
     const updatedInternalEntity = this.proto.update(updatedData)
 
-    const proxyTarget = createProxyTarget(updatedInternalEntity)
+    const proxyTarget = proxyTargetFactory(updatedInternalEntity)
 
     return new Proxy(proxyTarget, proxyHandler)
   }
 
-  function createProxyTarget<TInternalEntity>(internalEntity: TInternalEntity) {
+  function proxyTargetFactory<TInternalEntity>(
+    internalEntity: TInternalEntity
+  ) {
     return {
       proto: internalEntity,
       relationAccessor: relationAccessor,
     }
   }
 
-  function createEntity<TInputData extends AllowedEntityInput<ModelSchema>>(
-    inputData: TInputData
-  ) {
+  function createEntity<
+    TInputData extends UpdateEntityInput<TInputSchema, TIdentifier>,
+  >(inputData: TInputData) {
     const id = generateId()
-    const data = { ...inputData, id } as unknown as ModelSchema
+    const data = { ...inputData, id } as unknown as TInputSchema
 
     const internalEntity = new internalEntityClass(data)
 
-    const proxyTarget = createProxyTarget(internalEntity)
+    const proxyTarget = proxyTargetFactory(internalEntity)
 
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
-      ModelSchema,
+      TInputSchema,
       TMethods,
-      TDefinitions
+      TDefinitions,
+      TIdentifier
     >
   }
 
   function recoverEntity(serializedData: string) {
-    const data = JSON.parse(serializedData) as ModelSchema
+    const data = JSON.parse(serializedData) as TInputSchema
     const internalEntity = new internalEntityClass(data)
 
-    const proxyTarget = createProxyTarget(internalEntity)
+    const proxyTarget = proxyTargetFactory(internalEntity)
 
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
-      ModelSchema,
+      TInputSchema,
       TMethods,
-      TDefinitions
+      TDefinitions,
+      TIdentifier
     >
   }
 

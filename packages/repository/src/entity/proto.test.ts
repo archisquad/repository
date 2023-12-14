@@ -1,4 +1,4 @@
-import { createInternalEntity } from "./proto"
+import { internalEntityFactory } from "./proto"
 import { DeepReadonly } from "./types"
 import {
   TestEntityData,
@@ -20,15 +20,17 @@ describe("proto", () => {
     fakeData,
     passThroughValidator,
   }) => {
-    const context = createInternalEntity<TestEntityData>(
+    const context = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator
+      passThroughValidator,
+      () => "1"
     )
 
     const entity = new context({ ...fakeData, id: "1" })
 
     const result = entity.update({
       foo: "foo2",
+      bar: 2,
       some: true,
     })
 
@@ -45,7 +47,7 @@ describe("proto", () => {
         id: string
         foo: string
         bar: number
-        deep: {
+        deep?: {
           foo: string
           bar: string
         }
@@ -59,9 +61,10 @@ describe("proto", () => {
     fakeData,
     passThroughValidator,
   }) => {
-    const context = createInternalEntity<TestEntityData>(
+    const context = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator
+      passThroughValidator,
+      () => "1"
     )
 
     const entity = new context({ ...fakeData, id: "2" })
@@ -75,9 +78,10 @@ describe("proto", () => {
     fakeData,
     passThroughValidator,
   }) => {
-    const context = createInternalEntity<TestEntityData>(
+    const context = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator
+      passThroughValidator,
+      () => "1"
     )
 
     const entity = new context({ ...fakeData, id: "1" })
@@ -91,6 +95,22 @@ describe("proto", () => {
     expect(entity.isSynced(syncKeys[1])).toBe(false)
   })
 
+  it("getIdentifier method returns identifier value", ({
+    syncKeys,
+    fakeData,
+    passThroughValidator,
+  }) => {
+    const context = internalEntityFactory<TestEntityData, "id">(
+      syncKeys,
+      passThroughValidator,
+      () => "1"
+    )
+
+    const entity = new context({ ...fakeData, id: "1" })
+
+    expect(entity.getIdentifier()).toBe("1")
+  })
+
   it("Validator function is called on entity creation", ({
     syncKeys,
     fakeData,
@@ -100,7 +120,11 @@ describe("proto", () => {
       ...passThroughValidator(input),
       bar: "bar",
     }))
-    const context = createInternalEntity<TestEntityData>(syncKeys, validatorFn)
+    const context = internalEntityFactory<TestEntityData, "id">(
+      syncKeys,
+      validatorFn,
+      () => "1"
+    )
 
     const result = new context({ ...fakeData, id: "1" })
 
@@ -117,10 +141,14 @@ describe("proto", () => {
       ...passThroughValidator(input),
       foo: "updated",
     }))
-    const context = createInternalEntity<TestEntityData>(syncKeys, validatorFn)
+    const context = internalEntityFactory<TestEntityData, "id">(
+      syncKeys,
+      validatorFn,
+      () => "1"
+    )
     const entity = new context({ ...fakeData, id: "1" })
 
-    entity.update({ foo: "foo2" })
+    entity.update({ foo: "foo2", bar: 2, some: true })
 
     expect(validatorFn).toBeCalledTimes(2)
     expect(entity.data.foo).toBe("updated")
