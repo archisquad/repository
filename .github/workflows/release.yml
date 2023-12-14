@@ -42,7 +42,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check with publint
-        run: pnpm run publint
+        run: pnpm run pub-check
 
       - name: Build project
         run: pnpm run build
