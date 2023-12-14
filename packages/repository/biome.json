@@ -4,7 +4,12 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["src/**/*.d.ts", "**/dist/**/*", "**/coverage/**/*", "**/node_modules/**/*"]
+    "ignore": [
+      "src/**/*.d.ts",
+      "**/dist/**/*",
+      "**/coverage/**/*",
+      "**/node_modules/**/*"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -14,13 +19,13 @@
     "lineWidth": 80,
     "lineEnding": "lf"
   },
-   "javascript": {
+  "javascript": {
     "formatter": {
       "quoteStyle": "double",
       "quoteProperties": "asNeeded",
       "trailingComma": "es5",
       "semicolons": "asNeeded",
-      "arrowParentheses":"always",
+      "arrowParentheses": "always",
       "bracketSameLine": true,
       "bracketSpacing": true
     }
