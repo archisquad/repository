@@ -23,16 +23,16 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[markdown]": {
     "editor.formatOnSave": false
   },
   "[json]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
-  "vitest.commandLine": "vitest"
+  "vitest.commandLine": "vitest -c packages/repository/vitest.config.ts"
 }

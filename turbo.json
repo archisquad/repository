@@ -10,6 +10,7 @@
     },
     "lint": {},
     "type-check": {},
+    "pub-check": {},
     "dev": {
       "cache": false
     }
