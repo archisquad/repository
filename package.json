@@ -48,7 +48,8 @@
     "valibot": "0.24.1",
     "vite-tsconfig-paths": "4.2.2",
     "vitepress": "1.0.0-rc.31",
-    "vitest": "1.0.4",
+    "@biomejs/biome": "1.4.1",
+    "vitest": "1.0.3",
     "zod": "3.22.4"
   }
 }
