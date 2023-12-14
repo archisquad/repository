@@ -83,10 +83,6 @@ importers:
       vitepress:
         specifier: 1.0.0-rc.31
         version: 1.0.0-rc.31(@algolia/client-search@4.20.0)(@types/node@18.18.9)(search-insights@2.9.0)(typescript@5.3.3)
-    devDependencies:
-      eslint:
-        specifier: 8.55.0
-        version: 8.55.0
 
   packages/repository:
     dependencies:
