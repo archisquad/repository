@@ -4,9 +4,9 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import { describe, expect, it } from "vitest"
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { validateInput } from "./validation"
-import { describe, expect, it } from "vitest"
 
 function makeTestObj(
   {

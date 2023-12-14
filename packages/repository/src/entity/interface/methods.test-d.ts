@@ -1,5 +1,5 @@
-import { PrototypeMethods, ResolvedMethods } from "./methods"
 import { TestEntityData, describe, expectTypeOf, it } from "vitest"
+import { PrototypeMethods, ResolvedMethods } from "./methods"
 
 describe("Method-definition types", () => {
   it("ResolvedMethods returns prototype methods if methods are undefined", () => {

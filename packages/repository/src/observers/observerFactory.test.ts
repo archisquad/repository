@@ -1,8 +1,8 @@
+import { describe, expect, expectTypeOf, it, vi } from "vitest"
 /* eslint-disable sonarjs/no-duplicate-string */
 // @vitest-environment jsdom
 import { observerFactory } from "./observerFactory"
 import { Observer } from "./types"
-import { describe, expect, expectTypeOf, it, vi } from "vitest"
 
 describe("ObserverFactory", () => {
   describe("Interface", () => {

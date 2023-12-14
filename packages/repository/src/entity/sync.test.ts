@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
 import { SyncKey } from "./interface"
 import { SyncMap, makeSyncKey } from "./sync"
-import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
 
 declare module "vitest" {
   export interface TestContext {

@@ -1,4 +1,3 @@
-import { Entity } from "./entity"
 import {
   PostsRelationDefinition,
   TestEntityData,
@@ -6,6 +5,7 @@ import {
   expectTypeOf,
   it,
 } from "vitest"
+import { Entity } from "./entity"
 
 describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {

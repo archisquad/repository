@@ -8,9 +8,9 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import { Mock, beforeEach, describe, expect, it, vi } from "vitest"
 /* eslint-disable @typescript-eslint/unbound-method */
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
-import { Mock, beforeEach, describe, expect, it, vi } from "vitest"
 
 declare module "vitest" {
   interface TestContext {

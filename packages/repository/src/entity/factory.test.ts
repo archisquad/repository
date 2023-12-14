@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { entityModelFactory } from "./factory"
-import { makeSyncKey } from "./sync"
 import { makeRepositoryKey } from "@/repositoryKey"
 import {
   ObjectSchema,
@@ -20,6 +17,9 @@ import {
   it,
   vi,
 } from "vitest"
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { entityModelFactory } from "./factory"
+import { makeSyncKey } from "./sync"
 
 describe("Entity", () => {
   beforeEach((context) => {

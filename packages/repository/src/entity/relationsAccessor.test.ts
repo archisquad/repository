@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import { ResolvedRelations } from "./interface"
-import { relationAccessorFactory } from "./relationsAccessor"
 import { makeRepositoryKey } from "@/repositoryKey"
 import {
   TestEntityData,
@@ -10,6 +7,9 @@ import {
   expectTypeOf,
   it,
 } from "vitest"
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { ResolvedRelations } from "./interface"
+import { relationAccessorFactory } from "./relationsAccessor"
 
 describe("Entity: Relations Accessor", () => {
   beforeEach((context) => {
