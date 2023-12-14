@@ -1,5 +1,4 @@
 import { describe, expect, expectTypeOf, it, vi } from "vitest"
-/* eslint-disable sonarjs/no-duplicate-string */
 // @vitest-environment jsdom
 import { observerFactory } from "./observerFactory"
 import { Observer } from "./types"
@@ -126,7 +125,6 @@ describe("ObserverFactory", () => {
 
     it("Given callback with idle option on non-supported browser, When trigger, Then run after 2000ms", () => {
       vi.useFakeTimers()
-      // eslint-disable-next-line unicorn/no-useless-undefined
       vi.stubGlobal("requestIdleCallback", undefined)
       const { trigger, observe } = observerFactory({
         actions: ["action-idle"],

@@ -10,7 +10,6 @@ import {
 import { SyncMap } from "./sync"
 import { DeepReadonly } from "./types"
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function internalEntityFactory<
   TSchema extends EntitySchema,
   TIdentifier extends Identifier<TSchema> | undefined,
@@ -35,7 +34,6 @@ export function internalEntityFactory<
     }
 
     public getIdentifier(): ResolveIdentifier<TSchema, TIdentifier> {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- that's ESLint bug
       return identifierFn(this._data as TSchema)
     }
 

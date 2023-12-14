@@ -7,7 +7,6 @@ import {
   expectTypeOf,
   it,
 } from "vitest"
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { ResolvedRelations } from "./interface"
 import { relationAccessorFactory } from "./relationsAccessor"
 

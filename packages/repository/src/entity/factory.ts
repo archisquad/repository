@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
 import {

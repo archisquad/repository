@@ -78,7 +78,6 @@ describe("SyncMap", () => {
     syncMap.setStatus(destinationId, promise)
     expect(syncMap.checkStatus(destinationId)).toBe(false)
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await promise.catch(() => {})
 
     expect(syncMap.checkStatus(destinationId)).toBe(false)
