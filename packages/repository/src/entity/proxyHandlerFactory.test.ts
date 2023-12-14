@@ -1,15 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest"
-/* eslint-disable @typescript-eslint/unbound-method */
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 
 declare module "vitest" {
@@ -192,7 +181,7 @@ describe("proxyHandlerFactory", () => {
   }) => {
     expect(() => {
       testProxy.fakeKey = undefined
-    }).toThrowError("You can't delete entity properties, use update() instead.")
+    }).toThrowError("You can't overwrite entity properties, use update() instead.")
   })
 
   it("Given proxy with handler, When defineProperty, Then do nothing", ({
