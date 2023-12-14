@@ -18,6 +18,9 @@ export default defineConfig({
         { text: "Entity", link: "/api/entity" },
         { text: "Observatory", link: "/api/observatory" },
       ],
+      "/complex-types": [
+        { text: "Methods", link: "/complex-types/methods" },
+      ]
     },
 
     socialLinks: [
