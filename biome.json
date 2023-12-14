@@ -5,7 +5,7 @@
   },
   "files": {
     "ignore": [
-      "src/**/*.d.ts",
+      "**/*.d.ts",
       "**/dist/**/*",
       "**/coverage/**/*",
       "**/node_modules/**/*"
