@@ -41,11 +41,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check with publint
-        run: pnpm run pub-check
-
       - name: Build project
         run: pnpm run build
+
+      - name: Check with publint
+        run: pnpm run pub-check
 
       - name: Creating .npmrc
         run: |
