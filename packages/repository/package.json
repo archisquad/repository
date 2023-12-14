@@ -19,9 +19,7 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif",
     "lint:dev": "eslint --fix . --ext .js,.jsx,.ts,.tsx",
@@ -30,11 +28,7 @@
     "build": "unbuild",
     "pub-check": "publint"
   },
-  "keywords": [
-    "repository",
-    "framework agnostic",
-    "archisquad"
-  ],
+  "keywords": ["repository", "framework agnostic", "archisquad"],
   "maintainers": [
     {
       "name": "Mateusz Gostański",
@@ -61,7 +55,7 @@
     "@total-typescript/ts-reset": "0.5.1",
     "@vitest/coverage-istanbul": "1.0.4",
     "jsdom": "23.0.1",
-    "lint-staged": "15.2.0",
+    "lint-staged": "15.1.0",
     "publint": "0.2.6",
     "type-fest": "4.8.3",
     "typescript": "5.3.3",
