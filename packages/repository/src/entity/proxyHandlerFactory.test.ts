@@ -181,7 +181,9 @@ describe("proxyHandlerFactory", () => {
   }) => {
     expect(() => {
       testProxy.fakeKey = undefined
-    }).toThrowError("You can't overwrite entity properties, use update() instead.")
+    }).toThrowError(
+      "You can't overwrite entity properties, use update() instead."
+    )
   })
 
   it("Given proxy with handler, When defineProperty, Then do nothing", ({
