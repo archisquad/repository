@@ -41,7 +41,6 @@ jobs:
 
       - name: Run Biome CI
         run: pnpm run lint
-        continue-on-error: true
 
       - name: Run unit & integration tests
         run: pnpm run test
