@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "vitepress": "1.0.0-rc.31"
+    "vitepress": "1.0.0-rc.32"
   },
   "devDependencies": {
-    "eslint": "8.55.0"
+    "eslint": "8.56.0"
   },
   "scripts": {
     "dev": "vitepress dev",
