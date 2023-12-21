@@ -1,4 +1,3 @@
-import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 import { RepositoryKey } from "@/repositoryKey"
 import {
   AuthorRelationDefinition,
@@ -8,6 +7,7 @@ import {
   expectTypeOf,
   it,
 } from "vitest"
+import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
 describe("Interface: Relations", () => {
   it("uses defined relationship names as accessor function names", () => {

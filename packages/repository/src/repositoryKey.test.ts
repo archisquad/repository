@@ -1,5 +1,5 @@
-import { RepositoryKey, makeRepositoryKey } from "./repositoryKey"
 import { describe, expect, expectTypeOf, it } from "vitest"
+import { RepositoryKey, makeRepositoryKey } from "./repositoryKey"
 
 describe("Given a repository name, When create a repository key,", () => {
   it("Then the key is a symbol", () => {
@@ -39,10 +39,7 @@ describe("Given a repository name, When create a repository key,", () => {
       typeof repositoryName
     >(repositoryName)
 
-    type Recover<TRepo> = TRepo extends RepositoryKey<
-      infer TSchema,
-      infer TName
-    >
+    type Recover<TRepo> = TRepo extends RepositoryKey<infer TSchema, string>
       ? TSchema
       : never
 

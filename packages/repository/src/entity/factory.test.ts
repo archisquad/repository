@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { entityModelFactory } from "./factory"
-import { makeSyncKey } from "./sync"
 import { makeRepositoryKey } from "@/repositoryKey"
 import {
   ObjectSchema,
@@ -20,6 +17,8 @@ import {
   it,
   vi,
 } from "vitest"
+import { entityModelFactory } from "./factory"
+import { makeSyncKey } from "./sync"
 
 describe("Entity", () => {
   beforeEach((context) => {
@@ -451,9 +450,7 @@ describe("Entity", () => {
 
       const valibotInferFn = <TSchema extends ObjectSchema<any>>(
         valibotSchema: TSchema
-        // eslint-disable-next-line unicorn/consistent-function-scoping
       ) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return (valibotSchema as { entries: any }).entries as Output<TSchema>
       }
       const { createEntity } = entityModelFactory({

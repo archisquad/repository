@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
 import {
@@ -39,7 +38,7 @@ export function entityModelFactory<
     relations = {},
     syncDestinations = [],
     methods = {},
-    validator = (schema: TSchema, data: unknown) => data as TInputSchema,
+    validator = (_schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
   validateInput(configObj)

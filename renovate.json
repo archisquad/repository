@@ -1,9 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>archisquad/renovate-config"],
-  "ignoreDeps": [
-    "node",
-    "@types/node",
-    "lint-staged"
-  ]
+  "ignoreDeps": ["node", "@types/node", "lint-staged"]
 }

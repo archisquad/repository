@@ -28,7 +28,6 @@ export function readonlyClone<TData extends Record<string, any>>(
   data: TData
 ): DeepReadonly<TData> {
   // TODO: add polyfill for structuredClone
-  // eslint-disable-next-line compat/compat
   const clonedData = structuredClone(data)
 
   return deepReadonly(clonedData)

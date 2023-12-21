@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
 import { SyncKey } from "./interface"
 import { SyncMap, makeSyncKey } from "./sync"
-import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
 
 declare module "vitest" {
   export interface TestContext {
@@ -71,14 +71,13 @@ describe("SyncMap", () => {
   }) => {
     const syncMap = new SyncMap([destinationId])
     expect(syncMap.checkStatus(destinationId)).toBe(false)
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((_resolve, reject) => {
       reject(new Error("test"))
     })
 
     syncMap.setStatus(destinationId, promise)
     expect(syncMap.checkStatus(destinationId)).toBe(false)
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await promise.catch(() => {})
 
     expect(syncMap.checkStatus(destinationId)).toBe(false)

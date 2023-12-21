@@ -3,12 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "turbo run lint",
+    "lint:dev": "biome check --apply-unsafe ./",
+    "lint": "biome ci ./",
     "type-check": "turbo run type-check",
     "pub-check": "turbo run pub-check",
     "test": "turbo run test",
     "build": "turbo run build",
-    "format": "prettier --write .",
     "prepare": "husky install",
     "changeset": "changeset",
     "docs:dev": "turbo run dev --filter=docs"
@@ -22,24 +22,18 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "prettier": "@archisquad/prettier-config",
   "devDependencies": {
-    "@archisquad/prettier-config": "1.0.1",
     "@changesets/cli": "2.27.1",
     "@commitlint/cli": "18.4.3",
     "@faker-js/faker": "8.3.1",
-    "@microsoft/eslint-formatter-sarif": "3.0.0",
     "@paralleldrive/cuid2": "2.2.2",
     "@total-typescript/ts-reset": "0.5.1",
     "@vitest/coverage-istanbul": "1.1.0",
     "commitlint-config-gitmoji": "2.3.1",
-    "eslint": "8.56.0",
-    "eslint-config-archisquad": "1.2.0",
     "gitmoji-cli": "9.0.0",
     "husky": "8.0.3",
     "jsdom": "23.0.1",
     "lint-staged": "15.1.0",
-    "prettier": "3.1.1",
     "publint": "0.2.6",
     "turbo": "1.11.2",
     "type-fest": "4.8.3",
@@ -47,6 +41,7 @@
     "unbuild": "2.0.0",
     "valibot": "0.24.1",
     "vite-tsconfig-paths": "4.2.2",
+    "@biomejs/biome": "1.4.1",
     "vitepress": "1.0.0-rc.32",
     "vitest": "1.1.0",
     "zod": "3.22.4"

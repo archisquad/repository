@@ -1,16 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/unbound-method */
-import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest"
+import { proxyHandlerFactory } from "./proxyHandlerFactory"
 
 declare module "vitest" {
   interface TestContext {
@@ -89,9 +78,7 @@ describe("proxyHandlerFactory", () => {
     fakeProxiedObj,
   }) => {
     const userDefinedMethods = {
-      getIdentifier: function () {
-        return "fail"
-      },
+      getIdentifier: () => "fail",
     }
     const proxyHandler = proxyHandlerFactory<typeof fakeProxiedObj>(
       vi.fn(),
@@ -193,8 +180,10 @@ describe("proxyHandlerFactory", () => {
     testProxy,
   }) => {
     expect(() => {
-      delete testProxy.fakeKey
-    }).toThrowError("You can't delete entity properties, use update() instead.")
+      testProxy.fakeKey = undefined
+    }).toThrowError(
+      "You can't overwrite entity properties, use update() instead."
+    )
   })
 
   it("Given proxy with handler, When defineProperty, Then do nothing", ({
@@ -244,7 +233,7 @@ describe("proxyHandlerFactory", () => {
     testProxy,
   }) => {
     expect(() => {
-      const value = testProxy.nonExistingKey
+      const _value = testProxy.nonExistingKey
     }).toThrowError("Property 'nonExistingKey' does not exist on this entity.")
   })
 })

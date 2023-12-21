@@ -1,6 +1,6 @@
-import { deepReadonly, readonlyClone } from "./deepReadonly"
 import { ReadonlyDeep } from "type-fest"
 import { describe, expect, expectTypeOf, it } from "vitest"
+import { deepReadonly, readonlyClone } from "./deepReadonly"
 
 describe("Deep Readonly", () => {
   it("Given deep object, When deepReadonly is called, Then return deepReadonly object", () => {

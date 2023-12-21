@@ -9,12 +9,10 @@ export function getIdentifier<
   TIdentifier extends Identifier<TSchema> | undefined,
 >(identifier?: TIdentifier): GetIdentifierFn<TSchema, TIdentifier> {
   if (!identifier) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return ((data: TSchema) => data.id) as GetIdentifierFn<TSchema, TIdentifier>
   }
 
   if (typeof identifier === "string") {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return ((data: TSchema) => data[identifier]) as GetIdentifierFn<
       TSchema,
       TIdentifier

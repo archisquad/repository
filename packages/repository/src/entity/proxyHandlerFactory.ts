@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ProxyTarget } from "./interface"
 
 const allowedSymbolKeys = new Set([
@@ -39,15 +30,11 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
 
       // The update method & getIdentifier are not overridable
       if (prop === "update") {
-        return function (...args: any) {
-          return updateEntityFn.apply(target, args)
-        }
+        return (...args: any) => updateEntityFn.apply(target, args)
       }
 
       if (prop === "getIdentifier") {
-        return function () {
-          return target.proto.getIdentifier()
-        }
+        return () => target.proto.getIdentifier()
       }
 
       // User defined methods, takes precedence over internal methods

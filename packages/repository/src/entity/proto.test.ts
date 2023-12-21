@@ -1,5 +1,3 @@
-import { internalEntityFactory } from "./proto"
-import { DeepReadonly } from "./types"
 import {
   TestEntityData,
   beforeEach,
@@ -9,6 +7,8 @@ import {
   it,
   vi,
 } from "vitest"
+import { internalEntityFactory } from "./proto"
+import { DeepReadonly } from "./types"
 
 describe("proto", () => {
   beforeEach(() => {

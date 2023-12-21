@@ -1,12 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { validateInput } from "./validation"
 import { describe, expect, it } from "vitest"
+import { validateInput } from "./validation"
 
 function makeTestObj(
   {
@@ -19,7 +12,6 @@ function makeTestObj(
     methods: Record<string, any>
     relations: Record<string, any>
     identifier: string | ((data: any) => any)
-    // eslint-disable-next-line unicorn/no-object-as-default-parameter
   }> = { schema: {}, methods: {}, relations: {}, identifier: "id" }
 ) {
   return {
