@@ -77,12 +77,15 @@ export function entityModelFactory<
   }
 
   function createEntity<
+    // TODO: Full data schema
     TInputData extends UpdateEntityInput<TInputSchema, TIdentifier>,
-  >(inputData: TInputData) {
+    >(inputData: TInputData) {
+    // Id only when it's not defined
     const id = generateId()
-    const data = { ...inputData, id } as unknown as TInputSchema
+    // TODO: Remove it
+    const data = { ...inputData, id }
 
-    const internalEntity = new internalEntityClass(data)
+    const internalEntity = new internalEntityClass(inputData)
 
     const proxyTarget = proxyTargetFactory(internalEntity)
 

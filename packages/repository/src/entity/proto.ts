@@ -43,6 +43,7 @@ export function internalEntityFactory<
       return new EntityInternal({
         ...this._data,
         ...data,
+        // TODO: Remove it - identifier is selected by user
         id: this._data.id,
       } as TSchema)
     }
@@ -52,6 +53,7 @@ export function internalEntityFactory<
     }
 
     public toObject(): DeepReadonly<TSchema> {
+      // This should be cloned
       return this._data
     }
 

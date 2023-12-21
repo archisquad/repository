@@ -24,6 +24,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         return {}
       }
 
+      // TODO: use Reflect.has()
       if (prop in target.proto.data || allowedSymbolKeys.has(prop as symbol)) {
         return Reflect.get(target.proto.data, prop, receiver)
       }
@@ -58,6 +59,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         }
       }
 
+      // TODO: Reflect.has()
       if (prop in target.relationAccessor) {
         return target.relationAccessor[prop]
       }

@@ -16,6 +16,7 @@ export type EntityPrototype<
 }
 
 export type ProxyTarget = {
+  // TODO: Refactor to EntityInternal
   proto: any
   relationAccessor: any
 }
