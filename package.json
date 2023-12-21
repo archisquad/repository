@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "biome check --apply-unsafe ./",
+    "lint:dev": "biome check --apply-unsafe ./",
     "lint": "biome ci ./",
     "type-check": "turbo run type-check",
     "pub-check": "turbo run pub-check",

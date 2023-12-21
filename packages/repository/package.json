@@ -21,7 +21,7 @@
   },
   "files": ["dist"],
   "scripts": {
-    "check": "biome check --apply-unsafe ./",
+    "lint:dev": "biome check --apply-unsafe ./",
     "lint": "biome ci ./",
     "type-check": "tsc --noEmit",
     "test": "vitest run --coverage",
