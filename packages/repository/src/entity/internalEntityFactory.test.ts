@@ -1,3 +1,4 @@
+import type { PartialDeep } from "type-fest"
 import {
   TestContext,
   TestEntityData,
@@ -8,9 +9,8 @@ import {
   it,
   vi,
 } from "vitest"
-import { internalEntityFactory } from "./internalEntityFactory"
 import type { DeepReadonly } from "./deepReadonly"
-import type { PartialDeep } from "type-fest"
+import { internalEntityFactory } from "./internalEntityFactory"
 
 describe("proto", () => {
   beforeEach(() => {

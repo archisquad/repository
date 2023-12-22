@@ -1,4 +1,5 @@
 import { deepReadonly } from "./deepReadonly"
+import type { DeepReadonly } from "./deepReadonly"
 import { GetIdentifierFn } from "./identifier"
 import {
   EntitySchema,
@@ -8,7 +9,6 @@ import {
   UpdateEntityInput,
 } from "./interface"
 import { SyncMap } from "./sync"
-import type { DeepReadonly } from "./deepReadonly"
 
 export function internalEntityFactory<
   TSchema extends EntitySchema,
