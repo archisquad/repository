@@ -6,8 +6,9 @@ export function deepReadonly<TWriteableObject extends Record<string, any>>(
   for (const key of Reflect.ownKeys(obj)) {
     const value = obj[key as keyof TWriteableObject]
     if (checkIsObject(value)) {
-      // @ts-expect-error - we know that value is object
-      obj[key as keyof TWriteableObject] = deepReadonly(value)
+      obj[key as keyof TWriteableObject] = deepReadonly(
+        value
+      ) as TWriteableObject[keyof TWriteableObject]
     }
   }
 
