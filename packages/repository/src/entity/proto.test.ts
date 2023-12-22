@@ -153,4 +153,22 @@ describe("proto", () => {
     expect(validatorFn).toBeCalledTimes(2)
     expect(entity.data.foo).toBe("updated")
   })
+
+  it("toObject should return a copy of data", ({
+    syncKeys,
+    fakeData,
+    passThroughValidator,
+  }) => {
+    const context = internalEntityFactory<TestEntityData, "id">(
+      syncKeys,
+      passThroughValidator,
+      () => "1"
+    )
+    const entity = new context({ ...fakeData, id: "1" })
+
+    const result = entity.toObject()
+
+    expect(result).not.toBe(entity.data)
+    expect(result).toEqual(entity.data)
+  })
 })
