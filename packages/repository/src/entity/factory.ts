@@ -9,7 +9,6 @@ import type {
   Methods,
   ProxyTarget,
   RelationshipsDefinitions,
-  SyncKey,
   UpdateEntityInput,
   Validator,
 } from "./interface"
@@ -17,6 +16,7 @@ import { internalEntityFactory } from "./internalEntityFactory"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { validateConfigObj } from "./validation"
+import { SyncKey } from "@/network/interface/sync"
 
 export function entityModelFactory<
   TSchema,

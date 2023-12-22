@@ -1,10 +1,5 @@
-import type {
-  EntitySchema,
-  Identifier,
-  Methods,
-  SyncKey,
-  Validator,
-} from "./interface"
+import { SyncKey } from "@/network/interface/sync"
+import type { EntitySchema, Identifier, Methods, Validator } from "./interface"
 import type { RelationshipsDefinitions } from "./interface/relations"
 
 export function validateConfigObj<

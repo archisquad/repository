@@ -1,4 +1,4 @@
-import type { SyncKey, SyncTarget } from "./interface"
+import type { SyncKey, SyncTarget } from "./interface/sync"
 
 export function makeSyncKey(id: string): SyncKey {
   return id as SyncKey

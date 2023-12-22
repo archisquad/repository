@@ -5,11 +5,11 @@ import type {
   EntitySchema,
   Identifier,
   ResolveIdentifier,
-  SyncKey,
   UpdateEntityInput,
 } from "./interface"
 import { deepReadonly } from "./deepReadonly"
-import { SyncMap } from "./sync"
+import { SyncMap } from "../network/sync"
+import { SyncKey } from "@/network/interface/sync"
 
 export function internalEntityFactory<
   TSchema extends EntitySchema,

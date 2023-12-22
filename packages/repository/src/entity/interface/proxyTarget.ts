@@ -6,7 +6,7 @@ import type {
   ResolveIdentifier,
   UpdateEntityInput,
 } from "./data"
-import type { SyncKey } from "./sync"
+import type { SyncKey } from "../../network/interface/sync"
 
 export type EntityPrototype<
   TSchema extends EntitySchema,

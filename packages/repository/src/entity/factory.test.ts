@@ -4,7 +4,7 @@ import { boolean, cuid2, number, object, string } from "valibot"
 import type { TestEntityData } from "vitest"
 import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import { entityModelFactory } from "./factory"
-import { makeSyncKey } from "./sync"
+import { makeSyncKey } from "../network/sync"
 
 describe("Entity", () => {
   beforeEach((context) => {
