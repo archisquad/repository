@@ -29,56 +29,44 @@ export function validateInput<
   const methodNames = Object.keys(methods)
   const relationNames = Object.keys(relations)
 
-  if (isDefaultIdentifierDefined(identifier, fieldNames)) {
-    throw new EntityModelValidationError(
-      "You must provide an identifier or define a field named 'id'."
-    )
-  }
-
-  if (isDeclaredIdentifierDefined(identifier, fieldNames)) {
-    throw new EntityModelValidationError(
-      "The given identifier does not exist in the schema."
-    )
-  }
+  checkIsDefaultIdentifierDefined(identifier, fieldNames)
+  checkIsDeclaredIdentifierDefined(identifier, fieldNames)
 
   if (isNoRelationsOrMethodsDefined(methodNames, relationNames)) {
     return
   }
 
-  if (isAnyRelationNameUsedInMethods(methodNames, relationNames)) {
-    throw new EntityModelValidationError(
-      "Relations names cannot be the same as method names. Fix your relations names."
-    )
-  }
-
-  if (isAnyFieldNameUsedInMethods(methodNames, fieldNames)) {
-    throw new EntityModelValidationError(
-      "Field names cannot be the same as method names. Fix your method or field names."
-    )
-  }
-
-  if (isAnyFieldNameUsedInRelations(relationNames, fieldNames)) {
-    throw new EntityModelValidationError(
-      "Field names cannot be the same as relation names. Fix your field or relation names."
-    )
-  }
+  checkIsAnyRelationNameUsedInMethods(methodNames, relationNames)
+  checkIsAnyFieldNameUsedInMethods(methodNames, fieldNames)
+  checkIsAnyFieldNameUsedInRelations(relationNames, fieldNames)
 }
 
 class EntityModelValidationError extends Error {}
 
-function isDefaultIdentifierDefined(identifier: unknown, fieldNames: string[]) {
-  return !identifier && !fieldNames.includes("id")
-}
-
-function isDeclaredIdentifierDefined(
+function checkIsDefaultIdentifierDefined(
   identifier: unknown,
   fieldNames: string[]
 ) {
-  return (
+  if (!identifier && !fieldNames.includes("id")) {
+    throw new EntityModelValidationError(
+      "You must provide an identifier or define a field named 'id'."
+    )
+  }
+}
+
+function checkIsDeclaredIdentifierDefined(
+  identifier: unknown,
+  fieldNames: string[]
+) {
+  if (
     identifier &&
     typeof identifier === "string" &&
     !fieldNames.includes(identifier)
-  )
+  ) {
+    throw new EntityModelValidationError(
+      "The given identifier does not exist in the schema."
+    )
+  }
 }
 
 function isNoRelationsOrMethodsDefined(
@@ -88,23 +76,35 @@ function isNoRelationsOrMethodsDefined(
   return methodNames.length === 0 && relationNames.length === 0
 }
 
-function isAnyRelationNameUsedInMethods(
+function checkIsAnyRelationNameUsedInMethods(
   methodNames: string[],
   relationNames: string[]
 ) {
-  return relationNames.some((name) => methodNames.includes(name))
+  if (relationNames.some((name) => methodNames.includes(name))) {
+    throw new EntityModelValidationError(
+      "Relations names cannot be the same as method names. Fix your relations names."
+    )
+  }
 }
 
-function isAnyFieldNameUsedInMethods(
+function checkIsAnyFieldNameUsedInMethods(
   methodNames: string[],
   fieldNames: string[]
 ) {
-  return fieldNames.some((name) => methodNames.includes(name))
+  if (fieldNames.some((name) => methodNames.includes(name))) {
+    throw new EntityModelValidationError(
+      "Field names cannot be the same as method names. Fix your method or field names."
+    )
+  }
 }
 
-function isAnyFieldNameUsedInRelations(
+function checkIsAnyFieldNameUsedInRelations(
   relationNames: string[],
   fieldNames: string[]
 ) {
-  return fieldNames.some((name) => relationNames.includes(name))
+  if (fieldNames.some((name) => relationNames.includes(name))) {
+    throw new EntityModelValidationError(
+      "Field names cannot be the same as relation names. Fix your field or relation names."
+    )
+  }
 }
