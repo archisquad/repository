@@ -56,14 +56,14 @@ describe("proto", () => {
     })
 
     expect(result).not.toBe(sut)
-    expect(result.toObject()).toEqual(
+    expect(result.data).toEqual(
       expect.objectContaining({
-        id: "1",
         foo: "foo2",
+        bar: 2,
         some: true,
       })
     )
-    expectTypeOf(result.toObject()).toMatchTypeOf<
+    expectTypeOf(result.data).toMatchTypeOf<
       DeepReadonly<{
         id: string
         foo: string
