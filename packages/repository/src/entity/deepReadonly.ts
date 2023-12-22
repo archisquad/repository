@@ -3,13 +3,13 @@ import { DeepReadonly } from "./types"
 export function deepReadonly<TWriteableObject extends Record<string, any>>(
   obj: TWriteableObject
 ): DeepReadonly<TWriteableObject> {
-  Reflect.ownKeys(obj).forEach((key) => {
+  for (const key of Reflect.ownKeys(obj)) {
     const value = obj[key as keyof TWriteableObject]
     if (checkIsObject(value)) {
       // @ts-expect-error - we know that value is object
       obj[key as keyof TWriteableObject] = deepReadonly(value)
     }
-  })
+  }
 
   return Object.freeze(obj) as DeepReadonly<TWriteableObject>
 }
