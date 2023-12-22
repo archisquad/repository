@@ -8,7 +8,7 @@ import {
   it,
   vi,
 } from "vitest"
-import { internalEntityFactory } from "./proto"
+import { internalEntityFactory } from "./internalEntityFactory"
 import type { DeepReadonly } from "./deepReadonly"
 import type { PartialDeep } from "type-fest"
 

@@ -11,7 +11,7 @@ import {
   SyncKey,
   Validator,
 } from "./interface"
-import { internalEntityFactory } from "./proto"
+import { internalEntityFactory } from "./internalEntityFactory"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { validateConfigObj } from "./validation"
