@@ -9,7 +9,7 @@ export type EntityPrototype<
   get data(): DeepReadonly<TSchema>
   update(data: TSchema): EntityPrototype<TSchema, TIdentifier>
   toJson(): string
-  toObject(): DeepReadonly<TSchema>
+  toObject(): TSchema
   isSynced(id: SyncKey): boolean
   setSynced(id: SyncKey, promise: Promise<unknown>): void
   getIdentifier(): ResolveIdentifier<TSchema, TIdentifier>

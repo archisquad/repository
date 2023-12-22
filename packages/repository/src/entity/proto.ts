@@ -52,9 +52,8 @@ export function internalEntityFactory<
       return JSON.stringify(this._data)
     }
 
-    public toObject(): DeepReadonly<TSchema> {
-      // This should be cloned
-      return this._data
+    public toObject(): TSchema {
+      return structuredClone(this._data) as TSchema
     }
 
     public isSynced(id: SyncKey): boolean {
