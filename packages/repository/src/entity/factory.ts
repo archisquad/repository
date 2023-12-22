@@ -9,7 +9,6 @@ import {
   ProxyTarget,
   RelationshipsDefinitions,
   SyncKey,
-  UpdateEntityInput,
   Validator,
 } from "./interface"
 import { internalEntityFactory } from "./proto"
@@ -76,16 +75,15 @@ export function entityModelFactory<
     }
   }
 
-  function createEntity<
-    // TODO: Full data schema
-    TInputData extends UpdateEntityInput<TInputSchema, TIdentifier>,
-    >(inputData: TInputData) {
-    // Id only when it's not defined
-    const id = generateId()
-    // TODO: Remove it
-    const data = { ...inputData, id }
+  function createEntity<TInputData extends TInputSchema>(
+    inputData: TInputData
+  ) {
+    let data = inputData
+    if (!identifier) {
+      data = { ...inputData, id: generateId() }
+    }
 
-    const internalEntity = new internalEntityClass(inputData)
+    const internalEntity = new internalEntityClass(data)
 
     const proxyTarget = proxyTargetFactory(internalEntity)
 
