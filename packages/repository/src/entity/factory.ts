@@ -21,14 +21,14 @@ export function entityModelFactory<
   TInputSchema extends EntitySchema,
   TIdentifier extends Identifier<TInputSchema> | undefined,
   TMethods extends Methods<TInputSchema> | undefined,
-  const TDefinitions extends RelationshipsDefinitions<TInputSchema>,
+  const TRelations extends RelationshipsDefinitions<TInputSchema>,
 >(configObj: {
   schema: TSchema
   inferSchema: (data: TSchema) => TInputSchema
   identifier?: TIdentifier
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
-  relations?: TDefinitions
+  relations?: TRelations
   syncDestinations?: SyncKey[]
 }) {
   const {
@@ -90,7 +90,7 @@ export function entityModelFactory<
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       TInputSchema,
       TMethods,
-      TDefinitions,
+      TRelations,
       TIdentifier
     >
   }
@@ -104,7 +104,7 @@ export function entityModelFactory<
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       TInputSchema,
       TMethods,
-      TDefinitions,
+      TRelations,
       TIdentifier
     >
   }
