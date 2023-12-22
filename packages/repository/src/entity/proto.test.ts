@@ -1,4 +1,5 @@
 import {
+  TestContext,
   TestEntityData,
   beforeEach,
   describe,
@@ -15,18 +16,33 @@ describe("proto", () => {
     vi.clearAllMocks()
   })
 
-  it("Update method returns new instance with extended data", ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
-    const context = internalEntityFactory<TestEntityData, "id">(
+  function createSut(
+    context: TestContext,
+    overrides?: {
+      validatorFn?: (...args: any[]) => any
+      identifierFn?: (...args: any[]) => any
+    }
+  ) {
+    const { passThroughValidator, syncKeys, fakeData } = context
+    const { validatorFn = passThroughValidator, identifierFn = () => "1" } =
+      overrides ?? {}
+
+    const sut = internalEntityFactory<TestEntityData, "id">(
       syncKeys,
-      passThroughValidator,
-      () => "1"
+      validatorFn,
+      identifierFn
     )
 
-    const entity = new context({ ...fakeData, id: "1" })
+    return {
+      sut,
+      inputData: fakeData,
+      syncKeys,
+    }
+  }
+
+  it("Update method returns new instance with extended data", (context) => {
+    const { sut, inputData } = createSut(context)
+    const entity = new sut({ ...inputData, id: "1" })
 
     const result = entity.update({
       foo: "foo2",
@@ -56,36 +72,18 @@ describe("proto", () => {
     >()
   })
 
-  it("isSynced method return status for given SyncKey", ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
-    const context = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
-      passThroughValidator,
-      () => "1"
-    )
+  it("isSynced method return status for given SyncKey", (context) => {
+    const { sut, inputData, syncKeys } = createSut(context)
 
-    const entity = new context({ ...fakeData, id: "2" })
+    const entity = new sut({ ...inputData, id: "2" })
 
     expect(entity.isSynced(syncKeys[0])).toBe(false)
     expect(entity.isSynced(syncKeys[1])).toBe(false)
   })
 
-  it("setSynced method set status for given SyncKey", async ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
-    const context = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
-      passThroughValidator,
-      () => "1"
-    )
-
-    const entity = new context({ ...fakeData, id: "1" })
-
+  it("setSynced method set status for given SyncKey", async (context) => {
+    const { sut, inputData, syncKeys } = createSut(context)
+    const entity = new sut({ ...inputData, id: "1" })
     const promise = Promise.resolve()
 
     entity.setSynced(syncKeys[0], promise)
@@ -95,58 +93,33 @@ describe("proto", () => {
     expect(entity.isSynced(syncKeys[1])).toBe(false)
   })
 
-  it("getIdentifier method returns identifier value", ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
-    const context = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
-      passThroughValidator,
-      () => "1"
-    )
-
-    const entity = new context({ ...fakeData, id: "1" })
+  it("getIdentifier method returns identifier value", (context) => {
+    const { sut, inputData } = createSut(context)
+    const entity = new sut({ ...inputData, id: "1" })
 
     expect(entity.getIdentifier()).toBe("1")
   })
 
-  it("Validator function is called on entity creation", ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
+  it("Validator function is called on entity creation", (context) => {
     const validatorFn = vi.fn(<TInput>(input: TInput) => ({
-      ...passThroughValidator(input),
+      ...context.passThroughValidator(input),
       bar: "bar",
     }))
-    const context = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
-      validatorFn,
-      () => "1"
-    )
+    const { sut, inputData } = createSut(context, { validatorFn })
 
-    const result = new context({ ...fakeData, id: "1" })
+    const result = new sut({ ...inputData, id: "1" })
 
     expect(validatorFn).toBeCalledTimes(1)
     expect(result.data.bar).toBe("bar")
   })
 
-  it("Validator function is called on entity update", ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
+  it("Validator function is called on entity update", (context) => {
     const validatorFn = vi.fn(<TInput>(input: TInput) => ({
-      ...passThroughValidator(input),
+      ...context.passThroughValidator(input),
       foo: "updated",
     }))
-    const context = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
-      validatorFn,
-      () => "1"
-    )
-    const entity = new context({ ...fakeData, id: "1" })
+    const { sut, inputData } = createSut(context, { validatorFn })
+    const entity = new sut({ ...inputData, id: "1" })
 
     entity.update({ foo: "foo2", bar: 2, some: true })
 
@@ -154,17 +127,9 @@ describe("proto", () => {
     expect(entity.data.foo).toBe("updated")
   })
 
-  it("toObject should return a copy of data", ({
-    syncKeys,
-    fakeData,
-    passThroughValidator,
-  }) => {
-    const context = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
-      passThroughValidator,
-      () => "1"
-    )
-    const entity = new context({ ...fakeData, id: "1" })
+  it("toObject should return a copy of data", (context) => {
+    const { sut, inputData } = createSut(context)
+    const entity = new sut({ ...inputData, id: "1" })
 
     const result = entity.toObject()
 
