@@ -1,4 +1,4 @@
-import { EntitySchema, Identifier, ResolveIdentifier } from "./interface"
+import type { EntitySchema, Identifier, ResolveIdentifier } from "./interface"
 
 export type GetIdentifierFn<TSchema, TIdentifier> = (
   data: TSchema

@@ -1,7 +1,7 @@
-import { deepReadonly } from "./deepReadonly"
 import type { DeepReadonly } from "./deepReadonly"
-import { GetIdentifierFn } from "./identifier"
-import {
+import { deepReadonly } from "./deepReadonly"
+import type { GetIdentifierFn } from "./identifier"
+import type {
   EntitySchema,
   Identifier,
   ResolveIdentifier,

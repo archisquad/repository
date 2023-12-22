@@ -1,22 +1,8 @@
 import { makeRepositoryKey } from "@/repositoryKey"
-import {
-  ObjectSchema,
-  Output,
-  boolean,
-  cuid2,
-  number,
-  object,
-  string,
-} from "valibot"
-import {
-  TestEntityData,
-  beforeEach,
-  describe,
-  expect,
-  expectTypeOf,
-  it,
-  vi,
-} from "vitest"
+import type { ObjectSchema, Output } from "valibot"
+import { boolean, cuid2, number, object, string } from "valibot"
+import type { TestEntityData } from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import { entityModelFactory } from "./factory"
 import { makeSyncKey } from "./sync"
 

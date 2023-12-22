@@ -1,4 +1,4 @@
-import { ProxyTarget } from "./interface"
+import type { ProxyTarget } from "./interface"
 
 const allowedSymbolKeys = new Set([
   Symbol.hasInstance,

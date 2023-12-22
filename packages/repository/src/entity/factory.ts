@@ -1,6 +1,6 @@
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
-import {
+import type {
   Entity,
   EntityPrototype,
   EntitySchema,

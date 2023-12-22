@@ -1,14 +1,6 @@
 import type { PartialDeep } from "type-fest"
-import {
-  TestContext,
-  TestEntityData,
-  beforeEach,
-  describe,
-  expect,
-  expectTypeOf,
-  it,
-  vi,
-} from "vitest"
+import type { TestContext, TestEntityData } from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import type { DeepReadonly } from "./deepReadonly"
 import { internalEntityFactory } from "./internalEntityFactory"
 

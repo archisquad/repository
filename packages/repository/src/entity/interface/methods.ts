@@ -1,6 +1,6 @@
-import { Except } from "type-fest"
-import { EntitySchema } from "./data"
-import { SyncKey } from "./sync"
+import type { Except } from "type-fest"
+import type { EntitySchema } from "./data"
+import type { SyncKey } from "./sync"
 
 export type Methods<TSchema extends EntitySchema> = Record<
   string,

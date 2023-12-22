@@ -1,12 +1,12 @@
 import type { DeepReadonly } from "../deepReadonly"
-import {
+import type {
   EntitySchema,
   Identifier,
   ResolveIdentifier,
   UpdateEntityInput,
 } from "./data"
-import { Methods, ResolvedMethods } from "./methods"
-import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
+import type { Methods, ResolvedMethods } from "./methods"
+import type { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
 type UpdateMethod<
   TSchema extends EntitySchema,

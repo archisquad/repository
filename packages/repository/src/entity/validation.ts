@@ -1,11 +1,11 @@
-import {
+import type {
   EntitySchema,
   Identifier,
   Methods,
   SyncKey,
   Validator,
 } from "./interface"
-import { RelationshipsDefinitions } from "./interface/relations"
+import type { RelationshipsDefinitions } from "./interface/relations"
 
 export function validateConfigObj<
   TSchema,

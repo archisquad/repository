@@ -1,4 +1,4 @@
-import { IsStringLiteral } from "type-fest"
+import type { IsStringLiteral } from "type-fest"
 
 export type EntitySchema = Record<string, any>
 
