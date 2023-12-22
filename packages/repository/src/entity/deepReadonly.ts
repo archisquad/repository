@@ -23,12 +23,3 @@ export function deepReadonly<TWriteableObject extends Record<string, any>>(
 
   return Object.freeze(obj) as DeepReadonly<TWriteableObject>
 }
-
-export function readonlyClone<TData extends Record<string, any>>(
-  data: TData
-): DeepReadonly<TData> {
-  // TODO: add polyfill for structuredClone
-  const clonedData = structuredClone(data)
-
-  return deepReadonly(clonedData)
-}

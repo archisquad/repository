@@ -1,6 +1,6 @@
 import { ReadonlyDeep } from "type-fest"
 import { describe, expect, expectTypeOf, it } from "vitest"
-import { deepReadonly, readonlyClone } from "./deepReadonly"
+import { deepReadonly } from "./deepReadonly"
 
 describe("Deep Readonly", () => {
   it("Given deep object, When deepReadonly is called, Then return deepReadonly object", () => {
@@ -68,31 +68,6 @@ describe("Deep Readonly", () => {
 
     expect(readonlyObj).toBe(obj)
     expect(readonlyObj.bar).toBe(obj.bar)
-    expectTypeOf(readonlyObj).toMatchTypeOf<ReadonlyDeep<typeof obj>>()
-    expect(() => {
-      // @ts-expect-error - we testing runtime
-      readonlyObj.foo = "baz"
-    }).toThrow()
-    expect(() => {
-      // @ts-expect-error - we testing runtime
-      readonlyObj.bar.foo = "baz"
-    }).toThrow()
-  })
-})
-
-describe("Deep Readonly Clone", () => {
-  it("Given data object, When readonlyClone is called, Then return clone read-only object", () => {
-    const obj = {
-      foo: "bar",
-      bar: {
-        foo: "bar",
-      },
-    }
-
-    const readonlyObj = readonlyClone(obj)
-
-    expect(readonlyObj).not.toBe(obj)
-    expect(readonlyObj.bar).not.toBe(obj.bar)
     expectTypeOf(readonlyObj).toMatchTypeOf<ReadonlyDeep<typeof obj>>()
     expect(() => {
       // @ts-expect-error - we testing runtime
