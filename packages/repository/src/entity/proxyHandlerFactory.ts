@@ -24,9 +24,8 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         return {}
       }
 
-      // TODO: use Reflect.has()
       if (
-        prop in target.internalEntity.data ||
+        Reflect.has(target.internalEntity.data, prop) ||
         allowedSymbolKeys.has(prop as symbol)
       ) {
         return Reflect.get(target.internalEntity.data, prop, receiver)
@@ -62,8 +61,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         }
       }
 
-      // TODO: Reflect.has()
-      if (prop in target.relationAccessor) {
+      if (Reflect.has(target.relationAccessor, prop)) {
         return target.relationAccessor[prop]
       }
 
@@ -83,7 +81,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
       return Reflect.ownKeys(target.internalEntity.data)
     },
     getOwnPropertyDescriptor(target, prop) {
-      if (prop in target.internalEntity.data) {
+      if (Reflect.has(target.internalEntity.data, prop)) {
         return {
           value: target.internalEntity.data[prop],
           writable: false,
