@@ -40,11 +40,12 @@ export function internalEntityFactory<
     public update(
       data: UpdateEntityInput<TSchema, TIdentifier>
     ): EntityInternal {
+      // We're not protecting against updating the identifier here in runtime.
+      // For such changes we should take another function as parameter or
+      // change this class to inline calls inside the factory.
       return new EntityInternal({
         ...this._data,
         ...data,
-        // TODO: Remove it - identifier is selected by user
-        id: this._data.id,
       } as TSchema)
     }
 

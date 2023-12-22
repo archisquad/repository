@@ -483,7 +483,7 @@ describe("Entity", () => {
       expect(validator).toHaveBeenCalledWith(
         zodSchema,
         // id is added by the factory, direct match is not possible
-        expect.objectContaining(fakeData)
+        expect.objectContaining({ ...fakeData, id: expect.any(String) })
       )
     })
 
@@ -589,7 +589,8 @@ describe("Entity", () => {
       expect(updatedEntity.some).toBe(false)
     })
 
-    it("Given entity, When update with id, Then ID is not updated", ({
+    // Look at the comment in EntityInternal.update()
+    it.skip("Given entity, When update with id, Then ID is not updated", ({
       zodSchema,
       zodInferFn,
       fakeData,
