@@ -1,5 +1,5 @@
+import type { PartialDeep } from "type-fest"
 import type { DeepReadonly } from "./deepReadonly"
-import { deepReadonly } from "./deepReadonly"
 import type { GetIdentifierFn } from "./identifier"
 import type {
   EntitySchema,
@@ -8,6 +8,7 @@ import type {
   SyncKey,
   UpdateEntityInput,
 } from "./interface"
+import { deepReadonly } from "./deepReadonly"
 import { SyncMap } from "./sync"
 
 export function internalEntityFactory<
@@ -38,7 +39,7 @@ export function internalEntityFactory<
     }
 
     public update(
-      data: UpdateEntityInput<TSchema, TIdentifier>
+      data: PartialDeep<UpdateEntityInput<TSchema, TIdentifier>>
     ): EntityInternal {
       // We're not protecting against updating the identifier here in runtime.
       // For such changes we should take another function as parameter or

@@ -1,4 +1,5 @@
 import type { DeepReadonly } from "../deepReadonly"
+import { PartialDeep } from "type-fest"
 import type {
   EntitySchema,
   Identifier,
@@ -15,7 +16,7 @@ type UpdateMethod<
   TIdentifier extends Identifier<TSchema> | undefined,
 > = {
   update(
-    data: Partial<UpdateEntityInput<TSchema, TIdentifier>>
+    data: PartialDeep<UpdateEntityInput<TSchema, TIdentifier>>
   ): Entity<TSchema, TMethods, TRelations, TIdentifier>
 }
 

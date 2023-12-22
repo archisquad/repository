@@ -1,3 +1,4 @@
+import type { PartialDeep } from "type-fest"
 import type { DeepReadonly } from "../deepReadonly"
 import type {
   EntitySchema,
@@ -13,7 +14,7 @@ export type EntityPrototype<
 > = {
   get data(): DeepReadonly<TSchema>
   update(
-    data: UpdateEntityInput<TSchema, TIdentifier>
+    data: PartialDeep<UpdateEntityInput<TSchema, TIdentifier>>
   ): EntityPrototype<TSchema, TIdentifier>
   toJson(): string
   toObject(): TSchema

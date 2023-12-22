@@ -1,3 +1,4 @@
+import { PartialDeep } from "type-fest"
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
 import type {
@@ -58,7 +59,7 @@ export function entityModelFactory<
 
   function updateEntity(
     this: { internalEntity: EntityPrototype<TInputSchema, TIdentifier> },
-    updatedData: UpdateEntityInput<TInputSchema, TIdentifier>
+    updatedData: PartialDeep<UpdateEntityInput<TInputSchema, TIdentifier>>
   ): any {
     const updatedInternalEntity = this.internalEntity.update(updatedData)
 
