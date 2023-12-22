@@ -56,10 +56,10 @@ export function entityModelFactory<
   const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
   function updateEntity<TUpdatedData extends TInputSchema>(
-    this: { proto: EntityPrototype<TInputSchema, TIdentifier> },
+    this: { internalEntity: EntityPrototype<TInputSchema, TIdentifier> },
     updatedData: TUpdatedData
   ): any {
-    const updatedInternalEntity = this.proto.update(updatedData)
+    const updatedInternalEntity = this.internalEntity.update(updatedData)
 
     const proxyTarget = proxyTargetFactory(updatedInternalEntity)
 
@@ -70,8 +70,8 @@ export function entityModelFactory<
     internalEntity: TInternalEntity
   ) {
     return {
-      proto: internalEntity,
-      relationAccessor: relationAccessor,
+      internalEntity,
+      relationAccessor,
     }
   }
 

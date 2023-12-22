@@ -25,8 +25,11 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
       }
 
       // TODO: use Reflect.has()
-      if (prop in target.proto.data || allowedSymbolKeys.has(prop as symbol)) {
-        return Reflect.get(target.proto.data, prop, receiver)
+      if (
+        prop in target.internalEntity.data ||
+        allowedSymbolKeys.has(prop as symbol)
+      ) {
+        return Reflect.get(target.internalEntity.data, prop, receiver)
       }
 
       // The update method & getIdentifier are not overridable
@@ -35,7 +38,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
       }
 
       if (prop === "getIdentifier") {
-        return () => target.proto.getIdentifier()
+        return () => target.internalEntity.getIdentifier()
       }
 
       // User defined methods, takes precedence over internal methods
@@ -43,7 +46,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
         return function (...args: any[]) {
           return methods[prop].apply(
             // @ts-expect-error -- proxy handler
-            this === receiver ? target.proto.data : this,
+            this === receiver ? target.internalEntity.data : this,
             args
           )
         }
@@ -51,9 +54,9 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
 
       if (allowedInternalMethods.has(prop as string)) {
         return function (...args: any[]) {
-          return target.proto[prop].apply(
+          return target.internalEntity[prop].apply(
             // @ts-expect-error -- proxy handler
-            this === receiver ? target.proto : this,
+            this === receiver ? target.internalEntity : this,
             args
           )
         }
@@ -74,15 +77,15 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
       )
     },
     has(target, prop) {
-      return Reflect.has(target.proto.data, prop)
+      return Reflect.has(target.internalEntity.data, prop)
     },
     ownKeys(target) {
-      return Reflect.ownKeys(target.proto.data)
+      return Reflect.ownKeys(target.internalEntity.data)
     },
     getOwnPropertyDescriptor(target, prop) {
-      if (prop in target.proto.data) {
+      if (prop in target.internalEntity.data) {
         return {
-          value: target.proto.data[prop],
+          value: target.internalEntity.data[prop],
           writable: false,
           enumerable: true,
           configurable: true,
@@ -100,7 +103,7 @@ export function proxyHandlerFactory<TProxied extends ProxyTarget>(
       )
     },
     getPrototypeOf(target) {
-      return Reflect.getPrototypeOf(target.proto.data)
+      return Reflect.getPrototypeOf(target.internalEntity.data)
     },
     setPrototypeOf() {
       throw new Error("You can't change entity prototype.")
