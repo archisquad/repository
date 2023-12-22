@@ -9,7 +9,7 @@ import {
   vi,
 } from "vitest"
 import { internalEntityFactory } from "./proto"
-import type { DeepReadonly } from "./types"
+import type { DeepReadonly } from "./deepReadonly"
 import type { PartialDeep } from "type-fest"
 
 describe("proto", () => {

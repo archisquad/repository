@@ -8,7 +8,7 @@ import {
   UpdateEntityInput,
 } from "./interface"
 import { SyncMap } from "./sync"
-import { DeepReadonly } from "./types"
+import type { DeepReadonly } from "./deepReadonly"
 
 export function internalEntityFactory<
   TSchema extends EntitySchema,

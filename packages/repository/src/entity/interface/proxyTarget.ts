@@ -1,6 +1,6 @@
-import { DeepReadonly } from "../types"
-import { EntitySchema, Identifier, ResolveIdentifier } from "./data"
-import { SyncKey } from "./sync"
+import type { DeepReadonly } from "../deepReadonly"
+import type { EntitySchema, Identifier, ResolveIdentifier } from "./data"
+import type { SyncKey } from "./sync"
 
 export type EntityPrototype<
   TSchema extends EntitySchema,

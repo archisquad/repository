@@ -1,4 +1,4 @@
-import { DeepReadonly } from "../types"
+import type { DeepReadonly } from "../deepReadonly"
 import {
   EntitySchema,
   Identifier,
