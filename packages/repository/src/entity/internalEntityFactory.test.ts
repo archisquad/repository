@@ -17,7 +17,7 @@ describe("proto", () => {
       identifierFn?: (...args: any[]) => any
     }
   ) {
-    const { passThroughValidator, syncKeys, fakeData } = context
+    const { passThroughValidator, fakeData } = context
     const {
       validatorFn = passThroughValidator,
       identifierFn = () => "1",
@@ -25,7 +25,6 @@ describe("proto", () => {
     } = overrides ?? {}
 
     const sutFactory = internalEntityFactory<TestEntityData, "id">(
-      syncKeys,
       validatorFn,
       identifierFn
     )
@@ -34,7 +33,6 @@ describe("proto", () => {
 
     return {
       sut,
-      syncKeys,
     }
   }
 
@@ -67,24 +65,6 @@ describe("proto", () => {
         some: boolean
       }>
     >()
-  })
-
-  it("isSynced method return status for given SyncKey", (context) => {
-    const { sut, syncKeys } = createSut(context)
-
-    expect(sut.isSynced(syncKeys[0])).toBe(false)
-    expect(sut.isSynced(syncKeys[1])).toBe(false)
-  })
-
-  it("setSynced method set status for given SyncKey", async (context) => {
-    const { sut, syncKeys } = createSut(context)
-    const promise = Promise.resolve()
-
-    sut.setSynced(syncKeys[0], promise)
-    await promise
-
-    expect(sut.isSynced(syncKeys[0])).toBe(true)
-    expect(sut.isSynced(syncKeys[1])).toBe(false)
   })
 
   it("getIdentifier method returns identifier value", (context) => {

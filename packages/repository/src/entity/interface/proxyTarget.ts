@@ -6,7 +6,6 @@ import type {
   ResolveIdentifier,
   UpdateEntityInput,
 } from "./data"
-import type { SyncKey } from "../../network/interface/sync"
 
 export type EntityPrototype<
   TSchema extends EntitySchema,
@@ -18,8 +17,6 @@ export type EntityPrototype<
   ): EntityPrototype<TSchema, TIdentifier>
   toJson(): string
   toObject(): TSchema
-  isSynced(id: SyncKey): boolean
-  setSynced(id: SyncKey, promise: Promise<unknown>): void
   getIdentifier(): ResolveIdentifier<TSchema, TIdentifier>
 }
 

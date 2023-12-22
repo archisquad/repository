@@ -1,6 +1,5 @@
 import type { Except } from "type-fest"
 import type { EntitySchema } from "./data"
-import type { SyncKey } from "../../network/interface/sync"
 
 export type Methods<TSchema extends EntitySchema> = Record<
   string,
@@ -10,8 +9,6 @@ export type Methods<TSchema extends EntitySchema> = Record<
 export type PrototypeMethods<TSchema extends EntitySchema> = {
   toObject(): TSchema
   toJson(): string
-  isSynced(id: SyncKey): boolean
-  setSynced(id: SyncKey, promise: Promise<unknown>): void
 }
 
 /**

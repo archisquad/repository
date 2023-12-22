@@ -8,26 +8,21 @@ import type {
   UpdateEntityInput,
 } from "./interface"
 import { deepReadonly } from "./deepReadonly"
-import { SyncMap } from "../network/sync"
-import { SyncKey } from "@/network/interface/sync"
 
 export function internalEntityFactory<
   TSchema extends EntitySchema,
   TIdentifier extends Identifier<TSchema> | undefined,
 >(
-  syncDestinations: SyncKey[],
   validatorFn: (data: any) => TSchema,
   identifierFn: GetIdentifierFn<TSchema, TIdentifier>
 ) {
   return class EntityInternal {
     private _data: DeepReadonly<TSchema>
-    private _syncMap: SyncMap
 
     constructor(data: TSchema) {
       this._data = deepReadonly({
         ...validatorFn(data),
       })
-      this._syncMap = new SyncMap(syncDestinations)
     }
 
     public get data(): DeepReadonly<TSchema> {
@@ -56,14 +51,6 @@ export function internalEntityFactory<
 
     public toObject(): TSchema {
       return structuredClone(this._data) as TSchema
-    }
-
-    public isSynced(id: SyncKey): boolean {
-      return this._syncMap.checkStatus(id)
-    }
-
-    public setSynced(id: SyncKey, promise: Promise<unknown>): void {
-      this._syncMap.setStatus(id, promise)
     }
   }
 }

@@ -16,7 +16,6 @@ import { internalEntityFactory } from "./internalEntityFactory"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
 import { validateConfigObj } from "./validation"
-import { SyncKey } from "@/network/interface/sync"
 
 export function entityModelFactory<
   TSchema,
@@ -31,13 +30,11 @@ export function entityModelFactory<
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
   relations?: TRelations
-  syncDestinations?: SyncKey[]
 }) {
   const {
     schema,
     identifier,
     relations = {},
-    syncDestinations = [],
     methods = {},
     validator = (_schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
@@ -47,7 +44,6 @@ export function entityModelFactory<
   const identifierFn = getIdentifier<TInputSchema, TIdentifier>(identifier)
   const validatorFn = (data: unknown) => validator(schema, data)
   const internalEntityClass = internalEntityFactory<TInputSchema, TIdentifier>(
-    syncDestinations,
     validatorFn,
     identifierFn
   )
