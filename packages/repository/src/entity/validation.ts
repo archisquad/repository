@@ -7,7 +7,7 @@ import {
 } from "./interface"
 import { RelationshipsDefinitions } from "./interface/relations"
 
-export function validateInput<
+export function validateConfigObj<
   TSchema,
   TInputSchema extends EntitySchema,
   TIdentifier extends Identifier<TInputSchema> | undefined,

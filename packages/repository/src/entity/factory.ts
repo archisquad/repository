@@ -14,7 +14,7 @@ import {
 import { internalEntityFactory } from "./proto"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
-import { validateInput } from "./validation"
+import { validateConfigObj } from "./validation"
 
 export function entityModelFactory<
   TSchema,
@@ -40,7 +40,7 @@ export function entityModelFactory<
     validator = (_schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
-  validateInput(configObj)
+  validateConfigObj(configObj)
 
   const identifierFn = getIdentifier<TInputSchema, TIdentifier>(identifier)
   const validatorFn = (data: unknown) => validator(schema, data)
