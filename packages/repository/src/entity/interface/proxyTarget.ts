@@ -1,5 +1,10 @@
 import type { DeepReadonly } from "../deepReadonly"
-import type { EntitySchema, Identifier, ResolveIdentifier } from "./data"
+import type {
+  EntitySchema,
+  Identifier,
+  ResolveIdentifier,
+  UpdateEntityInput,
+} from "./data"
 import type { SyncKey } from "./sync"
 
 export type EntityPrototype<
@@ -7,7 +12,9 @@ export type EntityPrototype<
   TIdentifier extends Identifier<TSchema> | undefined,
 > = {
   get data(): DeepReadonly<TSchema>
-  update(data: TSchema): EntityPrototype<TSchema, TIdentifier>
+  update(
+    data: UpdateEntityInput<TSchema, TIdentifier>
+  ): EntityPrototype<TSchema, TIdentifier>
   toJson(): string
   toObject(): TSchema
   isSynced(id: SyncKey): boolean

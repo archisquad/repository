@@ -9,6 +9,7 @@ import {
   ProxyTarget,
   RelationshipsDefinitions,
   SyncKey,
+  UpdateEntityInput,
   Validator,
 } from "./interface"
 import { internalEntityFactory } from "./internalEntityFactory"
@@ -55,9 +56,9 @@ export function entityModelFactory<
 
   const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
-  function updateEntity<TUpdatedData extends TInputSchema>(
+  function updateEntity(
     this: { internalEntity: EntityPrototype<TInputSchema, TIdentifier> },
-    updatedData: TUpdatedData
+    updatedData: UpdateEntityInput<TInputSchema, TIdentifier>
   ): any {
     const updatedInternalEntity = this.internalEntity.update(updatedData)
 
