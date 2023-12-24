@@ -34,7 +34,7 @@
     "husky": "8.0.3",
     "jsdom": "23.0.1",
     "lint-staged": "15.1.0",
-    "publint": "0.2.6",
+    "publint": "0.2.7",
     "turbo": "1.11.2",
     "type-fest": "4.8.3",
     "typescript": "5.3.3",
