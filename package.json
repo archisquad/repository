@@ -36,13 +36,13 @@
     "lint-staged": "15.1.0",
     "publint": "0.2.7",
     "turbo": "1.11.2",
-    "type-fest": "4.8.3",
+    "type-fest": "4.9.0",
     "typescript": "5.3.3",
     "unbuild": "2.0.0",
-    "valibot": "0.24.1",
+    "valibot": "0.25.0",
     "vite-tsconfig-paths": "4.2.2",
     "@biomejs/biome": "1.4.1",
-    "vitepress": "1.0.0-rc.32",
+    "vitepress": "1.0.0-rc.33",
     "vitest": "1.1.0",
     "zod": "3.22.4"
   }
