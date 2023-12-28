@@ -1,3 +1,4 @@
+import { Opaque } from "type-fest"
 import { DeepReadonly } from "../types"
 import {
   EntitySchema,
@@ -7,6 +8,9 @@ import {
 } from "./data"
 import { Methods, ResolvedMethods } from "./methods"
 import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
+
+
+export type EntityKey = Opaque<string, "entity-key">
 
 type UpdateMethod<
   TSchema extends EntitySchema,

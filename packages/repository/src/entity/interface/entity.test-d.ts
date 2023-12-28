@@ -5,7 +5,7 @@ import {
   expectTypeOf,
   it,
 } from "vitest"
-import { Entity } from "./entity"
+import { Entity, EntityKey } from "./entity"
 
 describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {
@@ -17,7 +17,7 @@ describe("Entity interface", () => {
 
     expectTypeOf<Test["posts"]>().toEqualTypeOf<
       () => {
-        id: string
+        id: EntityKey
         name: string
         authorId: string
       }[]
@@ -27,7 +27,7 @@ describe("Entity interface", () => {
   it("Entity can be created without relations", () => {
     type Test = Entity<TestEntityData>
 
-    expectTypeOf<Test["id"]>().toEqualTypeOf<string>()
+    expectTypeOf<Test["id"]>().toEqualTypeOf<EntityKey>()
     expectTypeOf<Test["foo"]>().toEqualTypeOf<TestEntityData["foo"]>()
     expectTypeOf<Test["deep"]>().toMatchTypeOf<
       Readonly<TestEntityData["deep"]>

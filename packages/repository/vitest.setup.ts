@@ -1,4 +1,4 @@
-import { SyncKey } from "@/entity/interface"
+import { EntityKey, SyncKey } from "@/entity/interface"
 import { makeSyncKey } from "@/entity/sync"
 import type { RepositoryKey } from "@/repositoryKey"
 import { Faker, faker } from "@faker-js/faker"
@@ -30,7 +30,7 @@ declare module "vitest" {
 
   export type TestEntityData = Simplify<
     TestRawEntityData & {
-      id: string
+      id: EntityKey
     }
   >
 
