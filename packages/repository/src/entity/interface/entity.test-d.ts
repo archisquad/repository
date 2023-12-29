@@ -1,7 +1,7 @@
 import type { PostsRelationDefinition, TestEntityData } from "vitest"
-import type { Entity, EntityKey } from "./entity"
 import { describe, expectTypeOf, it } from "vitest"
 import { DeepReadonly } from "../deepReadonly"
+import type { Entity, EntityKey } from "./entity"
 
 describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {

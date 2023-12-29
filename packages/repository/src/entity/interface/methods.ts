@@ -1,6 +1,6 @@
 import type { Except } from "type-fest"
-import type { EntitySchema } from "./data"
 import type { DeepReadonly } from "../deepReadonly"
+import type { EntitySchema } from "./data"
 
 export type Methods<TSchema extends EntitySchema> = Record<
   string,

@@ -1,10 +1,10 @@
-import type { ObjectSchema, Output } from "valibot"
-import type { TestEntityData } from "vitest"
-import type { EntityKey } from "./interface"
-import { boolean, cuid2, number, object, string, transform } from "valibot"
-import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import { makeRepositoryKey } from "@/repositoryKey"
+import type { ObjectSchema, Output } from "valibot"
+import { boolean, cuid2, number, object, string, transform } from "valibot"
+import type { TestEntityData } from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import { entityModelFactory } from "./factory"
+import type { EntityKey } from "./interface"
 
 describe("Entity", () => {
   beforeEach((context) => {
