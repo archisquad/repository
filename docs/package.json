@@ -5,9 +5,14 @@
   "dependencies": {
     "vitepress": "1.0.0-rc.33"
   },
+  "devDependencies": {
+    "markdownlint-cli2": "0.11.0"
+  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "lint:dev": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" --fix"
   }
 }
