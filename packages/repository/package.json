@@ -61,7 +61,7 @@
     "typescript": "5.3.3",
     "unbuild": "2.0.0",
     "valibot": "0.25.0",
-    "vite-tsconfig-paths": "4.2.2",
+    "vite-tsconfig-paths": "4.2.3",
     "vitest": "1.1.0",
     "zod": "3.22.4"
   },
