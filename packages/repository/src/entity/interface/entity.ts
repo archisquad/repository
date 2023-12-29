@@ -1,5 +1,5 @@
-import type { DeepReadonly } from "../deepReadonly"
 import type { PartialDeep } from "type-fest"
+import type { DeepReadonly } from "../deepReadonly"
 import type {
   EntitySchema,
   Identifier,

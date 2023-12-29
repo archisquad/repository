@@ -1,5 +1,6 @@
 import type { PartialDeep } from "type-fest"
 import type { DeepReadonly } from "./deepReadonly"
+import { deepReadonly } from "./deepReadonly"
 import type { GetIdentifierFn } from "./identifier"
 import type {
   EntitySchema,
@@ -8,7 +9,6 @@ import type {
   SyncKey,
   UpdateEntityInput,
 } from "./interface"
-import { deepReadonly } from "./deepReadonly"
 import { SyncMap } from "./sync"
 
 export function internalEntityFactory<
