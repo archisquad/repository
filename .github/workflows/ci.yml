@@ -42,6 +42,14 @@ jobs:
       - name: Run Biome CI
         run: pnpm run lint
 
+      - name: markdownlint-cli2-action
+        uses: DavidAnson/markdownlint-cli2-action@v9
+        with:
+          globs: |
+            docs/**/*.md
+            #node_modules/
+            #**/node_modules/**
+
       - name: Run unit & integration tests
         run: pnpm run test
 
