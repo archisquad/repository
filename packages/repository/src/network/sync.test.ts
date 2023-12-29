@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
-import type { SyncKey } from "./interface"
+import type { SyncKey } from "./interface/sync"
 import { SyncMap, makeSyncKey } from "./sync"
 
 declare module "vitest" {

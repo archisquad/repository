@@ -37,8 +37,6 @@ describe("Method-definition types", () => {
       { update: () => void; getIdentifier: () => void }
     >
 
-    expectTypeOf<keyof Test>().toMatchTypeOf<
-      "toJson" | "toObject" | "isSynced" | "setSynced"
-    >()
+    expectTypeOf<keyof Test>().toMatchTypeOf<"toJson" | "toObject">()
   })
 })

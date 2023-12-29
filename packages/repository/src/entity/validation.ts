@@ -1,10 +1,4 @@
-import type {
-  EntitySchema,
-  Identifier,
-  Methods,
-  SyncKey,
-  Validator,
-} from "./interface"
+import type { EntitySchema, Identifier, Methods, Validator } from "./interface"
 import type { RelationshipsDefinitions } from "./interface/relations"
 
 export function validateConfigObj<
@@ -20,7 +14,6 @@ export function validateConfigObj<
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
   relations?: TDefinitions
-  syncDestinations?: SyncKey[]
 }): void {
   const { inferSchema, methods = {}, relations = {}, identifier } = configObj
   const schema = inferSchema(configObj.schema)

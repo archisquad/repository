@@ -7,12 +7,7 @@ const allowedSymbolKeys = new Set([
   Symbol.toStringTag,
 ])
 
-const allowedInternalMethods = new Set([
-  "toJson",
-  "toObject",
-  "isSynced",
-  "setSynced",
-])
+const allowedInternalMethods = new Set(["toJson", "toObject"])
 
 export function proxyHandlerFactory<TProxied extends ProxyTarget>(
   updateEntityFn: (data: any) => any,

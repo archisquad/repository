@@ -1,3 +1,3 @@
 export * from "./factory"
-export { makeSyncKey } from "./sync"
-export type { Entity, Relationship, SyncKey, SyncStatus } from "./interface"
+export { makeSyncKey } from "../network/sync"
+export type { Entity, Relationship } from "./interface"
