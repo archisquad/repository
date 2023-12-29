@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { validateInput } from "./validation"
+import { validateConfigObj } from "./validation"
 
 function makeTestObj(
   {
@@ -57,9 +57,9 @@ describe("Entity model valitation", () => {
     [makeTestObj({ identifier: (data: any) => data.id }), true],
   ])("should validate input", (config, successful) => {
     if (successful) {
-      expect(() => validateInput(config)).not.toThrow()
+      expect(() => validateConfigObj(config)).not.toThrow()
     } else {
-      expect(() => validateInput(config)).toThrow()
+      expect(() => validateConfigObj(config)).toThrow()
     }
   })
 })

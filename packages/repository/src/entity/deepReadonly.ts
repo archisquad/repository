@@ -1,34 +1,47 @@
-import { DeepReadonly } from "./types"
-
-function validateCustomTypes<TValue>(value: TValue): boolean {
-  const excludedTypes = [Date, RegExp, Map, Set]
-  return !excludedTypes.some((type) => value instanceof type)
+export type DeepReadonly<TData> = {
+  readonly [Key in keyof TData]: TData[Key] extends Record<string, any>
+    ? TData[Key] extends Set<any> | Map<any, any> | Date | RegExp
+      ? TData[Key]
+      : DeepReadonly<TData[Key]>
+    : TData[Key]
 }
 
 export function deepReadonly<TWriteableObject extends Record<string, any>>(
   obj: TWriteableObject
 ): DeepReadonly<TWriteableObject> {
-  Reflect.ownKeys(obj).forEach((key) => {
+  for (const key of Reflect.ownKeys(obj)) {
     const value = obj[key as keyof TWriteableObject]
-    if (
-      value &&
-      typeof value === "object" &&
-      validateCustomTypes(value) &&
-      Object.isFrozen(value) === false
-    ) {
-      // @ts-expect-error - we know that value is object
-      obj[key as keyof TWriteableObject] = deepReadonly(value)
+    if (checkIsObject(value)) {
+      obj[key as keyof TWriteableObject] = deepReadonly(
+        value
+      ) as TWriteableObject[keyof TWriteableObject]
     }
-  })
+  }
 
   return Object.freeze(obj) as DeepReadonly<TWriteableObject>
 }
 
-export function readonlyClone<TData extends Record<string, any>>(
-  data: TData
-): DeepReadonly<TData> {
-  // TODO: add polyfill for structuredClone
-  const clonedData = structuredClone(data)
+function checkIsObject(value: unknown): value is object {
+  if (!value) {
+    return false
+  }
 
-  return deepReadonly(clonedData)
+  if (typeof value !== "object") {
+    return false
+  }
+
+  if (!validateCustomTypes(value)) {
+    return false
+  }
+
+  if (Object.isFrozen(value)) {
+    return false
+  }
+
+  return true
+}
+
+function validateCustomTypes<TValue>(value: TValue): boolean {
+  const excludedTypes = [Date, RegExp, Map, Set]
+  return !excludedTypes.some((type) => value instanceof type)
 }

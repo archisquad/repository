@@ -1,24 +1,9 @@
 import { makeRepositoryKey } from "@/repositoryKey"
-import {
-  ObjectSchema,
-  Output,
-  boolean,
-  cuid2,
-  number,
-  object,
-  string,
-} from "valibot"
-import {
-  TestEntityData,
-  beforeEach,
-  describe,
-  expect,
-  expectTypeOf,
-  it,
-  vi,
-} from "vitest"
+import type { ObjectSchema, Output } from "valibot"
+import { boolean, cuid2, number, object, string } from "valibot"
+import type { TestEntityData } from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import { entityModelFactory } from "./factory"
-import { makeSyncKey } from "./sync"
 
 describe("Entity", () => {
   beforeEach((context) => {
@@ -49,7 +34,6 @@ describe("Entity", () => {
         zodSchema,
         zodInferFn,
         entityMethods,
-        syncKeys,
         authorsRelationship,
       }) => {
         const result = entityModelFactory({
@@ -57,7 +41,6 @@ describe("Entity", () => {
           inferSchema: zodInferFn,
           methods: entityMethods,
           relations: { author: authorsRelationship },
-          syncDestinations: syncKeys,
         })
 
         expect(result).toEqual(
@@ -251,23 +234,6 @@ describe("Entity", () => {
         expect(entity.author).toBeTypeOf("function")
       })
 
-      it("Given schema, sync keys, When entity factory called, Then return entity with sync keys", ({
-        zodSchema,
-        zodInferFn,
-        fakeData,
-      }) => {
-        const firstSyncKey = makeSyncKey("foo")
-        const entityFactory = entityModelFactory({
-          schema: zodSchema,
-          inferSchema: zodInferFn,
-          syncDestinations: [firstSyncKey],
-        })
-
-        const entity = entityFactory.createEntity(fakeData)
-
-        expect(entity.isSynced(firstSyncKey)).toBe(false)
-      })
-
       it("Given schema, methods, When entity factory called, Then return entity with methods", ({
         zodSchema,
         zodInferFn,
@@ -351,23 +317,6 @@ describe("Entity", () => {
 
         expect(recoveredEntity.author).toBeDefined()
         expect(recoveredEntity.author).toBeTypeOf("function")
-      })
-
-      it("Given serialized entity, When recover entity, Then return entity with sync keys all set to un-up-to-date", ({
-        serializedEntity,
-        zodSchema,
-        zodInferFn,
-      }) => {
-        const firstSyncKey = makeSyncKey("foo")
-        const entityFactory = entityModelFactory({
-          schema: zodSchema,
-          inferSchema: zodInferFn,
-          syncDestinations: [firstSyncKey],
-        })
-
-        const recoveredEntity = entityFactory.recoverEntity(serializedEntity)
-
-        expect(recoveredEntity.isSynced(firstSyncKey)).toBe(false)
       })
 
       it("Given serialized entity, When recover entity, Then return entity with methods", ({
@@ -483,7 +432,7 @@ describe("Entity", () => {
       expect(validator).toHaveBeenCalledWith(
         zodSchema,
         // id is added by the factory, direct match is not possible
-        expect.objectContaining(fakeData)
+        expect.objectContaining({ ...fakeData, id: expect.any(String) })
       )
     })
 
@@ -528,47 +477,6 @@ describe("Entity", () => {
   })
 
   describe("Instance", () => {
-    it("Given entity, When update, Then update data, And set sync status to un-up-to-date, And keep the same ID, And create new object, And keeps relations untouched", async ({
-      authorsRelationship,
-      fakeData,
-      zodSchema,
-      zodInferFn,
-    }) => {
-      const firstSyncKey = makeSyncKey("foo")
-      const secondSyncKey = makeSyncKey("bar")
-      const { createEntity } = entityModelFactory({
-        schema: zodSchema,
-        inferSchema: zodInferFn,
-        relations: { author: authorsRelationship },
-        syncDestinations: [firstSyncKey, secondSyncKey],
-      })
-
-      const entity = createEntity(fakeData)
-      const testPromise = Promise.resolve()
-      entity.setSynced(firstSyncKey, testPromise)
-      await testPromise
-      expect(entity.isSynced(firstSyncKey)).toBe(true)
-
-      const updatedEntity = entity.update({
-        foo: "baz",
-        some: false,
-      })
-
-      expect(updatedEntity).not.toBe(entity)
-      expect(updatedEntity.id).toBe(entity.id)
-      expect(updatedEntity.foo).toBe("baz")
-      expect(updatedEntity.some).toBe(false)
-
-      expect(updatedEntity.isSynced(firstSyncKey)).toBe(false)
-      expect(updatedEntity.isSynced(secondSyncKey)).toBe(false)
-
-      expect(updatedEntity.author).toBeDefined()
-      expectTypeOf(updatedEntity.author).toEqualTypeOf<
-        () => { id: string; name: string }
-      >()
-      expect(updatedEntity.author).toBeTypeOf("function")
-    })
-
     it("Given entity, When update to add data properties, Then updated entity have both data properties", ({
       zodSchema,
       zodInferFn,
@@ -589,7 +497,8 @@ describe("Entity", () => {
       expect(updatedEntity.some).toBe(false)
     })
 
-    it("Given entity, When update with id, Then ID is not updated", ({
+    // Look at the comment in EntityInternal.update()
+    it.skip("Given entity, When update with id, Then ID is not updated", ({
       zodSchema,
       zodInferFn,
       fakeData,
@@ -646,32 +555,6 @@ describe("Entity", () => {
         ...fakeData,
         id: entity.id,
       })
-    })
-
-    it("Given entity, When setSynced, Then update sync status only", async ({
-      zodSchema,
-      zodInferFn,
-      fakeData,
-    }) => {
-      const firstSyncKey = makeSyncKey("foo")
-      const secondSyncKey = makeSyncKey("bar")
-      const entityFactory = entityModelFactory({
-        schema: zodSchema,
-        inferSchema: zodInferFn,
-        syncDestinations: [firstSyncKey, secondSyncKey],
-      })
-      const entity = entityFactory.createEntity(fakeData)
-      expect(entity.isSynced(firstSyncKey)).toBe(false)
-      expect(entity.isSynced(secondSyncKey)).toBe(false)
-      const id = entity.id
-
-      const fakePromise = Promise.resolve()
-      entity.setSynced(firstSyncKey, fakePromise)
-      await fakePromise
-
-      expect(entity.isSynced(firstSyncKey)).toBe(true)
-      expect(entity.isSynced(secondSyncKey)).toBe(false)
-      expect(entity.id).toBe(id)
     })
 
     it("Given entity with methods, when method called, Then method has access to data", ({

@@ -1,12 +1,13 @@
-import { Mock, beforeEach, describe, expect, it, vi } from "vitest"
+import type { Mock } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 
 declare module "vitest" {
   interface TestContext {
     fakeProxiedObj: {
-      _mockedProto: Mock
+      _mockedInternalEntity: Mock
       _mockedRelationAccessor: Mock
-      proto: any
+      internalEntity: any
       relationAccessor: any
     }
     testProxy: any
@@ -16,7 +17,7 @@ declare module "vitest" {
 describe("proxyHandlerFactory", () => {
   beforeEach((ctx) => {
     ctx.fakeProxiedObj = {
-      _mockedProto: vi.fn().mockReturnValue({
+      _mockedInternalEntity: vi.fn().mockReturnValue({
         get data() {
           return Object.freeze({
             fakeKey: "fakeValue",
@@ -31,8 +32,8 @@ describe("proxyHandlerFactory", () => {
           name: "fakeRelated",
         }),
       }),
-      get proto() {
-        return this._mockedProto()
+      get internalEntity() {
+        return this._mockedInternalEntity()
       },
       get relationAccessor() {
         return this._mockedRelationAccessor()
@@ -115,7 +116,7 @@ describe("proxyHandlerFactory", () => {
     )
     const testProxy = new Proxy(fakeProxiedObj, proxyHandler) as any
 
-    expect(testProxy.someMethod()).toEqual(fakeProxiedObj.proto.data)
+    expect(testProxy.someMethod()).toEqual(fakeProxiedObj.internalEntity.data)
   })
 
   it("Given proxy with handler, When call data property, Then return empty object", ({

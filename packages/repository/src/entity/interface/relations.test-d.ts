@@ -1,13 +1,11 @@
-import { RepositoryKey } from "@/repositoryKey"
-import {
+import type { RepositoryKey } from "@/repositoryKey"
+import type {
   AuthorRelationDefinition,
   PostsRelationDefinition,
   TestEntityData,
-  describe,
-  expectTypeOf,
-  it,
 } from "vitest"
-import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
+import { describe, expectTypeOf, it } from "vitest"
+import type { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
 describe("Interface: Relations", () => {
   it("uses defined relationship names as accessor function names", () => {

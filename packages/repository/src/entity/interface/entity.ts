@@ -1,14 +1,13 @@
-import { Opaque } from "type-fest"
-import { DeepReadonly } from "../types"
-import {
+import type { Opaque, PartialDeep } from "type-fest"
+import type { DeepReadonly } from "../deepReadonly"
+import type {
   EntitySchema,
   Identifier,
   ResolveIdentifier,
   UpdateEntityInput,
 } from "./data"
-import { Methods, ResolvedMethods } from "./methods"
-import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
-
+import type { Methods, ResolvedMethods } from "./methods"
+import type { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
 export type EntityKey = Opaque<string, "entity-key">
 
@@ -19,7 +18,7 @@ type UpdateMethod<
   TIdentifier extends Identifier<TSchema> | undefined,
 > = {
   update(
-    data: Partial<UpdateEntityInput<TSchema, TIdentifier>>
+    data: PartialDeep<UpdateEntityInput<TSchema, TIdentifier>>
   ): Entity<TSchema, TMethods, TRelations, TIdentifier>
 }
 
