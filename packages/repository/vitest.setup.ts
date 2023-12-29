@@ -1,8 +1,7 @@
-import { SyncKey } from "@/entity/interface"
-import { makeSyncKey } from "@/entity/sync"
+import { SyncKey } from "@/network/interface/sync"
+import { makeSyncKey } from "@/network/sync"
 import type { RepositoryKey } from "@/repositoryKey"
 import { Faker, faker } from "@faker-js/faker"
-import { Simplify } from "type-fest"
 import { beforeEach } from "vitest"
 import { z } from "zod"
 
@@ -19,6 +18,7 @@ const zodSchema = z.object({
 
 declare module "vitest" {
   export type TestRawEntityData = {
+    id: string
     foo: string
     bar: number
     deep?: {
@@ -28,11 +28,7 @@ declare module "vitest" {
     some: boolean
   }
 
-  export type TestEntityData = Simplify<
-    TestRawEntityData & {
-      id: string
-    }
-  >
+  export type TestEntityData = TestRawEntityData
 
   export type PostsRelationDefinition = {
     readonly type: "has-many"
@@ -125,6 +121,7 @@ beforeEach((context) => {
 
 function generateFakeObj(faker: Faker) {
   return {
+    id: faker.string.uuid(),
     foo: faker.person.fullName(),
     bar: faker.number.int(),
     deep: {

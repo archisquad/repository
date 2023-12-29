@@ -1,6 +1,7 @@
+import { PartialDeep } from "type-fest"
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
-import {
+import type {
   Entity,
   EntityPrototype,
   EntitySchema,
@@ -8,45 +9,41 @@ import {
   Methods,
   ProxyTarget,
   RelationshipsDefinitions,
-  SyncKey,
   UpdateEntityInput,
   Validator,
 } from "./interface"
-import { internalEntityFactory } from "./proto"
+import { internalEntityFactory } from "./internalEntityFactory"
 import { proxyHandlerFactory } from "./proxyHandlerFactory"
 import { relationAccessorFactory } from "./relationsAccessor"
-import { validateInput } from "./validation"
+import { validateConfigObj } from "./validation"
 
 export function entityModelFactory<
   TSchema,
   TInputSchema extends EntitySchema,
   TIdentifier extends Identifier<TInputSchema> | undefined,
   TMethods extends Methods<TInputSchema> | undefined,
-  const TDefinitions extends RelationshipsDefinitions<TInputSchema>,
+  const TRelations extends RelationshipsDefinitions<TInputSchema>,
 >(configObj: {
   schema: TSchema
   inferSchema: (data: TSchema) => TInputSchema
   identifier?: TIdentifier
   validator?: Validator<TSchema, TInputSchema>
   methods?: TMethods
-  relations?: TDefinitions
-  syncDestinations?: SyncKey[]
+  relations?: TRelations
 }) {
   const {
     schema,
     identifier,
     relations = {},
-    syncDestinations = [],
     methods = {},
     validator = (_schema: TSchema, data: unknown) => data as TInputSchema,
   } = configObj
 
-  validateInput(configObj)
+  validateConfigObj(configObj)
 
   const identifierFn = getIdentifier<TInputSchema, TIdentifier>(identifier)
   const validatorFn = (data: unknown) => validator(schema, data)
   const internalEntityClass = internalEntityFactory<TInputSchema, TIdentifier>(
-    syncDestinations,
     validatorFn,
     identifierFn
   )
@@ -56,11 +53,11 @@ export function entityModelFactory<
 
   const proxyHandler = proxyHandlerFactory<ProxyTarget>(updateEntity, methods)
 
-  function updateEntity<TUpdatedData extends TInputSchema>(
-    this: { proto: EntityPrototype<TInputSchema, TIdentifier> },
-    updatedData: TUpdatedData
+  function updateEntity(
+    this: { internalEntity: EntityPrototype<TInputSchema, TIdentifier> },
+    updatedData: PartialDeep<UpdateEntityInput<TInputSchema, TIdentifier>>
   ): any {
-    const updatedInternalEntity = this.proto.update(updatedData)
+    const updatedInternalEntity = this.internalEntity.update(updatedData)
 
     const proxyTarget = proxyTargetFactory(updatedInternalEntity)
 
@@ -71,16 +68,18 @@ export function entityModelFactory<
     internalEntity: TInternalEntity
   ) {
     return {
-      proto: internalEntity,
-      relationAccessor: relationAccessor,
+      internalEntity,
+      relationAccessor,
     }
   }
 
-  function createEntity<
-    TInputData extends UpdateEntityInput<TInputSchema, TIdentifier>,
-  >(inputData: TInputData) {
-    const id = generateId()
-    const data = { ...inputData, id } as unknown as TInputSchema
+  function createEntity<TInputData extends TInputSchema>(
+    inputData: TInputData
+  ) {
+    let data = inputData
+    if (!identifier) {
+      data = { ...inputData, id: generateId() }
+    }
 
     const internalEntity = new internalEntityClass(data)
 
@@ -89,7 +88,7 @@ export function entityModelFactory<
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       TInputSchema,
       TMethods,
-      TDefinitions,
+      TRelations,
       TIdentifier
     >
   }
@@ -103,7 +102,7 @@ export function entityModelFactory<
     return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
       TInputSchema,
       TMethods,
-      TDefinitions,
+      TRelations,
       TIdentifier
     >
   }

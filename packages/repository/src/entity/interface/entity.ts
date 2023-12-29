@@ -1,12 +1,13 @@
-import { DeepReadonly } from "../types"
-import {
+import type { PartialDeep } from "type-fest"
+import type { DeepReadonly } from "../deepReadonly"
+import type {
   EntitySchema,
   Identifier,
   ResolveIdentifier,
   UpdateEntityInput,
 } from "./data"
-import { Methods, ResolvedMethods } from "./methods"
-import { RelationshipsDefinitions, ResolvedRelations } from "./relations"
+import type { Methods, ResolvedMethods } from "./methods"
+import type { RelationshipsDefinitions, ResolvedRelations } from "./relations"
 
 type UpdateMethod<
   TSchema extends EntitySchema,
@@ -15,7 +16,7 @@ type UpdateMethod<
   TIdentifier extends Identifier<TSchema> | undefined,
 > = {
   update(
-    data: Partial<UpdateEntityInput<TSchema, TIdentifier>>
+    data: PartialDeep<UpdateEntityInput<TSchema, TIdentifier>>
   ): Entity<TSchema, TMethods, TRelations, TIdentifier>
 }
 

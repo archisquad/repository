@@ -1,6 +1,6 @@
-import { RepositoryKey } from "src/repositoryKey"
-import { IsStringLiteral, Simplify } from "type-fest"
-import { EntitySchema } from "./data"
+import type { RepositoryKey } from "src/repositoryKey"
+import type { IsStringLiteral, Simplify } from "type-fest"
+import type { EntitySchema } from "./data"
 
 type RelationshipTypes = "has-many" | "belongs-to"
 

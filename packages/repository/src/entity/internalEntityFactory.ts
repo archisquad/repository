@@ -1,32 +1,28 @@
+import type { PartialDeep } from "type-fest"
+import type { DeepReadonly } from "./deepReadonly"
 import { deepReadonly } from "./deepReadonly"
-import { GetIdentifierFn } from "./identifier"
-import {
+import type { GetIdentifierFn } from "./identifier"
+import type {
   EntitySchema,
   Identifier,
   ResolveIdentifier,
-  SyncKey,
   UpdateEntityInput,
 } from "./interface"
-import { SyncMap } from "./sync"
-import { DeepReadonly } from "./types"
 
 export function internalEntityFactory<
   TSchema extends EntitySchema,
   TIdentifier extends Identifier<TSchema> | undefined,
 >(
-  syncDestinations: SyncKey[],
   validatorFn: (data: any) => TSchema,
   identifierFn: GetIdentifierFn<TSchema, TIdentifier>
 ) {
   return class EntityInternal {
     private _data: DeepReadonly<TSchema>
-    private _syncMap: SyncMap
 
     constructor(data: TSchema) {
       this._data = deepReadonly({
         ...validatorFn(data),
       })
-      this._syncMap = new SyncMap(syncDestinations)
     }
 
     public get data(): DeepReadonly<TSchema> {
@@ -38,12 +34,14 @@ export function internalEntityFactory<
     }
 
     public update(
-      data: UpdateEntityInput<TSchema, TIdentifier>
+      data: PartialDeep<UpdateEntityInput<TSchema, TIdentifier>>
     ): EntityInternal {
+      // We're not protecting against updating the identifier here in runtime.
+      // For such changes we should take another function as parameter or
+      // change this class to inline calls inside the factory.
       return new EntityInternal({
         ...this._data,
         ...data,
-        id: this._data.id,
       } as TSchema)
     }
 
@@ -51,16 +49,8 @@ export function internalEntityFactory<
       return JSON.stringify(this._data)
     }
 
-    public toObject(): DeepReadonly<TSchema> {
-      return this._data
-    }
-
-    public isSynced(id: SyncKey): boolean {
-      return this._syncMap.checkStatus(id)
-    }
-
-    public setSynced(id: SyncKey, promise: Promise<unknown>): void {
-      this._syncMap.setStatus(id, promise)
+    public toObject(): TSchema {
+      return structuredClone(this._data) as TSchema
     }
   }
 }

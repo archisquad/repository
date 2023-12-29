@@ -1,5 +1,6 @@
-import { TestEntityData, describe, expectTypeOf, it } from "vitest"
-import { PrototypeMethods, ResolvedMethods } from "./methods"
+import type { TestEntityData } from "vitest"
+import { describe, expectTypeOf, it } from "vitest"
+import type { PrototypeMethods, ResolvedMethods } from "./methods"
 
 describe("Method-definition types", () => {
   it("ResolvedMethods returns prototype methods if methods are undefined", () => {
@@ -36,8 +37,6 @@ describe("Method-definition types", () => {
       { update: () => void; getIdentifier: () => void }
     >
 
-    expectTypeOf<keyof Test>().toMatchTypeOf<
-      "toJson" | "toObject" | "isSynced" | "setSynced"
-    >()
+    expectTypeOf<keyof Test>().toMatchTypeOf<"toJson" | "toObject">()
   })
 })

@@ -1,5 +1,6 @@
-import { TestEntityData, describe, expectTypeOf, it } from "vitest"
-import { ResolveIdentifier } from "./data"
+import type { TestEntityData } from "vitest"
+import { describe, expectTypeOf, it } from "vitest"
+import type { ResolveIdentifier } from "./data"
 
 describe("User Input Data types", () => {
   it("ResolveIdentifier returns default identifier if identifier is undefined", () => {

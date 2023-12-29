@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, it, vi } from "vitest"
 // @vitest-environment jsdom
 import { observerFactory } from "./observerFactory"
-import { Observer } from "./types"
+import type { Observer } from "./types"
 
 describe("ObserverFactory", () => {
   describe("Interface", () => {
