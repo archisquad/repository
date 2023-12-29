@@ -1,6 +1,6 @@
-## Identifier - unique identifier specified by the user, providing its key from TSchema or a function generating it.
+## Identifier - unique identifier specified by the user, providing its key from TSchema or a function resolving it.
 
-The ResolveIdentifier type is intended to uniquely specify the type of identifier in the Schema.
+The `ResolveIdentifier` type is intended to specify the type of identifier in the Schema uniquely.
 
 If the identifier has not been specified by the user, the DefaultIdentifier will be returned as a fallback to `string`.
 
