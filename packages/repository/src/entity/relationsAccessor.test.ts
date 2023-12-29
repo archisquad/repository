@@ -1,13 +1,7 @@
 import { makeRepositoryKey } from "@/repositoryKey"
-import {
-  TestEntityData,
-  beforeEach,
-  describe,
-  expect,
-  expectTypeOf,
-  it,
-} from "vitest"
-import { ResolvedRelations } from "./interface"
+import type { TestEntityData } from "vitest"
+import { beforeEach, describe, expect, expectTypeOf, it } from "vitest"
+import type { ResolvedRelations } from "./interface"
 import { relationAccessorFactory } from "./relationsAccessor"
 
 describe("Entity: Relations Accessor", () => {

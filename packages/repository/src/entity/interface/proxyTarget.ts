@@ -1,21 +1,28 @@
-import { DeepReadonly } from "../types"
-import { EntitySchema, Identifier, ResolveIdentifier } from "./data"
-import { SyncKey } from "./sync"
+import type { DeepReadonly } from "../deepReadonly"
+import type {
+  EntitySchema,
+  Identifier,
+  ResolveIdentifier,
+  UpdateEntityInput,
+} from "./data"
+import type { SyncKey } from "./sync"
 
 export type EntityPrototype<
   TSchema extends EntitySchema,
   TIdentifier extends Identifier<TSchema> | undefined,
 > = {
   get data(): DeepReadonly<TSchema>
-  update(data: TSchema): EntityPrototype<TSchema, TIdentifier>
+  update(
+    data: UpdateEntityInput<TSchema, TIdentifier>
+  ): EntityPrototype<TSchema, TIdentifier>
   toJson(): string
-  toObject(): DeepReadonly<TSchema>
+  toObject(): TSchema
   isSynced(id: SyncKey): boolean
   setSynced(id: SyncKey, promise: Promise<unknown>): void
   getIdentifier(): ResolveIdentifier<TSchema, TIdentifier>
 }
 
 export type ProxyTarget = {
-  proto: any
+  internalEntity: any
   relationAccessor: any
 }

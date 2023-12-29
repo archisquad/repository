@@ -1,5 +1,6 @@
 import { describe, expect, expectTypeOf, it } from "vitest"
-import { RepositoryKey, makeRepositoryKey } from "./repositoryKey"
+import type { RepositoryKey } from "./repositoryKey"
+import { makeRepositoryKey } from "./repositoryKey"
 
 describe("Given a repository name, When create a repository key,", () => {
   it("Then the key is a symbol", () => {
