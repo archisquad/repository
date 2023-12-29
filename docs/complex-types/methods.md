@@ -1,15 +1,17 @@
-# methods
+# Methods
 
-In this section we will explore 🚀 all nooks and crannies behind methods types.
+In this section we will explore all nooks and crannies behind methods types.
 
-## Methods
+## The Methods type
 
 ### Why?
+
 So basically type `Methods` is defined to declare how methods within Entity are built.\
 It will be an object with keys and values
 
 
 ### How?
+
 ```ts
 export type Methods<TSchema extends EntitySchema> = Record<
   string, // keys
@@ -18,10 +20,13 @@ export type Methods<TSchema extends EntitySchema> = Record<
 ```
 
 ::: info EntitySchema
- Record<string, any>
+```ts
+Record<string, any>
+```
 :::
 
-It's a `Record` that has keys as strings & methods as values.\
+It's a `Record` that has keys as strings & methods as values.
+
 The values part seems to be tricky. It indicates a methods that takes
  - `this` of type `TSchema` as it's first parameter.
  - `..args: any[]` as rest. (It means any number of arguments of any type)
@@ -34,33 +39,25 @@ We assume that all methods in `Entity` are going to have access to data layer. B
 ## Prototype Methods
 
 ### Why?
+
 Prototype Methods are default methods inside every entity.\
 It doesn't matter what Entity we are going to build we will always have this base methods inside.
 
 ### How?
 
-It's an `object` with four keys.
+It's an `object` with two keys.
 
 ```ts
 export type PrototypeMethods<TSchema extends EntitySchema> = {
   toObject(): TSchema
   toJson(): string
-  isSynced(id: SyncKey): boolean
-  setSynced(id: SyncKey, promise: Promise<unknown>): void
 }
 ```
-::: info SyncKey
-  Opaque<string, "sync-key"> (Branded type)
-:::
-
-The curious part here is `setSynced`.\
-`setSynced` method takes two parameters (id of type `SyncKey` and promise of type `Promise<unknown>`) and doesn't return any value (`void`).\
-This type signature is commonly used in TypeScript to declare function that perform some action or side effects without returning any value.\
-This method does not handle the promise resolution itself but expects the consumer to chain a `.then` callback for side effects and update sync status.
 
 ## ResolvedMethods
 
 ### Why?
+
 This type is a mechanism for ensuring that the user-defined methods for an `EntitySchema` are appropriately augmented and validated based on a set of `PrototypeMethods`.
 
 ::: info
@@ -96,6 +93,7 @@ The `ResolvedMethods` type uses conditional types to perform this check and mani
 To have a better view we will breakdown `ResolvedMethods` step by step
 
 #### 1. Generics
+
 - `TSchema` - which is a data layer for entity,
 - `TMethods` - which is an `object` of user-defined methods or `undefined`
 
@@ -130,6 +128,7 @@ The calculations will be always an union (Type is running mechanism twice for `M
 and result will contain `"true"` or `"false"` or `0`
 
 #### 3. Augmentation of Methods
+
 ```ts
  ... extends "true"
   ? TMethods extends Methods<TSchema>
@@ -143,13 +142,14 @@ and result will contain `"true"` or `"false"` or `0`
   : PrototypeMethods<TSchema>
 ```
 
-If Calculations from [Conditionals for User-Defined Methods](#conditionals-for-user-defined-methods) is labeled as `"true"` it means that the user has explicitly defined methods.\
+If Calculations from [Conditionals for User-Defined Methods](#_2-conditionals-for-user-defined-methods) is labeled as `"true"` it means that the user has explicitly defined methods.\
 Type then checks if the user-defined methods (`TMethods`) are a subset of the prototype methods (`PrototypeMethods<TSchema>`).
 If they are, Type augments the user-defined methods with additional prototype methods, excluding specific keys (`update` and `getIdentifier`).
 
-If Calculations from [Conditionals for User-Defined Methods](#conditionals-for-user-defined-methods) is labeled as `"false"` (meaning it's not explicitly defined), the type defaults to using the prototype methods (`PrototypeMethods<TSchema>`).
+If Calculations from [Conditionals for User-Defined Methods](#_2-conditionals-for-user-defined-methods) is labeled as `"false"` (meaning it's not explicitly defined), the type defaults to using the prototype methods (`PrototypeMethods<TSchema>`).
 
 #### 4. Resulting Type:
-The resulting type is a combination of 
+
+The resulting type is a combination of
  - prototype methods
  - user-defined methods (ensuring that the user-defined methods are properly augmented based on the prototype methods).
