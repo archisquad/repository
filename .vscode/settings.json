@@ -4,7 +4,8 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "biomejs.biome",
   "[markdown]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
   },
   "[json]": {
     "editor.formatOnSave": true

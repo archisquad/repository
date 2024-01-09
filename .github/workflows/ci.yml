@@ -5,6 +5,10 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   ci:
     name: CI
@@ -41,6 +45,14 @@ jobs:
 
       - name: Run Biome CI
         run: pnpm run lint
+
+      - name: markdownlint-cli2-action
+        uses: DavidAnson/markdownlint-cli2-action@v14
+        with:
+          globs: |
+            docs/**/*.md
+            #node_modules/
+            #**/node_modules/**
 
       - name: Run unit & integration tests
         run: pnpm run test

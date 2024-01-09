@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.5.0/schema.json",
   "organizeImports": {
     "enabled": true
   },
@@ -8,7 +8,8 @@
       "**/*.d.ts",
       "**/dist/**/*",
       "**/coverage/**/*",
-      "**/node_modules/**/*"
+      "**/node_modules/**/*",
+      "**/.vitepress/cache/**/*"
     ]
   },
   "formatter": {
@@ -65,11 +66,19 @@
       "suspicious": {
         "noConsoleLog": "error",
         "noMisrefactoredShorthandAssign": "warn",
+        "noImplicitAnyLet": "error",
         "noExplicitAny": "off"
       },
       "nursery": {
         "noEmptyBlockStatements": "off",
-        "noImplicitAnyLet": "error",
+        "useExportType": "error",
+        "useImportType": "error",
+        "useNodejsImportProtocol": "error",
+        "noInvalidUseBeforeDeclaration": "error",
+        "noGlobalEval": "error",
+        "noGlobalAssign": "error",
+        "noThenProperty": "error",
+        "noUselessTernary": "error",
         "noUnusedImports": "error",
         "noUnusedPrivateClassMembers": "error",
         "noUselessLoneBlockStatements": "error",

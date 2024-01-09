@@ -1,3 +1,7 @@
 {
-  "recommendations": ["seatonjiang.gitmoji-vscode", "biomejs.biome"]
+  "recommendations": [
+    "seatonjiang.gitmoji-vscode",
+    "biomejs.biome",
+    "DavidAnson.vscode-markdownlint"
+  ]
 }
