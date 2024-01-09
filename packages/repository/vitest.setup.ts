@@ -1,7 +1,7 @@
-import { SyncKey } from "@/network/interface/sync"
+import type { SyncKey } from "@/network/interface/sync"
 import { makeSyncKey } from "@/network/sync"
 import type { RepositoryKey } from "@/repositoryKey"
-import { Faker, faker } from "@faker-js/faker"
+import { type Faker, faker } from "@faker-js/faker"
 import { beforeEach } from "vitest"
 import { z } from "zod"
 

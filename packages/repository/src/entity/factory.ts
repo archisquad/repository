@@ -1,4 +1,4 @@
-import { PartialDeep } from "type-fest"
+import type { PartialDeep } from "type-fest"
 import { generateId } from "./generateId"
 import { getIdentifier } from "./identifier"
 import type {

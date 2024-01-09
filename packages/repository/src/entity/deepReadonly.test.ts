@@ -33,7 +33,7 @@ describe("Deep Readonly", () => {
       date: new Date(),
       set: new Set(),
       map: new Map(),
-      regexp: new RegExp(""),
+      regexp: /(?:)/,
       other: "field",
     }
 
