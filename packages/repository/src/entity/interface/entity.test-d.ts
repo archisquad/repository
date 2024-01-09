@@ -102,12 +102,9 @@ describe("Entity interface", () => {
     >
 
     expectTypeOf<Test["update"]>().toMatchTypeOf<{
-      (data: TestEntityData): Entity<
-        TestEntityData,
-        { update(): never },
-        undefined,
-        undefined
-      >
+      (
+        data: TestEntityData
+      ): Entity<TestEntityData, { update(): never }, undefined, undefined>
     }>()
   })
 
