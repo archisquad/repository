@@ -43,6 +43,9 @@ jobs:
       - name: Type-checking
         run: pnpm run type-check
 
+      - name: Try to build it
+        run: pnpm run build
+
       - name: Run Biome CI
         run: pnpm run lint
 
