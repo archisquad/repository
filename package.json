@@ -9,7 +9,7 @@
     "pub-check": "turbo run pub-check",
     "test": "turbo run test",
     "build": "turbo run build",
-    "prepare": "husky install",
+    "prepare": "husky",
     "changeset": "changeset",
     "docs:dev": "turbo run dev --filter=docs"
   },
