@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "vitepress": "1.0.0-rc.41"
+    "vitepress": "1.0.0-rc.42"
   },
   "devDependencies": {
     "markdownlint-cli2": "0.12.1"
