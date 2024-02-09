@@ -88,6 +88,6 @@ describe("Deep Readonly", () => {
 
     expect(readonlyObj).toBe(obj)
     expect(readonlyObj.func).toBe(obj.func)
-    expect((readonlyObj.func as () => string)()).toBe("baz")
+    expect(readonlyObj.func()).toBe("baz")
   })
 })
