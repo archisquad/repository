@@ -18,8 +18,8 @@ importers:
         specifier: 18.6.0
         version: 18.6.0(@types/node@18.18.9)(typescript@5.3.3)
       '@faker-js/faker':
-        specifier: 8.4.0
-        version: 8.4.0
+        specifier: 8.4.1
+        version: 8.4.1
       '@paralleldrive/cuid2':
         specifier: 2.2.2
         version: 2.2.2
@@ -98,8 +98,8 @@ importers:
         specifier: 1.5.3
         version: 1.5.3
       '@faker-js/faker':
-        specifier: 8.4.0
-        version: 8.4.0
+        specifier: 8.4.1
+        version: 8.4.1
       '@total-typescript/ts-reset':
         specifier: 0.5.1
         version: 0.5.1
@@ -1319,8 +1319,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@faker-js/faker@8.4.0:
-    resolution: {integrity: sha512-htW87352wzUCdX1jyUQocUcmAaFqcR/w082EC8iP/gtkF0K+aKcBp0hR5Arb7dzR8tQ1TrhE9DNa5EbJELm84w==}
+  /@faker-js/faker@8.4.1:
+    resolution: {integrity: sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: true
 
