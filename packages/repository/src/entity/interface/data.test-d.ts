@@ -23,4 +23,10 @@ describe("User Input Data types", () => {
 
     expectTypeOf<Test>().toEqualTypeOf<string>()
   })
+
+  it("ResolveIdentifier returns default identifier if identifier is string literal but not keyof TSchema", () => {
+    type Test = ResolveIdentifier<TestEntityData, "nonexistentKey">
+
+    expectTypeOf<Test>().toEqualTypeOf<string>()
+  })
 })
