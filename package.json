@@ -2,6 +2,7 @@
   "name": "repository",
   "private": true,
   "type": "module",
+  "workspaces": ["packages/*", "docs"],
   "scripts": {
     "lint:dev": "biome check --apply-unsafe ./",
     "lint": "biome ci ./",
