@@ -73,14 +73,7 @@ export function entityModelFactory<
     }
   }
 
-  function createEntity<TInputData extends TInputSchema>(
-    inputData: TInputData
-  ) {
-    let data = inputData
-    if (!identifier) {
-      data = { ...inputData, id: generateId() }
-    }
-
+  function createProxy(data: TInputSchema) {
     const internalEntity = new internalEntityClass(data)
 
     const proxyTarget = proxyTargetFactory(internalEntity)
@@ -93,18 +86,23 @@ export function entityModelFactory<
     >
   }
 
+  function createEntity<TInputData extends TInputSchema>(
+    inputData: TInputData
+  ) {
+    let data = inputData
+    if (!identifier) {
+      data = { ...inputData, id: generateId() }
+    }
+    const proxy = createProxy(data)
+
+    return proxy
+  }
+
   function recoverEntity(serializedData: string) {
     const data = JSON.parse(serializedData) as TInputSchema
-    const internalEntity = new internalEntityClass(data)
+    const proxy = createProxy(data)
 
-    const proxyTarget = proxyTargetFactory(internalEntity)
-
-    return new Proxy(proxyTarget, proxyHandler) as unknown as Entity<
-      TInputSchema,
-      TMethods,
-      TRelations,
-      TIdentifier
-    >
+    return proxy
   }
 
   return {
