@@ -26,26 +26,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Init pnpm (latest)
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      - name: Init Bun
+        uses: oven-sh/setup-bun@v1
 
       - name: Use Node.js (v${{ matrix.node-version }})
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install
 
       - name: Build project
-        run: pnpm run build
+        run: bun run build
 
       - name: Check with publint
-        run: pnpm run pub-check
+        run: bun run pub-check
 
       - name: Creating .npmrc
         run: |
@@ -63,8 +59,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: changesets/action@v1
         with:
-          version: pnpm exec changeset version
-          publish: pnpm exec changeset publish
+          version: bunx changeset version
+          publish: bunx changeset publish
           commit: ":bookmark: ci(release): npm packages release"
           title: ":bookmark: ci(release): npm packages release"
         env:

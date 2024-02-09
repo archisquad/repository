@@ -25,29 +25,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Init pnpm (latest)
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      - name: Init Bun
+        uses: oven-sh/setup-bun@v1
 
       - name: Use Node.js (v${{ matrix.node-version }})
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install
 
       - name: Type-checking
-        run: pnpm run type-check
+        run: bun run type-check
 
       - name: Try to build it
-        run: pnpm run build
+        run: bun run build
 
       - name: Run Biome CI
-        run: pnpm run lint
+        run: bun run lint
 
       - name: markdownlint-cli2-action
         uses: DavidAnson/markdownlint-cli2-action@v15
@@ -58,7 +54,7 @@ jobs:
             #**/node_modules/**
 
       - name: Run unit & integration tests
-        run: pnpm run test
+        run: bun run test
 
       - name: Report Coverage
         if: always()
