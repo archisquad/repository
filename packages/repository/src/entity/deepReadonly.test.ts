@@ -78,4 +78,16 @@ describe("Deep Readonly", () => {
       readonlyObj.bar.foo = "baz"
     }).toThrow()
   })
+
+  it("Given an object with function, When deepReadonly is called, Then return the same object with function", () => {
+    const obj = {
+      func: () => "baz",
+    }
+
+    const readonlyObj = deepReadonly(obj)
+
+    expect(readonlyObj).toBe(obj)
+    expect(readonlyObj.func).toBe(obj.func)
+    expect(readonlyObj.func()).toBe("baz")
+  })
 })
