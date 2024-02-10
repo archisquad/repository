@@ -177,7 +177,7 @@ describe("proxyHandlerFactory", () => {
     ).toBeUndefined()
   })
 
-  it("Given proxy with handler, When delete property, Then throw error", ({
+  it("Given proxy with handler, When try to overwrite property, Then throw error", ({
     testProxy,
   }) => {
     expect(() => {
@@ -185,6 +185,14 @@ describe("proxyHandlerFactory", () => {
     }).toThrowError(
       "You can't overwrite entity properties, use update() instead."
     )
+  })
+
+  it("Given proxy with handler, When delete property, Then throw error", ({
+    testProxy,
+  }) => {
+    expect(() => {
+      testProxy.fakeKey = undefined
+    }).toThrowError("You can't delete entity properties, use update() instead.")
   })
 
   it("Given proxy with handler, When defineProperty, Then do nothing", ({
