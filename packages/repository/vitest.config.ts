@@ -11,7 +11,7 @@ export default defineConfig({
     coverage: {
       provider: "istanbul",
       reporter: ["text", "json", "json-summary", "html", "lcov"],
-      exclude: [...(configDefaults.coverage?.exclude ?? []), "**/*.test-d.ts"],
+      exclude: [...(configDefaults.coverage?.exclude ?? []), "**/*.test-d.ts", "**/*.mjs"],
       thresholds: {
         lines: 80,
         statements: 80,
