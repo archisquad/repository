@@ -1,6 +1,5 @@
 import { z } from "zod"
 
-// TODO: Rozwinąć schemat książki
 export const bookSchema = z.object({
   id: z.string().cuid2(),
   title: z.string(),
@@ -14,6 +13,8 @@ export const bookSchema = z.object({
   cover: z.string().url(),
   authors: z.array(z.string().cuid2()),
 })
+
+export type Book = z.infer<typeof bookSchema>
 
 // TODO: Dodać schemat autora
 

@@ -1,9 +1,9 @@
 import { createStorage } from "unstorage"
 import { seedEntities } from "./seed"
 
-export function databaseFactory() {
+export async function databaseFactory() {
   const db = createStorage()
-  seedEntities(db)
+  await seedEntities(db)
 
   return db
 }

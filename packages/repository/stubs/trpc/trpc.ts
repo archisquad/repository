@@ -1,6 +1,11 @@
-import { initTRPC } from '@trpc/server';
+import { initTRPC } from "@trpc/server"
+import type { Storage } from "unstorage"
 
-const t = initTRPC.create();
+type Context = {
+  db: Storage
+}
 
-export const router = t.router;
-export const publicProcedure = t.procedure;
+const t = initTRPC.context<Context>().create()
+
+export const router = t.router
+export const publicProcedure = t.procedure
