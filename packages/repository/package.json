@@ -57,7 +57,7 @@
     "jsdom": "24.0.0",
     "lint-staged": "15.1.0",
     "publint": "0.2.7",
-    "type-fest": "4.10.2",
+    "type-fest": "4.10.3",
     "typescript": "5.3.3",
     "unbuild": "2.0.0",
     "valibot": "0.29.0",
