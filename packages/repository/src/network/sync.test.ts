@@ -22,7 +22,7 @@ describe("SyncMap", () => {
     })
   })
 
-  it("Given one destination ID, When SyncMap is created, Then SyncMap has one destination", ({
+  it("Given one destination ID, When SyncMap is created, Then status for the ID is false", ({
     syncMapDestinationId: destinationId,
   }) => {
     const syncMap = new SyncMap([destinationId])
@@ -30,7 +30,7 @@ describe("SyncMap", () => {
     expect(syncMap.checkStatus(destinationId)).toBe(false)
   })
 
-  it("Given two the same destination IDs, When SyncMap is created, Then SyncMap has one destination", ({
+  it("Given two the same destination IDs, When SyncMap is created, Then status for the ID is false", ({
     syncMapDestinationId: destinationId,
   }) => {
     const syncMap = new SyncMap([destinationId, destinationId])
@@ -38,7 +38,7 @@ describe("SyncMap", () => {
     expect(syncMap.checkStatus(destinationId)).toBe(false)
   })
 
-  it("Given couple destination IDs, When SyncMap is created, Then SyncMap has many destinations", ({
+  it("Given multiple destination IDs, When SyncMap is created, Then status for each ID is false", ({
     syncMapDestinationId: firstDestinationId,
   }) => {
     const secondDestinationId = makeSyncKey("other-destination-id")
