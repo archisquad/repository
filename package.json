@@ -37,7 +37,7 @@
     "lint-staged": "15.1.0",
     "publint": "0.2.7",
     "turbo": "1.12.4",
-    "type-fest": "4.10.3",
+    "type-fest": "4.11.0",
     "typescript": "5.3.3",
     "unbuild": "2.0.0",
     "valibot": "0.29.0",
