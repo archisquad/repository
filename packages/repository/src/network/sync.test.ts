@@ -3,6 +3,7 @@ import type { SyncKey } from "./interface/sync"
 import { SyncMap, makeSyncKey } from "./sync"
 
 declare module "vitest" {
+  // biome-ignore lint/suspicious/noExportsInTest: this is only way to extend interface
   export interface TestContext {
     syncMapDestinationId: SyncKey
   }
