@@ -42,9 +42,9 @@ describe("ObserverFactory", () => {
           dataAccessor: () => ({ foo: "bar" }),
         })
 
-        expectTypeOf(observe).parameter(0).toMatchTypeOf<{
-          (data: { foo: string }): void
-        }>()
+        expectTypeOf(observe)
+          .parameter(0)
+          .toMatchTypeOf<(data: { foo: string }) => void>()
       })
     })
 

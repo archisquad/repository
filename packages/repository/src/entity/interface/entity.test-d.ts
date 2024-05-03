@@ -101,11 +101,11 @@ describe("Entity interface", () => {
       }
     >
 
-    expectTypeOf<Test["update"]>().toMatchTypeOf<{
+    expectTypeOf<Test["update"]>().toMatchTypeOf<
       (
         data: TestEntityData
-      ): Entity<TestEntityData, { update(): never }, undefined, undefined>
-    }>()
+      ) => Entity<TestEntityData, { update(): never }, undefined, undefined>
+    >()
   })
 
   it("Defined methods can override other built-in methods", () => {
