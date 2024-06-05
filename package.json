@@ -36,14 +36,14 @@
     "markdownlint-cli2": "0.13.0",
     "lint-staged": "15.1.0",
     "publint": "0.2.8",
-    "turbo": "1.13.3",
-    "type-fest": "4.18.3",
+    "turbo": "1.13.4",
+    "type-fest": "4.19.0",
     "typescript": "5.4.5",
     "unbuild": "2.0.0",
     "valibot": "0.30.0",
     "vite-tsconfig-paths": "4.3.2",
-    "@biomejs/biome": "1.7.3",
-    "vitepress": "1.2.2",
+    "@biomejs/biome": "1.8.0",
+    "vitepress": "1.2.3",
     "vitest": "1.6.0",
     "zod": "3.23.8"
   }
