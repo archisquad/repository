@@ -36,7 +36,7 @@
     "markdownlint-cli2": "0.13.0",
     "lint-staged": "15.1.0",
     "publint": "0.2.8",
-    "turbo": "1.13.4",
+    "turbo": "2.0.12",
     "type-fest": "4.19.0",
     "typescript": "5.4.5",
     "unbuild": "2.0.0",
