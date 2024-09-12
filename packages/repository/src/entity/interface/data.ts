@@ -1,4 +1,5 @@
-import type { IsStringLiteral } from "type-fest"
+import { IsStringLiteral } from "type-fest"
+import { EntityKey } from "./entity"
 
 export type EntitySchema = Record<string, any>
 
@@ -8,7 +9,7 @@ export type Validator<TSchema, TInputSchema> = (
 ) => TInputSchema
 
 export type Identifier<TSchema> = keyof TSchema | ((data: TSchema) => any)
-type DefaultIdentifier = string
+type DefaultIdentifier = EntityKey
 
 /**
  * To determine if the identifier is defined, we checking for union function with
