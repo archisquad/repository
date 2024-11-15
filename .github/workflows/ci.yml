@@ -50,7 +50,7 @@ jobs:
         run: pnpm run lint
 
       - name: markdownlint-cli2-action
-        uses: DavidAnson/markdownlint-cli2-action@v17
+        uses: DavidAnson/markdownlint-cli2-action@v18
         with:
           globs: |
             docs/**/*.md
