@@ -39,7 +39,7 @@
     "turbo": "1.13.4",
     "type-fest": "4.19.0",
     "typescript": "5.4.5",
-    "unbuild": "2.0.0",
+    "unbuild": "3.2.0",
     "valibot": "0.30.0",
     "vite-tsconfig-paths": "4.3.2",
     "@biomejs/biome": "1.8.0",
