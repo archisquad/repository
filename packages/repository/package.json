@@ -54,7 +54,7 @@
     "@faker-js/faker": "8.4.1",
     "@total-typescript/ts-reset": "0.5.1",
     "@vitest/coverage-istanbul": "1.6.0",
-    "jsdom": "24.1.0",
+    "jsdom": "25.0.1",
     "lint-staged": "15.1.0",
     "publint": "0.2.8",
     "type-fest": "4.19.0",
