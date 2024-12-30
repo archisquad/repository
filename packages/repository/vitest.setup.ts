@@ -1,3 +1,4 @@
+import type { EntityKey } from "@/entity/interface"
 import type { SyncKey } from "@/network/interface/sync"
 import { makeSyncKey } from "@/network/sync"
 import type { RepositoryKey } from "@/repositoryKey"
@@ -6,7 +7,10 @@ import { beforeEach } from "vitest"
 import { z } from "zod"
 
 const zodSchema = z.object({
-  id: z.string().cuid2(),
+  id: z
+    .string()
+    .cuid2()
+    .transform((id) => id as EntityKey),
   foo: z.string(),
   bar: z.number(),
   deep: z.object({
@@ -18,7 +22,7 @@ const zodSchema = z.object({
 
 declare module "vitest" {
   export type TestRawEntityData = {
-    id: string
+    id: EntityKey
     foo: string
     bar: number
     deep?: {
@@ -121,7 +125,7 @@ beforeEach((context) => {
 
 function generateFakeObj(faker: Faker) {
   return {
-    id: faker.string.uuid(),
+    id: faker.string.uuid() as EntityKey,
     foo: faker.person.fullName(),
     bar: faker.number.int(),
     deep: {

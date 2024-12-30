@@ -1,9 +1,10 @@
 import type { Except } from "type-fest"
+import type { DeepReadonly } from "../deepReadonly"
 import type { EntitySchema } from "./data"
 
 export type Methods<TSchema extends EntitySchema> = Record<
   string,
-  (this: TSchema, ...args: any[]) => any
+  (this: DeepReadonly<TSchema>, ...args: any[]) => any
 >
 
 export type PrototypeMethods<TSchema extends EntitySchema> = {

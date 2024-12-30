@@ -1,9 +1,10 @@
 import { makeRepositoryKey } from "@/repositoryKey"
 import type { ObjectSchema, Output } from "valibot"
-import { boolean, cuid2, number, object, string } from "valibot"
+import { boolean, cuid2, number, object, string, transform } from "valibot"
 import type { TestEntityData } from "vitest"
 import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import { entityModelFactory } from "./factory"
+import type { EntityKey } from "./interface"
 
 describe("Entity", () => {
   beforeEach((context) => {
@@ -176,7 +177,7 @@ describe("Entity", () => {
 
         const entity = entityFactory.createEntity({
           ...fakeData,
-          id: "anything",
+          id: "anything" as EntityKey,
         })
 
         expect(entity.getIdentifier()).toEqual(fakeData.foo)
@@ -195,7 +196,7 @@ describe("Entity", () => {
 
         const entity = entityFactory.createEntity({
           ...fakeData,
-          id: "anything",
+          id: "anything" as EntityKey,
         })
 
         expect(entity.getIdentifier()).toEqual(fakeData.foo)
@@ -349,7 +350,7 @@ describe("Entity", () => {
     }) => {
       const { createEntity } = entityModelFactory({
         schema: {
-          id: "string",
+          id: "string" as EntityKey,
           foo: "string",
           bar: 1,
           deep: {
@@ -363,7 +364,7 @@ describe("Entity", () => {
 
       const entity = createEntity(fakeData)
 
-      expectTypeOf(entity).toMatchTypeOf<TestEntityData>()
+      expectTypeOf(entity.toObject()).toMatchTypeOf<TestEntityData>()
       expect(entity.foo).toBe(fakeData.foo)
     })
 
@@ -379,7 +380,7 @@ describe("Entity", () => {
 
       const entity = createEntity(fakeData)
 
-      expectTypeOf(entity).toMatchTypeOf<TestEntityData>()
+      expectTypeOf(entity.toObject()).toMatchTypeOf<TestEntityData>()
       expect(entity.foo).toBe(fakeData.foo)
     })
 
@@ -387,7 +388,7 @@ describe("Entity", () => {
       fakeData,
     }) => {
       const valibotSchema = object({
-        id: string([cuid2()]),
+        id: transform(string([cuid2()]), (id) => id as EntityKey),
         foo: string(),
         bar: number(),
         deep: object({
@@ -409,7 +410,7 @@ describe("Entity", () => {
 
       const entity = createEntity(fakeData)
 
-      expectTypeOf(entity).toMatchTypeOf<TestEntityData>()
+      expectTypeOf(entity.toObject()).toMatchTypeOf<TestEntityData>()
       expect(entity.foo).toBe(fakeData.foo)
     })
   })

@@ -1,5 +1,6 @@
 import { createId } from "@paralleldrive/cuid2"
+import { EntityKey } from "./interface"
 
-export function generateId(): string {
-  return createId()
+export function generateId(): EntityKey {
+  return createId() as EntityKey
 }

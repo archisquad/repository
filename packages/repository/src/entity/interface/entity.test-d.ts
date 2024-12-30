@@ -1,6 +1,7 @@
 import type { PostsRelationDefinition, TestEntityData } from "vitest"
 import { describe, expectTypeOf, it } from "vitest"
-import type { Entity } from "./entity"
+import { DeepReadonly } from "../deepReadonly"
+import type { Entity, EntityKey } from "./entity"
 
 describe("Entity interface", () => {
   it("Entity has relationship accessors according to defined relations", () => {
@@ -22,7 +23,7 @@ describe("Entity interface", () => {
   it("Entity can be created without relations", () => {
     type Test = Entity<TestEntityData>
 
-    expectTypeOf<Test["id"]>().toEqualTypeOf<string>()
+    expectTypeOf<Test["id"]>().toMatchTypeOf<DeepReadonly<EntityKey>>()
     expectTypeOf<Test["foo"]>().toEqualTypeOf<TestEntityData["foo"]>()
     expectTypeOf<Test["deep"]>().toMatchTypeOf<
       Readonly<TestEntityData["deep"]>
@@ -59,7 +60,7 @@ describe("Entity interface", () => {
   it("Entity haven't to identifier defined", () => {
     type Test = Entity<TestEntityData, undefined, undefined, undefined>
 
-    expectTypeOf<Test["getIdentifier"]>().toEqualTypeOf<() => string>()
+    expectTypeOf<Test["getIdentifier"]>().toEqualTypeOf<() => EntityKey>()
   })
 
   it("Entity give readonly access to data", () => {
@@ -86,11 +87,7 @@ describe("Entity interface", () => {
   it("Entity can be created without defining methods", () => {
     type Test = Entity<TestEntityData>
 
-    expectTypeOf<Test>().toMatchTypeOf<
-      TestEntityData & {
-        id: string
-      }
-    >()
+    expectTypeOf<Test>().toMatchTypeOf<DeepReadonly<TestEntityData>>()
   })
 
   it("Defined methods can't override built-in update method", () => {
