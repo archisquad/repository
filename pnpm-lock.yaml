@@ -63,8 +63,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(typescript@5.4.5)
       valibot:
-        specifier: 0.30.0
-        version: 0.30.0
+        specifier: 1.4.2
+        version: 1.4.2(typescript@5.4.5)
       vite-tsconfig-paths:
         specifier: 4.3.2
         version: 4.3.2(typescript@5.4.5)(vite@5.2.12)
@@ -125,8 +125,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(typescript@5.4.5)
       valibot:
-        specifier: 0.30.0
-        version: 0.30.0
+        specifier: 1.4.2
+        version: 1.4.2(typescript@5.4.5)
       vite-tsconfig-paths:
         specifier: 4.3.2
         version: 4.3.2(typescript@5.4.5)(vite@5.2.12)
@@ -6517,8 +6517,15 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
-  /valibot@0.30.0:
-    resolution: {integrity: sha512-5POBdbSkM+3nvJ6ZlyQHsggisfRtyT4tVTo1EIIShs6qCdXJnyWU5TJ68vr8iTg5zpOLjXLRiBqNx+9zwZz/rA==}
+  /valibot@1.4.2(typescript@5.4.5):
+    resolution: {integrity: sha512-gjdCvJ6d3RyHAneqxMYMW9QMCwYMb3jpOO0IyHZV1bnRHFBHrX3VkIILt5XYR0WhwHiH7Mty8ovuPZ/O3gamrg==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.4.5
     dev: true
 
   /validate-npm-package-license@3.0.4:
