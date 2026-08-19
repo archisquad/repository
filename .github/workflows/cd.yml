@@ -22,17 +22,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Init pnpm (latest)
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
           version: latest
 
       - name: Use Node.js (v${{ matrix.node-version }})
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
@@ -61,7 +61,7 @@ jobs:
       - name: Publish to npm
         id: changesets-main
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: changesets/action@v1
+        uses: changesets/action@v2.1.1
         with:
           version: pnpm exec changeset version
           publish: pnpm exec changeset publish
