@@ -50,7 +50,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.0",
+    "@biomejs/biome": "2.5.12",
     "@faker-js/faker": "8.4.1",
     "@total-typescript/ts-reset": "0.5.1",
     "@vitest/coverage-istanbul": "1.6.0",
